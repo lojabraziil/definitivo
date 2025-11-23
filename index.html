@@ -1635,98 +1635,91 @@ var ElementorProFrontendConfig = {"ajaxurl":"https:\/\/outleteletronicos.shop\/w
 </div>
 
 <style>
-/* Fundo escuro que cobre a tela */
+/* Z-Index altíssimo para garantir que fique na frente de tudo */
 .image-modal {
-  display: none; /* Escondido por padrão */
+  display: none;
   position: fixed;
-  z-index: 10001; /* Fica acima de tudo, inclusive da barra fixa */
+  z-index: 9999999 !important; /* Força bruta para ficar na frente */
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: rgba(0,0,0,0.9); /* Fundo preto transparente */
+  background-color: rgba(0,0,0,0.95);
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(5px); /* Opcional: desfoque no fundo */
+  backdrop-filter: blur(5px);
 }
 
-/* A imagem ampliada */
 .image-modal-content {
   margin: auto;
   display: block;
-  max-width: 90%;
-  max-height: 85%;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  animation: zoomIn 0.3s; /* Efeito de entrada */
+  max-width: 95%;
+  max-height: 90vh; /* Máximo de 90% da altura da tela */
+  border-radius: 4px;
+  object-fit: contain;
+  box-shadow: 0 0 20px rgba(0,0,0,0.8);
+  animation: zoomIn 0.2s ease-out;
 }
 
-/* Botão de fechar (X) */
 .image-modal-close {
   position: absolute;
   top: 20px;
-  right: 30px;
-  color: #f1f1f1;
-  font-size: 40px;
+  right: 20px;
+  color: #fff;
+  font-size: 35px;
   font-weight: bold;
-  transition: 0.3s;
+  background: rgba(0,0,0,0.5);
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 50%;
   cursor: pointer;
-  z-index: 10002;
+  z-index: 10000000;
+  user-select: none;
 }
 
-.image-modal-close:hover,
-.image-modal-close:focus {
-  color: #bbb;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-/* Animação de zoom simples */
 @keyframes zoomIn {
-  from {transform:scale(0)} 
-  to {transform:scale(1)}
+  from {transform:scale(0.8); opacity: 0;} 
+  to {transform:scale(1); opacity: 1;}
 }
 
-/* Indica que as imagens das reviews são clicáveis */
+/* Cursor de mãozinha nas imagens de review */
 .review-images img {
-    cursor: pointer;
-    transition: 0.2s;
-}
-.review-images img:hover {
-    opacity: 0.8;
+    cursor: zoom-in;
 }
 </style>
 
 <script>
-  // Pega os elementos do modal
-  var modal = document.getElementById("imageViewerModal");
-  var modalImg = document.getElementById("fullImage");
-  
-  // Seleciona TODAS as imagens dentro dos blocos de review
-  // Procura por imagens dentro da classe .review-images
-  var images = document.querySelectorAll(".review-images img");
+document.addEventListener("DOMContentLoaded", function() {
+    var modal = document.getElementById("imageViewerModal");
+    var modalImg = document.getElementById("fullImage");
+    var closeBtn = document.querySelector(".image-modal-close");
 
-  // Adiciona o evento de clique em cada imagem encontrada
-  images.forEach(function(img) {
-      img.addEventListener("click", function(){
-          modal.style.display = "flex"; // Mostra o modal
-          modalImg.src = this.src;      // Pega a foto clicada e põe no modal
-      });
-  });
+    // --- A MÁGICA ACONTECE AQUI ---
+    // Em vez de procurar as imagens, escutamos cliques na página inteira
+    document.body.addEventListener('click', function(e) {
+        
+        // Verifica se o que foi clicado é uma IMAGEM e se está dentro da área de reviews
+        // O .closest('.review-images') garante que só funcione nas imagens certas
+        if (e.target.tagName === 'IMG' && e.target.closest('.review-images')) {
+            e.preventDefault(); // Evita comportamentos estranhos
+            modal.style.display = "flex";
+            modalImg.src = e.target.src; // Pega a imagem clicada
+        }
+        
+        // Verifica se clicou no botão de fechar
+        if (e.target.classList.contains('image-modal-close')) {
+            modal.style.display = "none";
+        }
 
-  // Botão de fechar
-  var span = document.getElementsByClassName("image-modal-close")[0];
-  span.onclick = function() { 
-      modal.style.display = "none";
-  }
-
-  // Fechar também se clicar fora da imagem (no fundo preto)
-  modal.onclick = function(event) {
-      if (event.target === modal) {
-          modal.style.display = "none";
-      }
-  }
+        // Verifica se clicou no fundo escuro (para fechar)
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+});
 </script>
 
 </div></div></div></body></html><!-- Page cached by LiteSpeed Cache 7.6.2 on 2025-11-11 15:37:41 -->
