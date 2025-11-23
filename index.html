@@ -1629,6 +1629,104 @@ var ElementorProFrontendConfig = {"ajaxurl":"https:\/\/outleteletronicos.shop\/w
 <script src="js/elements-handlers.min.js" id="pro-elements-handlers-js"></script>
 	
 
+<div id="imageViewerModal" class="image-modal">
+  <span class="image-modal-close">&times;</span>
+  <img class="image-modal-content" id="fullImage">
+</div>
 
+<style>
+/* Fundo escuro que cobre a tela */
+.image-modal {
+  display: none; /* Escondido por padrão */
+  position: fixed;
+  z-index: 10001; /* Fica acima de tudo, inclusive da barra fixa */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0,0,0,0.9); /* Fundo preto transparente */
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px); /* Opcional: desfoque no fundo */
+}
+
+/* A imagem ampliada */
+.image-modal-content {
+  margin: auto;
+  display: block;
+  max-width: 90%;
+  max-height: 85%;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  animation: zoomIn 0.3s; /* Efeito de entrada */
+}
+
+/* Botão de fechar (X) */
+.image-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+  cursor: pointer;
+  z-index: 10002;
+}
+
+.image-modal-close:hover,
+.image-modal-close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Animação de zoom simples */
+@keyframes zoomIn {
+  from {transform:scale(0)} 
+  to {transform:scale(1)}
+}
+
+/* Indica que as imagens das reviews são clicáveis */
+.review-images img {
+    cursor: pointer;
+    transition: 0.2s;
+}
+.review-images img:hover {
+    opacity: 0.8;
+}
+</style>
+
+<script>
+  // Pega os elementos do modal
+  var modal = document.getElementById("imageViewerModal");
+  var modalImg = document.getElementById("fullImage");
+  
+  // Seleciona TODAS as imagens dentro dos blocos de review
+  // Procura por imagens dentro da classe .review-images
+  var images = document.querySelectorAll(".review-images img");
+
+  // Adiciona o evento de clique em cada imagem encontrada
+  images.forEach(function(img) {
+      img.addEventListener("click", function(){
+          modal.style.display = "flex"; // Mostra o modal
+          modalImg.src = this.src;      // Pega a foto clicada e põe no modal
+      });
+  });
+
+  // Botão de fechar
+  var span = document.getElementsByClassName("image-modal-close")[0];
+  span.onclick = function() { 
+      modal.style.display = "none";
+  }
+
+  // Fechar também se clicar fora da imagem (no fundo preto)
+  modal.onclick = function(event) {
+      if (event.target === modal) {
+          modal.style.display = "none";
+      }
+  }
+</script>
 
 </div></div></div></body></html><!-- Page cached by LiteSpeed Cache 7.6.2 on 2025-11-11 15:37:41 -->
