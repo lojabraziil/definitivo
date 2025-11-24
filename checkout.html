@@ -115,7 +115,7 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-            z-index: 10; /* Eleva o passo sobre a linha */
+            z-index: 10;
         }
 
         .circle {
@@ -130,7 +130,7 @@
             align-items: center;
             font-size: 0.8rem;
             transition: background-color 0.3s ease;
-            box-shadow: 0 0 0 4px white; /* Efeito flutuante sobre a linha */
+            box-shadow: 0 0 0 4px white;
         }
 
         .circle.active {
@@ -152,10 +152,10 @@
             position: absolute;
             height: 2px;
             background-color: #e5e7eb;
-            width: calc(100% - 40px); /* Ajusta a largura para caber entre os círculos */
-            top: 40px; /* Alinha no meio dos círculos */
-            left: 20px; /* Desloca para o centro */
-            z-index: 5; /* Fica abaixo dos círculos */
+            width: calc(100% - 40px);
+            top: 40px; 
+            left: 20px; 
+            z-index: 5;
         }
 
         .line-segment {
@@ -314,7 +314,7 @@
         /* --- Botão --- */
         .btn-checkout {
             width: 100%;
-            margin-top: 20px; /* Ajustei a margem após o guarantee-box */
+            margin-top: 20px;
             padding: 18px;
             background: var(--success-gradient);
             color: white;
@@ -562,6 +562,13 @@
                     </div>
 
                     <div class="input-group">
+                        <label for="referencia">Ponto de Referência (Opcional)</label>
+                        <div class="input-icon-wrap">
+                            <input type="text" id="referencia" placeholder="Ex: Portão preto, perto da padaria.">
+                            <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm0-4h-2V7h2v8z"/></svg>
+                        </div>
+                    </div>
+                    <div class="input-group">
                         <label for="bairro">Bairro</label>
                         <div class="input-icon-wrap">
                             <input type="text" id="bairro" disabled>
@@ -638,8 +645,11 @@
     const btnSpinner = document.getElementById('btnSpinner');
     const btnText = document.getElementById('btnText');
 
-    // --- Variáveis dos Inputs ---
-    const inputIds = ['nome', 'email', 'cpf', 'telefone', 'cep', 'rua', 'numero', 'bairro', 'cidade', 'uf'];
+    // --- Lista completa de todos os inputs (incluindo opcionais) ---
+    const allInputIds = ['nome', 'email', 'cpf', 'telefone', 'cep', 'rua', 'numero', 'complemento', 'referencia', 'bairro', 'cidade', 'uf'];
+    // Lista de inputs OBRIGATÓRIOS para a validação (complemento e referencia são opcionais)
+    const requiredInputIds = ['nome', 'email', 'cpf', 'telefone', 'cep', 'rua', 'numero', 'bairro', 'cidade', 'uf'];
+
 
     const cepInput = document.getElementById('cep');
     const ruaInput = document.getElementById('rua');
@@ -648,33 +658,41 @@
     const ufInput = document.getElementById('uf');
     const numeroInput = document.getElementById('numero');
     const complementoInput = document.getElementById('complemento');
+    const referenciaInput = document.getElementById('referencia'); // NOVO: Ponto de Referência
 
     const loader = document.getElementById('cepLoader');
     const errorMsg = document.getElementById('cepError');
 
-    // --- Variáveis da Barra de Progresso ---
-    const progressSegment = document.getElementById('progressSegment');
-    const step2Circle = document.querySelector('.step[data-step="2"] .circle');
-    const step3Circle = document.querySelector('.step[data-step="3"] .circle');
-    const step2Label = document.querySelector('.step[data-step="2"] .step-label');
-    const step3Label = document.querySelector('.step[data-step="3"] .step-label');
-
     // =========================================================
-    //           VALIDAÇÃO E BARRA DE PROGRESSO
+    //           VALIDAÇÃO DO FORMULÁRIO (E BOTÃO)
     // =========================================================
     
     const checkFormValidity = () => {
         let isValid = true;
 
-        inputIds.forEach(id => {
+        requiredInputIds.forEach(id => {
             const el = document.getElementById(id);
-            if (!el || el.value.trim() === '') {
+            // Verifica apenas campos que não estão disabled (campos do CEP) e se o valor não está vazio
+            if (el && !el.disabled && el.value.trim() === '') {
                 isValid = false;
             }
         });
 
         checkoutBtn.disabled = !isValid;
+        // Chama o progress bar sempre que a validade muda
+        checkProgress();
     };
+
+
+    // =========================================================
+    //           LÓGICA DA BARRA DE PROGRESSO
+    // =========================================================
+    
+    const progressSegment = document.getElementById('progressSegment');
+    const step2Circle = document.querySelector('.step[data-step="2"] .circle');
+    const step3Circle = document.querySelector('.step[data-step="3"] .circle');
+    const step2Label = document.querySelector('.step[data-step="2"] .step-label');
+    const step3Label = document.querySelector('.step[data-step="3"] .step-label');
 
     const checkProgress = () => {
         // Passo 1: Dados Pessoais (Nome, Email, CPF, Telefone)
@@ -690,33 +708,30 @@
             step2Label.classList.remove('active');
         }
 
-        // Passo 2: Endereço (Todos os campos obrigatórios)
-        const addressDataCompleted = inputIds.every(id => document.getElementById(id).value.trim() !== '');
+        // Passo 2: Endereço (rua, numero, bairro, cidade, uf) - Usando os OBRIGATÓRIOS
+        const addressDataCompleted = requiredInputIds.slice(4).every(id => document.getElementById(id).value.trim() !== '');
 
-        if (addressDataCompleted) {
+        if (personalDataCompleted && addressDataCompleted) {
             progressSegment.style.width = '100%';
             step3Circle.classList.add('active');
             step3Label.classList.add('active');
         } else {
+            // Se sair do passo 2, a linha volta para 50% (se o passo 1 estiver ok)
             if (personalDataCompleted) {
                 progressSegment.style.width = '50%';
-            } else {
-                progressSegment.style.width = '0%';
             }
             step3Circle.classList.remove('active');
             step3Label.classList.remove('active');
         }
-        
-        // Mantém a validação do botão
-        checkFormValidity(); 
     };
 
+
     // Adiciona o evento de 'input' e 'change' para acionar o progresso e a validade
-    inputIds.forEach(id => {
+    allInputIds.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
-            el.addEventListener('input', checkProgress);
-            el.addEventListener('change', checkProgress);
+            el.addEventListener('input', checkFormValidity);
+            el.addEventListener('change', checkFormValidity);
         }
     });
 
@@ -732,7 +747,7 @@
         value = value.replace(/(\d{3})(\d)/, '$1.$2');
         value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
         e.target.value = value;
-        checkProgress();
+        checkFormValidity();
     });
 
     const telInputEl = document.getElementById('telefone');
@@ -742,7 +757,7 @@
         value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
         value = value.replace(/(\d)(\d{4})$/, '$1-$2');
         e.target.value = value;
-        checkProgress();
+        checkFormValidity();
     });
 
     cepInput.addEventListener('input', (e) => {
@@ -751,7 +766,7 @@
             value = value.substring(0, 5) + '-' + value.substring(5, 8);
         }
         e.target.value = value;
-        checkProgress();
+        checkFormValidity();
     });
 
     // =========================================================
@@ -765,6 +780,7 @@
         ufInput.value = '';
         numeroInput.value = ''; 
         complementoInput.value = ''; 
+        referenciaInput.value = ''; // NOVO: Limpa Referência
 
         ruaInput.disabled = true; 
         bairroInput.disabled = true; 
@@ -773,14 +789,15 @@
         
         numeroInput.disabled = false;
         complementoInput.disabled = false;
+        referenciaInput.disabled = false; // Garante que Referencia esteja HABILITADO
         
-        checkProgress(); 
+        checkFormValidity(); 
     }
 
     const buscarCep = async () => {
         const cep = cepInput.value.replace(/\D/g, '');
         errorMsg.style.display = 'none';
-        cepInput.style.borderColor = '#e1e1e1';
+        cepInput.style.borderColor = '#e5e7eb';
         
         if (cep === "") { limparCampos(); return; }
 
@@ -812,6 +829,7 @@
                 cepInput.style.borderColor = '#e74c3c';
                 limparCampos();
                 
+                // Em caso de erro, habilita os campos para digitação manual
                 ruaInput.disabled = false; 
                 bairroInput.disabled = false;
                 cidadeInput.disabled = false; 
@@ -820,7 +838,7 @@
             } finally {
                 loader.style.display = 'none';
                 cepInput.disabled = false;
-                checkProgress();
+                checkFormValidity();
             }
         }
     };
@@ -859,13 +877,13 @@
         checkoutBtn.disabled = true;
 
         setTimeout(() => {
-            // Este é o link de pagamento simulado
+            // Link de pagamento simulado
             window.location.href = 'https://pay.infinitepay.io/pedro-henriques-alves777/VC1DLUMtSQ-6kzKPREN1n-19,90';
         }, 2000); 
     };
 
     startTimer();
-    checkProgress(); // Roda ao carregar para garantir bloqueio inicial e status do progresso
+    checkFormValidity(); 
 
 </script>
 </body>
