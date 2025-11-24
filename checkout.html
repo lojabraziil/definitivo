@@ -4,53 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finalizar Pedido - i2GO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        /* --- Reset e Variáveis --- */
+        /* --- Variáveis e Reset --- */
         :root {
             --primary-color: #0071e3;
-            --success-color: #27ae60;
+            --success-color: #27ae60; 
+            --success-gradient: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
             --urgent-color: #e74c3c;
-            --text-color: #333;
-            --gray-light: #f5f7fa;
-            --border-color: #e1e1e1;
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-
-        /* --- Estilos para o Logo do TikTok Shop --- */
-        .tiktok-logo-bar {
-            text-align: center;
-            padding: 15px 0 10px 0;
-            background-color: white;
-        }
-
-        .logo-img {
-            max-height: 25px; 
-            width: auto;
-            object-fit: contain;
+            --text-color: #1f2937;
+            --bg-color: #f0f2f5;
+            --input-bg: #f9fafb;
+            --border-color: #e5e7eb;
+            --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.05);
+            --shadow-btn: 0 10px 20px -5px rgba(39, 174, 96, 0.4);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--gray-light);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             color: var(--text-color);
             padding: 20px;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* --- Container Principal --- */
         .checkout-card {
             background: white;
             width: 100%;
-            max-width: 480px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
+            max-width: 500px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-card);
             overflow: hidden;
-            position: relative;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        /* --- Logo Bar --- */
+        .tiktok-logo-bar {
+            text-align: center;
+            padding: 20px 0 15px 0;
+            background-color: white;
+        }
+
+        .logo-img {
+            max-height: 28px; 
+            width: auto;
+            object-fit: contain;
         }
 
         /* --- Barra do Cronômetro --- */
@@ -58,7 +64,7 @@
             background-color: #fff4f4;
             color: var(--urgent-color);
             text-align: center;
-            padding: 10px;
+            padding: 12px;
             font-size: 0.9rem;
             font-weight: 600;
             border-bottom: 1px solid #ffe0e0;
@@ -71,6 +77,7 @@
         .timer-count {
             font-weight: 800;
             font-size: 1.1rem;
+            font-variant-numeric: tabular-nums;
         }
 
         /* --- Cabeçalho de Segurança --- */
@@ -82,7 +89,7 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            color: #666;
+            color: #6b7280;
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
@@ -91,18 +98,86 @@
         
         .header-secure svg { width: 14px; height: 14px; fill: #27ae60; }
 
-        .content-body { padding: 25px; }
+        .content-body { padding: 30px; }
+
+        /* --- Progress Bar --- */
+        .progress-bar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 0 10px;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10; /* Eleva o passo sobre a linha */
+        }
+
+        .circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e5e7eb;
+            color: white;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 0 0 4px white; /* Efeito flutuante sobre a linha */
+        }
+
+        .circle.active {
+            background-color: var(--primary-color);
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .step-label.active {
+            color: var(--primary-color);
+        }
+
+        .line {
+            position: absolute;
+            height: 2px;
+            background-color: #e5e7eb;
+            width: calc(100% - 40px); /* Ajusta a largura para caber entre os círculos */
+            top: 40px; /* Alinha no meio dos círculos */
+            left: 20px; /* Desloca para o centro */
+            z-index: 5; /* Fica abaixo dos círculos */
+        }
+
+        .line-segment {
+            position: absolute;
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        /* FIM Progress Bar */
 
         /* --- Resumo do Produto --- */
         .product-summary {
             display: flex;
             align-items: center;
             gap: 15px;
-            background-color: #f9f9f9;
+            background-color: white;
             padding: 15px;
             border-radius: 12px;
-            border: 1px solid #eee;
-            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 10px; 
         }
 
         .product-img {
@@ -110,74 +185,97 @@
             height: 70px;
             object-fit: contain;
             border-radius: 8px;
-            border: 1px solid #ddd;
-            background: white;
+            border: 1px solid #f3f3f3;
             padding: 5px;
         }
 
         .product-info h4 {
             font-size: 0.95rem;
             margin-bottom: 4px;
-            line-height: 1.2;
-            color: #222;
+            line-height: 1.3;
+            color: #111827;
+            font-weight: 600;
         }
 
         .price-old {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             text-decoration: line-through;
-            color: #999;
+            color: #9ca3af;
         }
 
         .price-new {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 800;
-            color: var(--success-color);
+            color: var(--primary-color);
         }
 
         /* --- Títulos --- */
         h3 {
-            font-size: 0.95rem;
-            color: #555;
-            margin: 20px 0 15px 0;
-            border-bottom: 1px solid #eee;
+            font-size: 1.05rem;
+            color: #111827;
+            margin: 30px 0 15px 0;
             padding-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* --- Formulário --- */
-        .form-grid { display: grid; gap: 15px; }
+        /* --- Formulário e Inputs Modernos --- */
+        .form-grid { display: grid; gap: 18px; }
         .input-group { position: relative; }
 
         label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 5px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 6px;
             display: block;
-            color: #555;
+            color: #4b5563;
+        }
+
+        .input-icon-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            fill: #9ca3af;
+            transition: fill 0.2s;
+            pointer-events: none;
         }
 
         input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 14px 16px 14px 44px;
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            background: #fff;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            background: var(--input-bg);
             transition: all 0.2s ease;
-            color: #333;
+            color: #1f2937;
         }
 
         input:focus {
+            background-color: #fff;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
         }
 
+        input:focus + .input-icon {
+            fill: var(--primary-color);
+        }
+
         input:disabled {
-            background-color: #f9f9f9;
-            color: #888;
+            background-color: #f3f4f6;
+            color: #9ca3af;
             cursor: not-allowed;
-            border-color: #eee;
+            border-color: #e5e7eb;
         }
 
         .row-inputs {
@@ -207,25 +305,28 @@
 
         .msg-error {
             color: #e74c3c;
-            font-size: 0.75rem;
-            margin-top: 5px;
+            font-size: 0.8rem;
+            margin-top: 6px;
             display: none;
+            font-weight: 500;
         }
 
         /* --- Botão --- */
         .btn-checkout {
             width: 100%;
-            margin-top: 25px;
-            padding: 16px;
-            background-color: var(--success-color);
+            margin-top: 20px; /* Ajustei a margem após o guarantee-box */
+            padding: 18px;
+            background: var(--success-gradient);
             color: white;
             font-size: 1.1rem;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background 0.3s, transform 0.1s;
-            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-btn);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -233,30 +334,26 @@
         }
 
         .btn-checkout:hover {
-            background-color: #219150;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(39, 174, 96, 0.5);
         }
 
         .btn-checkout:active { transform: translateY(1px); }
 
-        /* --- NOVO: Estilo para Botão Desabilitado --- */
         .btn-checkout:disabled {
-            background-color: #bdc3c7;
+            background: #d1d5db;
             cursor: not-allowed;
             box-shadow: none;
             transform: none;
-            opacity: 0.7;
+            opacity: 1;
         }
 
-        /* --- Loading do Botão --- */
         .btn-checkout.loading {
-            background-color: #1abc9c;
+            background: #10b981;
             cursor: wait;
             pointer-events: none;
         }
-
-        .btn-checkout svg { transition: opacity 0.3s; }
-        .btn-checkout.loading svg { opacity: 0; } 
+        .btn-checkout.loading svg { opacity: 0; display: none; } 
 
         .spinner {
             border: 3px solid rgba(255, 255, 255, 0.3);
@@ -265,7 +362,6 @@
             width: 20px;
             height: 20px;
             animation: spin-btn 1s linear infinite;
-            margin-right: 10px;
             display: none;
         }
 
@@ -274,57 +370,73 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* --- Footer e Bandeiras --- */
+        /* --- Footer --- */
         .secure-footer {
-            margin-top: 25px;
+            margin-top: 30px;
             text-align: center;
             border-top: 1px solid #f0f0f0;
-            padding-top: 20px;
+            padding-top: 25px;
         }
 
         .secure-title {
             font-size: 0.75rem;
-            color: #888;
-            margin-bottom: 10px;
+            color: #9ca3af;
+            margin-bottom: 12px;
             display: block;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            font-weight: 600;
         }
 
         .payment-flags {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .flag-img {
-            height: 25px;
+            height: 26px;
             width: auto;
-            filter: grayscale(10%);
-            opacity: 0.85;
-            transition: opacity 0.2s;
+            filter: grayscale(100%);
+            opacity: 0.6;
+            transition: all 0.3s;
         }
         
-        .flag-img:hover { opacity: 1; filter: grayscale(0%); }
+        .flag-img:hover { opacity: 1; filter: grayscale(0%); transform: scale(1.05); }
 
         .security-badges {
             display: flex;
             justify-content: center;
             gap: 15px;
-            font-size: 0.7rem;
-            color: #aaa;
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-weight: 500;
         }
 
         .badge-item {
             display: flex;
             align-items: center;
-            gap: 5px;
-            background: #f8f9fa;
-            padding: 4px 8px;
-            border-radius: 4px;
+            gap: 6px;
+            background: #f3f4f6;
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+        
+        .tiktok-disclaimer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #f3f4f6;
+            text-align: center;
+        }
+
+        .tiktok-disclaimer p {
+            font-size: 0.65rem; 
+            color: #9ca3af;
+            line-height: 1.5;
+            padding: 0 5px;
         }
     </style>
 </head>
@@ -334,6 +446,7 @@
         <div class="tiktok-logo-bar">
             <img src="images/tiktok-shop-logo.png" alt="TikTok Shop" class="logo-img">
         </div>
+        
         <div class="timer-bar">
             <svg style="width:18px;height:18px;fill:#e74c3c" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
             Sua oferta expira em: <span class="timer-count" id="countdown">10:00</span>
@@ -355,6 +468,23 @@
                 </div>
             </div>
 
+            <div class="progress-bar-container">
+                <div class="step" data-step="1">
+                    <div class="circle active">1</div>
+                    <span class="step-label active">Dados</span>
+                </div>
+                
+                <div class="step" data-step="2">
+                    <div class="line"><div class="line-segment" id="progressSegment"></div></div>
+                    <div class="circle">2</div>
+                    <span class="step-label">Entrega</span>
+                </div>
+                
+                <div class="step" data-step="3">
+                    <div class="circle">3</div>
+                    <span class="step-label">Pagamento</span>
+                </div>
+            </div>
             <form id="checkoutForm">
                 <div class="form-grid">
                     
@@ -362,72 +492,110 @@
                     
                     <div class="input-group">
                         <label for="nome">Nome Completo</label>
-                        <input type="text" id="nome" placeholder="Ex: João da Silva" autocomplete="name">
+                        <div class="input-icon-wrap">
+                            <input type="text" id="nome" placeholder="Ex: João da Silva" autocomplete="name">
+                            <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        </div>
                     </div>
                     
                     <div class="input-group">
                         <label for="email">E-mail</label>
-                        <input type="email" id="email" placeholder="nome@exemplo.com" autocomplete="email" required>
+                        <div class="input-icon-wrap">
+                            <input type="email" id="email" placeholder="nome@exemplo.com" autocomplete="email" required>
+                            <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label for="cpf">CPF</label>
-                        <input type="tel" id="cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off" inputmode="numeric">
+                        <div class="input-icon-wrap">
+                            <input type="tel" id="cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off" inputmode="numeric">
+                            <svg class="input-icon" viewBox="0 0 24 24"><path d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"/></svg>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label for="telefone">Celular / WhatsApp</label>
-                        <input type="tel" id="telefone" placeholder="(11) 99999-9999" maxlength="15" autocomplete="tel" inputmode="numeric">
+                        <div class="input-icon-wrap">
+                            <input type="tel" id="telefone" placeholder="(11) 99999-9999" maxlength="15" autocomplete="tel" inputmode="numeric">
+                            <svg class="input-icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                        </div>
                     </div>
 
                     <h3>Endereço de Entrega</h3>
 
                     <div class="input-group">
                         <label for="cep">CEP</label>
-                        <div class="input-wrapper">
-                            <input type="tel" id="cep" placeholder="00000-000" maxlength="9" autocomplete="postal-code" inputmode="numeric">
-                            <div class="loader" id="cepLoader"></div>
+                        <div class="input-icon-wrap">
+                            <div class="input-wrapper">
+                                <input type="tel" id="cep" placeholder="00000-000" maxlength="9" autocomplete="postal-code" inputmode="numeric">
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                <div class="loader" id="cepLoader"></div>
+                            </div>
                         </div>
                         <div class="msg-error" id="cepError">CEP não encontrado.</div>
                     </div>
 
                     <div class="input-group">
                         <label for="rua">Endereço</label>
-                        <input type="text" id="rua" disabled placeholder="Rua, Avenida...">
+                        <div class="input-icon-wrap">
+                            <input type="text" id="rua" disabled placeholder="Rua, Avenida...">
+                            <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/></svg>
+                        </div>
                     </div>
 
                     <div class="row-inputs">
                         <div class="input-group">
                             <label for="numero">Número</label>
-                            <input type="tel" id="numero" placeholder="Ex: 123" inputmode="numeric">
+                            <div class="input-icon-wrap">
+                                <input type="tel" id="numero" placeholder="Ex: 123" inputmode="numeric">
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h-2v2h-2v2h2v2h2v2h2v-2h2v-2h-2v-2z"/></svg>
+                            </div>
                         </div>
                         <div class="input-group">
                             <label for="complemento">Comp.</label>
-                            <input type="text" id="complemento" placeholder="Apto/Bloco">
+                            <div class="input-icon-wrap">
+                                <input type="text" id="complemento" placeholder="Apto/Bloco">
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M15 15H9v-2h6v2zm0-4H9V9h6v2zm-1-8h-4v2h4V3zM7 3H3v2h4V3zm14 0h-4v2h4V3zm0 4h-4v14H7V7H3v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7z"/></svg>
+                            </div>
                         </div>
                     </div>
 
                     <div class="input-group">
                         <label for="bairro">Bairro</label>
-                        <input type="text" id="bairro" disabled>
+                        <div class="input-icon-wrap">
+                            <input type="text" id="bairro" disabled>
+                            <svg class="input-icon" viewBox="0 0 24 24"><path d="M10.5 18.5l-6-6 1.41-1.41L10.5 15.67l6.59-6.59L18.5 10.5z"/></svg>
+                        </div>
                     </div>
 
                     <div class="row-inputs">
                         <div class="input-group">
                             <label for="cidade">Cidade</label>
-                            <input type="text" id="cidade" disabled>
+                            <div class="input-icon-wrap">
+                                <input type="text" id="cidade" disabled>
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M15 11V5l-3-3-3 3v2H2v11h20V11h-7z"/></svg>
+                            </div>
                         </div>
                         <div class="input-group">
                             <label for="uf">Estado</label>
-                            <input type="text" id="uf" disabled>
+                            <div class="input-icon-wrap">
+                                <input type="text" id="uf" disabled>
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg>
+                            </div>
                         </div>
                     </div>
 
                 </div>
+                
+                <div class="guarantee-box" style="margin-top: 25px; padding: 12px; background: #ecfdf5; border-radius: 8px; border: 1px solid #a7f3d0; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.85rem; color: #065f46; font-weight: 600;">
+                    <svg style="width:20px;height:20px;fill:#059669" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                    Compra Segura | Entrega Garantida ou Seu Dinheiro de Volta
+                </div>
 
                 <button type="button" id="checkoutBtn" class="btn-checkout" onclick="initiatePayment()" disabled>  
                     <div class="spinner" id="btnSpinner"></div> 
-                    <svg style="width:20px;height:20px;fill:white" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                    <svg style="width:22px;height:22px;fill:white" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
                     <span id="btnText">FINALIZAR COMPRA</span>
                 </button>
 
@@ -446,6 +614,14 @@
                         <span class="badge-item">🔒 SSL Válido</span>
                         <span class="badge-item">🛡️ Dados Protegidos</span>
                     </div>
+
+                    <div class="tiktok-disclaimer">
+                        <p>
+                            Esta página é uma oferta especial da i2GO, desenvolvida para clientes do TikTok Shop.
+                            O TikTok é uma marca registrada. Esta oferta é de responsabilidade exclusiva da i2GO e não é afiliada ou endossada pelo TikTok.
+                            <br>Todos os direitos reservados. &copy; 2024 i2GO.
+                        </p>
+                    </div>
                 </div>
 
             </form>
@@ -463,7 +639,6 @@
     const btnText = document.getElementById('btnText');
 
     // --- Variáveis dos Inputs ---
-    // Removemos 'complemento' da lista de obrigatórios
     const inputIds = ['nome', 'email', 'cpf', 'telefone', 'cep', 'rua', 'numero', 'bairro', 'cidade', 'uf'];
 
     const cepInput = document.getElementById('cep');
@@ -477,8 +652,15 @@
     const loader = document.getElementById('cepLoader');
     const errorMsg = document.getElementById('cepError');
 
+    // --- Variáveis da Barra de Progresso ---
+    const progressSegment = document.getElementById('progressSegment');
+    const step2Circle = document.querySelector('.step[data-step="2"] .circle');
+    const step3Circle = document.querySelector('.step[data-step="3"] .circle');
+    const step2Label = document.querySelector('.step[data-step="2"] .step-label');
+    const step3Label = document.querySelector('.step[data-step="3"] .step-label');
+
     // =========================================================
-    //           NOVA FUNÇÃO: VALIDAÇÃO DO FORMULÁRIO
+    //           VALIDAÇÃO E BARRA DE PROGRESSO
     // =========================================================
     
     const checkFormValidity = () => {
@@ -486,22 +668,55 @@
 
         inputIds.forEach(id => {
             const el = document.getElementById(id);
-            // Verifica se o campo existe e se está vazio
             if (!el || el.value.trim() === '') {
                 isValid = false;
             }
         });
 
-        // Habilita ou Desabilita o botão
         checkoutBtn.disabled = !isValid;
     };
 
-    // Adiciona o evento de 'input' em todos os campos obrigatórios
+    const checkProgress = () => {
+        // Passo 1: Dados Pessoais (Nome, Email, CPF, Telefone)
+        const personalDataCompleted = ['nome', 'email', 'cpf', 'telefone'].every(id => document.getElementById(id).value.trim() !== '');
+
+        if (personalDataCompleted) {
+            progressSegment.style.width = '50%';
+            step2Circle.classList.add('active');
+            step2Label.classList.add('active');
+        } else {
+            progressSegment.style.width = '0%';
+            step2Circle.classList.remove('active');
+            step2Label.classList.remove('active');
+        }
+
+        // Passo 2: Endereço (Todos os campos obrigatórios)
+        const addressDataCompleted = inputIds.every(id => document.getElementById(id).value.trim() !== '');
+
+        if (addressDataCompleted) {
+            progressSegment.style.width = '100%';
+            step3Circle.classList.add('active');
+            step3Label.classList.add('active');
+        } else {
+            if (personalDataCompleted) {
+                progressSegment.style.width = '50%';
+            } else {
+                progressSegment.style.width = '0%';
+            }
+            step3Circle.classList.remove('active');
+            step3Label.classList.remove('active');
+        }
+        
+        // Mantém a validação do botão
+        checkFormValidity(); 
+    };
+
+    // Adiciona o evento de 'input' e 'change' para acionar o progresso e a validade
     inputIds.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
-            el.addEventListener('input', checkFormValidity);
-            el.addEventListener('change', checkFormValidity);
+            el.addEventListener('input', checkProgress);
+            el.addEventListener('change', checkProgress);
         }
     });
 
@@ -517,7 +732,7 @@
         value = value.replace(/(\d{3})(\d)/, '$1.$2');
         value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
         e.target.value = value;
-        checkFormValidity();
+        checkProgress();
     });
 
     const telInputEl = document.getElementById('telefone');
@@ -527,7 +742,7 @@
         value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
         value = value.replace(/(\d)(\d{4})$/, '$1-$2');
         e.target.value = value;
-        checkFormValidity();
+        checkProgress();
     });
 
     cepInput.addEventListener('input', (e) => {
@@ -536,7 +751,7 @@
             value = value.substring(0, 5) + '-' + value.substring(5, 8);
         }
         e.target.value = value;
-        checkFormValidity();
+        checkProgress();
     });
 
     // =========================================================
@@ -559,7 +774,7 @@
         numeroInput.disabled = false;
         complementoInput.disabled = false;
         
-        checkFormValidity(); 
+        checkProgress(); 
     }
 
     const buscarCep = async () => {
@@ -605,7 +820,7 @@
             } finally {
                 loader.style.display = 'none';
                 cepInput.disabled = false;
-                checkFormValidity(); 
+                checkProgress();
             }
         }
     };
@@ -613,7 +828,7 @@
     cepInput.addEventListener('blur', buscarCep);
 
     // =========================================================
-    //                 FUNÇÕES GERAIS
+    //                 TIMER E PAGAMENTO
     // =========================================================
 
     const startTimer = () => {
@@ -640,16 +855,17 @@
 
         checkoutBtn.classList.add('loading');
         btnSpinner.style.display = 'block';
-        btnText.textContent = 'Redirecionando...'; 
+        btnText.textContent = 'Processando...'; 
         checkoutBtn.disabled = true;
 
         setTimeout(() => {
+            // Este é o link de pagamento simulado
             window.location.href = 'https://pay.infinitepay.io/pedro-henriques-alves777/VC1DLUMtSQ-6kzKPREN1n-19,90';
         }, 2000); 
     };
 
     startTimer();
-    checkFormValidity(); // Roda ao carregar
+    checkProgress(); // Roda ao carregar para garantir bloqueio inicial e status do progresso
 
 </script>
 </body>
