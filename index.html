@@ -100,16 +100,12 @@
         /* --- BANNER COM VÍDEO LIMPO --- */
         .hero-banner-container {
             margin-top: 12px;
-            background-color: #000; /* Fundo preto caso o vídeo demore a carregar */
-            /* Arredondamento mais moderno */
+            background-color: #000;
             border-radius: 16px; 
-            /* Remove padding para o vídeo encostar nas bordas */
             padding: 0; 
             position: relative;
-            /* Garante que o vídeo respeite as bordas arredondadas */
             overflow: hidden;
             width: 100%;
-            /* Define a proporção baseada nas dimensões 822x234 */
             aspect-ratio: 822 / 234;
             box-shadow: 0 5px 20px rgba(254, 44, 85, 0.2); 
             border: 1px solid #222;
@@ -120,12 +116,9 @@
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            /* Garante que o vídeo cubra todo o espaço sem distorcer (pode cortar um pouco as bordas se a tela for muito diferente da proporção) */
             object-fit: cover; 
             z-index: 0;
-            /* Opacidade total para aparecer por inteiro */
             opacity: 1; 
-            /* Impede que o mouse interaja com o vídeo (não clicável) */
             pointer-events: none; 
         }
 
@@ -206,10 +199,10 @@
     <main>
         <section class="container">
             <div class="hero-banner-container">
-                <video class="banner-video-bg" autoplay loop muted playsinline>
+                <video id="heroVideo" class="banner-video-bg" autoplay loop muted playsinline preload="auto">
                     <source src="images/an.mp4" type="video/mp4">
                 </video>
-                </div>
+            </div>
 
             <div class="promo-container-modern">
                 <div class="promo-block-modern block-frete-modern">
@@ -356,7 +349,24 @@
         </div> </main>
 
     <script>
-        // 1. LOGICA DO BOTÃO RESGATAR
+        // 1. FORCE MOBILE AUTOPLAY VIDEO
+        document.addEventListener('DOMContentLoaded', function() {
+            var video = document.getElementById('heroVideo');
+            if(video) {
+                video.muted = true; // iOS requer isso explícito no JS
+                var promise = video.play();
+                if (promise !== undefined) {
+                    promise.catch(error => {
+                        // Autoplay foi prevenido.
+                        console.log("Autoplay bloqueado, tentando novamente silenciado.");
+                        video.muted = true;
+                        video.play();
+                    });
+                }
+            }
+        });
+
+        // 2. LOGICA DO BOTÃO RESGATAR
         const btnResgatar = document.getElementById('btnResgatar');
         if (btnResgatar) {
             btnResgatar.addEventListener('click', function() {
@@ -365,7 +375,7 @@
             });
         }
 
-        // 2. SEARCH LOGIC
+        // 3. SEARCH LOGIC
         const productsData = [
             { id: 1, title: "Smart Tv 32 Philco Led Roku Tv Hd Dolby Audio", price: "R$ 499,00", img: "images/t1.webp", link: "tv.html" },
             { id: 2, title: "Fogão Atlas 4 Bocas Mônaco Top Glass Preto", price: "R$ 249,90", img: "images/f1.jpg", link: "fogao.html" },
