@@ -190,6 +190,8 @@
         .price-final { font-size: 15px; font-weight: 800; color: var(--primary-pink); text-shadow: 0 0 2px rgba(254, 44, 85, 0.3); }
         .text-muted { color: var(--text-secondary); font-size: 11px; }
         
+        .menu-float-btn { position: absolute; bottom: 8px; right: 8px; width: 28px; height: 28px; background: rgba(30, 30, 30, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.3); font-size: 16px; border: 1px solid #333; color: var(--text-primary); }
+        
         .no-results { text-align: center; padding: 40px; width: 100%; grid-column: span 2; display: none; color: var(--text-secondary); }
         .no-results button { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-dark); }
 
@@ -416,16 +418,16 @@
         const productItems = document.querySelectorAll('.item-searchable');
         const noResultsMsg = document.getElementById('noResultsMsg');
 
-        // --- SCRIPT PARA TROCAR O PLACEHOLDER ALEATORIAMENTE ---
+        // --- SCRIPT PARA TROCAR O PLACEHOLDER ALEATORIAMENTE (Sem 'Buscar:') ---
         function updatePlaceholder() {
             const titles = productsData.map(p => p.title);
             const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-            // Efeito simples de troca
-            searchInput.setAttribute('placeholder', ` ${randomTitle.substring(0, 25)}...`);
+            // Apenas o nome do produto, cortado para não ficar gigante
+            searchInput.setAttribute('placeholder', `${randomTitle.substring(0, 32)}...`);
         }
         // Troca a cada 3 segundos
         setInterval(updatePlaceholder, 3000);
-        // Inicia um logo ao carregar
+        // Inicia ao carregar
         updatePlaceholder();
 
         // --- LÓGICA DE BUSCA PADRÃO ---
