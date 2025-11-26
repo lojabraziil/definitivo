@@ -67,30 +67,15 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* Ajuste para o ícone SVG */
-        .search-icon-left { 
-            padding-left: 14px; 
-            color: var(--text-secondary); 
-            display: flex; 
-            align-items: center;
-            justify-content: center;
-        }
+        .search-icon-left { padding-left: 14px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; }
         
-        /* Estilo do SVG da lupa */
         .search-icon-svg {
-            width: 18px;
-            height: 18px;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            fill: none;
+            width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none;
         }
 
         .modern-input {
             flex: 1; border: none; background: transparent; outline: none; padding: 8px 10px;
             font-size: 14px; color: var(--text-primary); font-family: 'Inter', sans-serif;
-            /* Animação suave na troca de texto */
             transition: opacity 0.3s ease; 
         }
         .modern-input::placeholder { color: #666; transition: color 0.3s; }
@@ -117,7 +102,7 @@
 
         .container { padding: 0 12px; }
         
-        /* --- BANNER COM VÍDEO LIMPO --- */
+        /* --- BANNER --- */
         .hero-banner-container {
             margin-top: 12px;
             background-color: #000;
@@ -194,6 +179,47 @@
         
         .no-results { text-align: center; padding: 40px; width: 100%; grid-column: span 2; display: none; color: var(--text-secondary); }
         .no-results button { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-dark); }
+
+        /* --- RESPONSIVIDADE (DESKTOP) --- */
+        @media (min-width: 768px) {
+            /* Container Centralizado no Desktop */
+            .container, .masonry-grid {
+                max-width: 1100px; /* Largura máxima confortável */
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            /* Cabeçalho Centralizado */
+            .top-header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .logo-row { width: 100%; max-width: 1100px; }
+            .search-row-custom { width: 100%; max-width: 800px; margin: 0 auto; }
+
+            /* Aumentar colunas do Grid */
+            .masonry-grid {
+                column-count: 4; /* 4 produtos por linha no PC */
+                column-gap: 16px;
+            }
+
+            /* Ajustar altura do banner para não ficar gigante */
+            .hero-banner-container {
+                max-height: 400px; 
+            }
+            
+            /* Ajustes de fonte para PC */
+            .card-title { font-size: 14px; }
+            .price-final { font-size: 16px; }
+        }
+
+        @media (min-width: 1200px) {
+            .masonry-grid {
+                column-count: 5; /* 5 produtos em telas muito grandes */
+            }
+        }
 
     </style>
 </head>
