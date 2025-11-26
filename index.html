@@ -32,7 +32,7 @@
             padding-bottom: 40px;
         }
 
-        /* --- CSS GERAL --- */
+        /* --- HEADER & LOGO --- */
         .top-header { position: fixed; top: 0; left: 0; width: 100%; background: white; z-index: 1000; border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         
         .logo-row { display: flex; justify-content: center; align-items: center; padding: 12px 16px 8px 16px; position: relative; }
@@ -40,19 +40,68 @@
         .brand-logo { display: flex; align-items: center; gap: 6px; font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: var(--tiktok-black); }
         .tiktok-icon-svg { width: 24px; height: 24px; fill: var(--tiktok-black); filter: drop-shadow(-2px -2px 0 var(--primary-cyan)) drop-shadow(2px 2px 0 var(--primary-pink)); }
         
-        .search-row { padding: 0 12px 12px 12px; display: flex; gap: 10px; position: relative; }
-        .search-container { flex: 1; position: relative; }
-        .search-input-box { background: var(--bg-gray); border-radius: 4px; display: flex; align-items: center; padding: 8px 12px; transition: all 0.3s; }
-        .search-input-box:focus-within { background: white; box-shadow: 0 0 0 2px rgba(22, 24, 35, 0.1); }
-        .search-input-box input { border: none; background: transparent; outline: none; flex: 1; font-size: 14px; margin-left: 8px; font-family: 'Inter'; }
-        .btn-procurar { background: var(--tiktok-black); color: white; border: none; padding: 0 16px; border-radius: 4px; font-weight: 600; font-size: 13px; cursor: pointer; transition: opacity 0.2s; }
+        /* --- NOVA BARRA DE PESQUISA (Atualizada) --- */
+        .search-row-custom {
+            padding: 0 16px 12px 16px;
+            display: flex;
+            justify-content: center;
+            position: relative; /* Para o dropdown se posicionar corretamente */
+        }
+
+        .modern-search-bar {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background-color: #fff;
+            border: 2px solid #161823; /* Borda preta */
+            border-radius: 50px; /* Formato cápsula */
+            padding: 3px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .search-icon-left {
+            padding-left: 12px;
+            color: #8a8b91;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .modern-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 8px 10px;
+            font-size: 14px;
+            color: #161823;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modern-search-btn {
+            background-color: #161823; /* Botão Preto */
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .modern-search-btn:hover {
+            background-color: #000;
+        }
         
+        /* Dropdown de Resultados */
         .search-results-dropdown {
-            position: absolute; top: 100%; left: 0; width: 100%;
+            position: absolute; top: 100%; left: 16px; right: 16px; /* Ajustado para alinhar com a padding */
             background: white; border-radius: 0 0 12px 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15); margin-top: 4px;
-            z-index: 1001; display: none; max-height: 350px; overflow-y: auto;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15); margin-top: -10px;
+            z-index: 999; display: none; max-height: 350px; overflow-y: auto;
             border: 1px solid #f1f1f1;
+            width: auto; /* Auto para respeitar left/right */
         }
         .result-item { display: flex; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f8f8f8; cursor: pointer; transition: background 0.2s; }
         .result-item:hover { background-color: #f9f9f9; }
@@ -161,15 +210,16 @@
             </div>
         </div>
         
-        <div class="search-row">
-            <div class="search-container">
-                <div class="search-input-box">
-                    <span class="text-gray">🔍</span>
-                    <input type="text" id="searchInput" placeholder="Buscar ofertas..." autocomplete="off">
-                </div>
-                <div id="dropdownResults" class="search-results-dropdown"></div>
+        <div class="search-row-custom">
+            <div class="modern-search-bar">
+                <span class="search-icon-left">🔍</span>
+                
+                <input type="text" id="searchInput" class="modern-input" placeholder="Buscar ofertas..." autocomplete="off">
+                
+                <button class="modern-search-btn" id="searchBtn">Procurar</button>
             </div>
-            <button class="btn-procurar" id="searchBtn">Procurar</button>
+            
+            <div id="dropdownResults" class="search-results-dropdown"></div>
         </div>
     </header>
 
@@ -223,7 +273,6 @@
                 <div class="menu-float-btn">➔</div>
             </div>
 
-
             <div class="product-card item-searchable" onclick="window.location.href='tv.html'">
                 <img src="images/t1.webp" class="card-img" style="aspect-ratio: 1/1;">
                 <div class="card-info">
@@ -254,7 +303,7 @@
                 <div class="menu-float-btn">➔</div>
             </div>
             
-            <div class="product-card item-searchable" onclick="window.location.href='apple.html'">
+            <div class="product-card item-searchable" onclick="window.location.href='apple2.html'">
                 <img src="images/r1.webp" class="card-img" style="aspect-ratio: 1/1;">
                 <div class="card-info">
                     <h3 class="card-title">iPhone 11 128 GB Branco - Bom (Recondicionado)</h3>
