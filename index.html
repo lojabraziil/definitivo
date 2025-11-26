@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Shop - Loja Completa</title>
+    <title>TikTok Shop</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -67,13 +67,33 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        .search-icon-left { padding-left: 12px; color: var(--text-secondary); font-size: 16px; display: flex; align-items: center; }
+        /* Ajuste para o ícone SVG */
+        .search-icon-left { 
+            padding-left: 14px; 
+            color: var(--text-secondary); 
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Estilo do SVG da lupa */
+        .search-icon-svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
 
         .modern-input {
             flex: 1; border: none; background: transparent; outline: none; padding: 8px 10px;
             font-size: 14px; color: var(--text-primary); font-family: 'Inter', sans-serif;
+            /* Animação suave na troca de texto */
+            transition: opacity 0.3s ease; 
         }
-        .modern-input::placeholder { color: #666; }
+        .modern-input::placeholder { color: #666; transition: color 0.3s; }
 
         .modern-search-btn {
             background-color: var(--primary-pink); color: white; border: none; padding: 8px 20px; border-radius: 50px;
@@ -111,7 +131,6 @@
             border: 1px solid #222;
         }
 
-        /* Estilo do Vídeo de Fundo */
         .banner-video-bg {
             position: absolute;
             top: 0; left: 0;
@@ -188,7 +207,13 @@
         
         <div class="search-row-custom">
             <div class="modern-search-bar">
-                <span class="search-icon-left">🔍</span>
+                <span class="search-icon-left">
+                    <svg class="search-icon-svg" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </span>
+                
                 <input type="text" id="searchInput" class="modern-input" placeholder="Buscar ofertas..." autocomplete="off">
                 <button class="modern-search-btn" id="searchBtn">Procurar</button>
             </div>
@@ -353,11 +378,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             var video = document.getElementById('heroVideo');
             if(video) {
-                video.muted = true; // iOS requer isso explícito no JS
+                video.muted = true; 
                 var promise = video.play();
                 if (promise !== undefined) {
                     promise.catch(error => {
-                        // Autoplay foi prevenido.
                         console.log("Autoplay bloqueado, tentando novamente silenciado.");
                         video.muted = true;
                         video.play();
@@ -375,7 +399,7 @@
             });
         }
 
-        // 3. SEARCH LOGIC
+        // 3. SEARCH LOGIC & PLACEHOLDER ANIMATION
         const productsData = [
             { id: 1, title: "Smart Tv 32 Philco Led Roku Tv Hd Dolby Audio", price: "R$ 499,00", img: "images/t1.webp", link: "tv.html" },
             { id: 2, title: "Fogão Atlas 4 Bocas Mônaco Top Glass Preto", price: "R$ 249,90", img: "images/f1.jpg", link: "fogao.html" },
@@ -392,6 +416,19 @@
         const productItems = document.querySelectorAll('.item-searchable');
         const noResultsMsg = document.getElementById('noResultsMsg');
 
+        // --- SCRIPT PARA TROCAR O PLACEHOLDER ALEATORIAMENTE ---
+        function updatePlaceholder() {
+            const titles = productsData.map(p => p.title);
+            const randomTitle = titles[Math.floor(Math.random() * titles.length)];
+            // Efeito simples de troca
+            searchInput.setAttribute('placeholder', ` ${randomTitle.substring(0, 25)}...`);
+        }
+        // Troca a cada 3 segundos
+        setInterval(updatePlaceholder, 3000);
+        // Inicia um logo ao carregar
+        updatePlaceholder();
+
+        // --- LÓGICA DE BUSCA PADRÃO ---
         searchInput.addEventListener('input', function(e) {
             const query = e.target.value.toLowerCase().trim();
             dropdownResults.innerHTML = '';
