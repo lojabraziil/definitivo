@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Admin 3.5 - Editor & Importador</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- ESTILOS DO PAINEL (DARK ENTERPRISE) --- */
+        :root {
+            --bg-body: #0d0d0d;
+            --bg-panel: #141414;
+            --bg-input: #1a1a1a;
+            --border: #2a2a2a;
+            --accent: #25f4ee;
+            --accent-hover: #1ccbc6;
+            --pink: #fe2c55;
+            --text-main: #ececec;
+            --text-muted: #888;
+            --sidebar-width: 240px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 13px;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+        .brand { font-size: 18px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .brand span { color: var(--accent); }
+        .menu-group { margin-bottom: 20px; }
+        .menu-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding-left: 10px; }
+        .nav-btn { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px; background: transparent; border: none; color: var(--text-muted); border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 500; font-size: 13px; text-align: left; }
+        .nav-btn:hover { background: var(--border); color: #fff; }
+        .nav-btn.active { background: rgba(37, 244, 238, 0.08); color: var(--accent); border: 1px solid rgba(37, 244, 238, 0.1); }
+        .nav-btn svg { width: 16px; height: 16px; }
+
+        /* MAIN */
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        .top-bar { height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; }
+        .top-title h1 { font-size: 16px; font-weight: 600; }
+        .top-actions .btn-link { color: var(--text-muted); text-decoration: none; font-size: 12px; display:flex; align-items:center; gap:5px; transition:0.2s; }
+        .top-actions .btn-link:hover { color: var(--accent); }
+
+        /* WORKSPACE */
+        .workspace { flex: 1; overflow: hidden; position: relative; }
+        .tab-view { display: none; height: 100%; }
+        .tab-view.active { display: flex; }
+        .creator-layout { display: grid; grid-template-columns: 400px 1fr; height: 100%; width: 100%; }
+        
+        /* CONTROLS */
+        .control-panel { background: var(--bg-panel); border-right: 1px solid var(--border); overflow-y: auto; padding: 20px; }
+        .control-panel::-webkit-scrollbar { width: 5px; }
+        .control-panel::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+        details { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+        summary { padding: 12px 15px; cursor: pointer; font-weight: 600; user-select: none; display: flex; align-items: center; justify-content: space-between; background: var(--bg-panel); }
+        summary:hover { background: #1f1f1f; }
+        .details-content { padding: 15px; border-top: 1px solid var(--border); }
+
+        .form-group { margin-bottom: 12px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        label { display: block; margin-bottom: 6px; font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; }
+        input, textarea, select { width: 100%; background: #0a0a0a; border: 1px solid var(--border); border-radius: 6px; padding: 10px; color: #fff; font-family: 'Inter', sans-serif; font-size: 13px; transition: 0.2s; }
+        input:focus, textarea:focus, select:focus { border-color: var(--accent); background: #111; }
+
+        .action-bar { padding: 15px; background: var(--bg-panel); border-top: 1px solid var(--border); display: flex; gap: 10px; position: sticky; bottom: 0; }
+        .btn { flex: 1; padding: 12px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; font-size: 13px; transition: 0.2s; }
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-secondary { background: #2a2a2a; color: #fff; border: 1px solid var(--border); }
+        .btn-secondary:hover { background: #333; border-color: #444; }
+        
+        /* ESTILO DO BOTÃO DE UPLOAD */
+        .upload-wrapper {
+            margin-bottom: 20px;
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            background: rgba(255,255,255,0.02);
+            transition: 0.3s;
+        }
+        .upload-wrapper:hover { border-color: var(--accent); background: rgba(37, 244, 238, 0.05); }
+        .btn-upload { background: transparent; border: none; color: var(--accent); font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+
+        /* PREVIEW */
+        .preview-stage { background: #000; display: flex; align-items: center; justify-content: center; padding: 40px; background-image: radial-gradient(#1a1a1a 1px, transparent 1px); background-size: 20px 20px; }
+        .device-mockup { width: 340px; height: 680px; background: #fff; border-radius: 40px; border: 10px solid #222; box-shadow: 0 30px 60px rgba(0,0,0,0.6); overflow: hidden; position: relative; }
+        .device-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 25px; background: #222; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; z-index: 10; }
+        #previewFrame { width: 100%; height: 100%; border: none; }
+
+        /* VITRINE TABLE */
+        .vitrine-layout { padding: 30px; overflow-y: auto; width: 100%; }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .data-table th { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 500; }
+        .data-table td { padding: 10px; border-bottom: 1px solid #222; vertical-align: middle; }
+        .data-table tr:hover td { background: #1a1a1a; }
+        .thumb-sm { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; border: 1px solid var(--border); }
+        .status-pill { background: rgba(37, 244, 238, 0.1); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+        .btn-icon { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 5px; border-radius: 4px; }
+        .btn-icon:hover { background: #222; color: var(--pink); }
+        
+        .badge-ai { font-size: 9px; background: #112a2a; color: var(--accent); padding: 2px 5px; border-radius: 3px; margin-left: 5px; border: 1px solid #1a4444; display: none; }
+
+        @media (max-width: 900px) { body { flex-direction: column; height: auto; overflow: auto; } .sidebar { width: 100%; padding: 20px; flex-direction: row; align-items: center; flex-wrap: wrap; } .creator-layout { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="brand"><span>ALVES 7</span> MASTER</div>
+        <div class="menu-group">
+            <div class="menu-title">Criação</div>
+            <button class="nav-btn active" onclick="switchTab('creator', this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editor de Produto
+            </button>
+        </div>
+        <div class="menu-group">
+            <div class="menu-title">Gerenciamento</div>
+            <button class="nav-btn" onclick="switchTab('vitrine', this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Vitrine da Loja
+            </button>
+        </div>
+        <div style="margin-top: auto;">
+            <button class="nav-btn" onclick="window.open('index.html', '_blank')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Visualizar Loja
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="top-title"><h1 id="page-title">Editor de Produto</h1></div>
+            <div class="top-actions"><a href="#" class="btn-link">Suporte</a></div>
+        </div>
+
+        <div class="workspace">
+            
+            <div id="tab-creator" class="tab-view active creator-layout">
+                <div class="control-panel">
+                    
+                    <div class="upload-wrapper">
+                        <input type="file" id="htmlLoader" accept=".html" style="display: none;" onchange="loadHtmlFile(this)">
+                        <button class="btn-upload" onclick="document.getElementById('htmlLoader').click()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            Carregar/Editar HTML Existente
+                        </button>
+                    </div>
+
+                    <details open>
+                        <summary>Informações Principais</summary>
+                        <div class="details-content">
+                            <div class="form-group">
+                                <label>Título do Produto <span id="autoBadge" class="badge-ai">IA ATIVA</span></label>
+                                <input type="text" id="pTitle" placeholder="Ex: iPhone 15, Air Fryer..." oninput="updatePreview()" onkeyup="autoFillSpecs(this.value); autoFillReviews(this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label>Link de Compra</label>
+                                <input type="text" id="pCheckout" placeholder="https://pay..." value="#" oninput="updatePreview()">
+                            </div>
+                            <div class="form-row">
+                                <div><label>Preço Atual</label><input type="text" id="pPrice" value="R$ 0,00" oninput="updatePreview()"></div>
+                                <div><label>Preço Antigo</label><input type="text" id="pOldPrice" value="R$ 0,00" oninput="updatePreview()"></div>
+                            </div>
+                            <div class="form-row">
+                                <div><label>Desconto</label><input type="text" id="pDiscount" value="0%" oninput="updatePreview()"></div>
+                                <div><label>Título da Aba</label><input type="text" id="pPageTitle" value="Loja" oninput="updatePreview()"></div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Especificações Técnicas</summary>
+                        <div class="details-content">
+                            <div class="form-group"><label>Gerado pela IA (Automático)</label><textarea id="pSpecs" rows="12" oninput="updatePreview()"></textarea></div>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Imagens</summary>
+                        <div class="details-content">
+                            <div class="form-group"><label>Imagem 1 (Principal)</label><input type="text" id="pImg1" oninput="updatePreview()"></div>
+                            <div class="form-group"><label>Imagem 2</label><input type="text" id="pImg2" oninput="updatePreview()"></div>
+                            <div class="form-group"><label>Imagem 3</label><input type="text" id="pImg3" oninput="updatePreview()"></div>
+                            <div class="form-group"><label>Imagem 4</label><input type="text" id="pImg4" oninput="updatePreview()"></div>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Avaliações Avançadas</summary>
+                        <div class="details-content">
+                            <button onclick="randomizeAllAvatars()" class="btn btn-secondary" style="width:100%; margin-bottom:15px;">🎲 Gerar Novos Rostos</button>
+                            <div id="reviewsContainer"></div>
+                        </div>
+                    </details>
+
+                    <div class="action-bar">
+                        <button class="btn btn-secondary" onclick="addToStore()">Salvar na Vitrine</button>
+                        <button class="btn btn-primary" onclick="generateFile()">Baixar HTML</button>
+                    </div>
+                </div>
+
+                <div class="preview-stage">
+                    <div class="device-mockup">
+                        <div class="device-notch"></div>
+                        <iframe id="previewFrame"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-vitrine" class="tab-view">
+                <div class="vitrine-layout">
+                    <div class="card">
+                        <div style="background:#1a1a1a; padding:15px; border-radius:8px; margin-bottom:20px; font-size:12px; color:#aaa; border-left:3px solid #fe2c55;">
+                            <strong>DICA:</strong> Os produtos listados aqui aparecerão automaticamente na seção "Você também pode gostar" de todos os produtos que você criar.
+                        </div>
+                        <table class="data-table">
+                            <thead><tr><th width="60">Img</th><th>Produto</th><th>Preço</th><th>Status</th><th width="50">Ação</th></tr></thead>
+                            <tbody id="storeListBody"></tbody>
+                        </table>
+                    </div>
+                    <button onclick="resetStore()" style="margin-top:20px; background:none; border:1px solid #333; color:#555; padding:8px 15px; border-radius:4px; cursor:pointer;">Limpar Tudo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- FUNÇÃO PARA IMPORTAR/EDITAR HTML EXISTENTE ---
+        function loadHtmlFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(content, 'text/html');
+
+                try {
+                    // 1. Título e Preços
+                    const title = doc.querySelector('.product-title').innerText;
+                    const price = doc.querySelector('.preco-atual-ativa').innerText;
+                    const oldPrice = doc.querySelector('.preco-antigo-ativa').innerText;
+                    const discountText = doc.querySelector('.desconto-tag-ativa').innerText.replace('Economize ', '');
+                    const pageTitle = doc.querySelector('title').innerText;
+                    const checkoutLink = doc.querySelector('.buy-button').getAttribute('href');
+
+                    document.getElementById('pTitle').value = title;
+                    document.getElementById('pPrice').value = price;
+                    document.getElementById('pOldPrice').value = oldPrice;
+                    document.getElementById('pDiscount').value = discountText;
+                    document.getElementById('pPageTitle').value = pageTitle;
+                    document.getElementById('pCheckout').value = checkoutLink;
+
+                    // 2. Imagens
+                    const imgs = doc.getElementById('gallery').querySelectorAll('img');
+                    for(let i = 1; i <= 4; i++) {
+                        document.getElementById(`pImg${i}`).value = imgs[i-1] ? imgs[i-1].src : '';
+                    }
+
+                    // 3. Especificações
+                    const specItems = doc.querySelectorAll('.specs-list li');
+                    let specString = "";
+                    specItems.forEach(li => {
+                        const key = li.querySelector('strong').innerText.replace(':', '');
+                        const val = li.querySelector('span').innerText;
+                        specString += `${key}: ${val}\n`;
+                    });
+                    document.getElementById('pSpecs').value = specString;
+
+                    // 4. Avaliações (Parsing Complexo)
+                    const reviews = doc.querySelectorAll('.review-card');
+                    reviews.forEach((card, index) => {
+                        const i = index + 1;
+                        if(i > 5) return;
+
+                        const name = card.querySelector('.reviewer-name').innerText;
+                        const avatar = card.querySelector('.reviewer-avatar').src;
+                        const text = card.querySelector('.review-text').innerText;
+                        
+                        // Contar estrelas preenchidas
+                        const stars = card.querySelectorAll('.star-icon-svg').length;
+                        
+                        // Fotos da review (se houver)
+                        let pics = [];
+                        const mediaItems = card.querySelectorAll('.review-media-item');
+                        mediaItems.forEach(m => pics.push(m.src));
+                        
+                        // Resposta da loja (se houver)
+                        let reply = "";
+                        const replyBox = card.querySelector('.seller-reply-box');
+                        if (replyBox) {
+                            // Pega o texto removendo o título "Resposta da Loja:"
+                            reply = replyBox.innerText.replace('Resposta da Loja:', '').trim();
+                        }
+
+                        // Popular campos
+                        document.getElementById(`rName${i}`).value = name;
+                        document.getElementById(`rImg${i}`).value = avatar;
+                        document.getElementById(`rText${i}`).value = text;
+                        document.getElementById(`rStars${i}`).value = stars;
+                        document.getElementById(`rPic${i}`).value = pics.join(', ');
+                        document.getElementById(`rReply${i}`).value = reply;
+                    });
+
+                    // Limpar avaliações excedentes no form se o arquivo tiver menos que 5
+                    for(let j = reviews.length + 1; j <= 5; j++) {
+                        document.getElementById(`rName${j}`).value = "";
+                        document.getElementById(`rText${j}`).value = "";
+                        document.getElementById(`rReply${j}`).value = "";
+                    }
+
+                    alert("Arquivo carregado com sucesso! Você pode editar agora.");
+                    updatePreview(); // Atualiza o preview com os dados carregados
+
+                } catch (err) {
+                    alert("Erro ao ler o arquivo. Certifique-se de que é um HTML criado por este painel.");
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // --- LÓGICA DA VITRINE (LOCALSTORAGE) ---
+        const STORAGE_KEY = 'tiktokShopProducts';
+        function addToStore() {
+            const title = document.getElementById('pTitle').value;
+            const price = document.getElementById('pPrice').value;
+            const img = document.getElementById('pImg1').value;
+            if(!title) { alert("Preencha o título!"); return; }
+            const filename = title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 30) + ".html";
+            const newProd = { id: Date.now(), title: title, price: price, oldPrice: document.getElementById('pOldPrice').value, img: img, link: filename };
+            let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            products.unshift(newProd);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+            alert("Produto salvo na Vitrine! Ele aparecerá nas sugestões.");
+            renderStoreList();
+            updatePreview(); // Atualiza o preview para mostrar o novo produto nas sugestões
+        }
+        function renderStoreList() {
+            const list = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            const tbody = document.getElementById('storeListBody');
+            tbody.innerHTML = list.length ? '' : '<tr><td colspan="5" style="text-align:center; padding:20px; color:#666;">Sua vitrine está vazia.<br>Crie e salve produtos para começar.</td></tr>';
+            list.forEach((p, index) => {
+                tbody.innerHTML += `<tr><td><img src="${p.img}" class="thumb-sm" onerror="this.src='https://placehold.co/40'"></td><td><div style="font-weight:600; color:#fff;">${p.title}</div><div style="font-size:11px; color:#666;">${p.link}</div></td><td style="color:#fff;">${p.price}</td><td><span class="status-pill">Ativo</span></td><td><button class="btn-icon" onclick="removeStoreItem(${index})">🗑️</button></td></tr>`;
+            });
+        }
+        function removeStoreItem(index) { 
+            let l = JSON.parse(localStorage.getItem(STORAGE_KEY)); 
+            l.splice(index, 1); 
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(l)); 
+            renderStoreList(); 
+            updatePreview(); 
+        }
+        function resetStore() { if(confirm("Limpar toda a vitrine? Isso removerá as sugestões dos produtos.")) { localStorage.removeItem(STORAGE_KEY); renderStoreList(); updatePreview(); } }
+        function switchTab(tab, el) {
+            document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active')); document.getElementById('tab-'+tab).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); el.classList.add('active');
+            document.getElementById('page-title').innerText = tab==='creator'?'Editor de Produto':'Gerenciar Vitrine';
+            if(tab==='vitrine') renderStoreList();
+        }
+
+        // --- BASE DE DADOS AVANÇADA (IPHONE ATUALIZADO) ---
+        const specsDB = {
+            "iphone11": "Marca: Apple\nModelo: iPhone 11\nProcessador: A13 Bionic (6-core)\nMemória RAM: 4GB\nArmazenamento: 64GB / 128GB\nTela: Liquid Retina LCD 6.1\"\nCâmera Traseira: Dupla 12MP (Wide) + 12MP (Ultra Wide)\nCâmera Frontal: 12MP TrueDepth\nBateria: Até 17h de vídeo\nMaterial: Alumínio e Vidro\nSegurança: Face ID\nConectividade: 4G LTE, Wi-Fi 6\nResistência: IP68 (2 metros por 30 min)\nCarregamento: Lightning",
+            
+            "iphone12": "Marca: Apple\nModelo: iPhone 12 / 12 Pro\nProcessador: A14 Bionic (5nm)\nMemória RAM: 4GB (Base) / 6GB (Pro)\nArmazenamento: 64GB / 128GB / 256GB\nTela: Super Retina XDR OLED (Ceramic Shield)\nCâmera: 12MP (Sistema Avançado)\nVídeo: Gravação Dolby Vision HDR\nBateria: Até 17h (Base) / 20h (Pro Max)\nConectividade: 5G (Primeira Geração), Wi-Fi 6\nDesign: Bordas Planas (Flat Edge)\nCarregamento: MagSafe e Lightning\nResistência: IP68",
+
+            "iphone13": "Marca: Apple\nModelo: iPhone 13 / 13 Pro Max\nProcessador: A15 Bionic\nMemória RAM: 4GB (Base) / 6GB (Pro)\nTela: Super Retina XDR OLED (Notch reduzido)\nTaxa de Atualização: 60Hz (Base) / 120Hz ProMotion (Pro)\nCâmera: Modo Cinema (1080p a 30 qps)\nArmazenamento: Início em 128GB\nBateria: Melhoria significativa vs iPhone 12\nConectividade: 5G, Wi-Fi 6\nResistência: IP68\nCarregamento: MagSafe e Lightning",
+
+            "iphone14": "Marca: Apple\nModelo: iPhone 14 / 14 Pro Max\nProcessador: A15 (Base) / A16 Bionic (Pro)\nMemória RAM: 6GB\nTela: Super Retina XDR\nInovação: Dynamic Island (Apenas modelos Pro)\nSegurança: Detecção de Acidentes e SOS via Satélite\nCâmera Pro: 48MP Principal (Modelos Pro)\nModo Ação: Vídeos ultra estáveis\nConectividade: 5G, Bluetooth 5.3\nBateria: Até 29h de vídeo (Pro Max)\nCarregamento: MagSafe e Lightning",
+
+            "iphone15": "Marca: Apple\nModelo: iPhone 15 / 15 Pro Max\nProcessador: A16 (Base) / A17 Pro (Pro)\nEstrutura: Alumínio (Base) / Titânio Aeroespacial (Pro)\nBotão: Ação (Modelos Pro)\nConexão: USB-C (Alta velocidade no Pro)\nTela: Dynamic Island em todos os modelos\nCâmera: 48MP (Todos) + Zoom Óptico 5x (Pro Max)\nMemória RAM: 6GB (Base) / 8GB (Pro)\nBateria: Dia todo de duração\nSistema: iOS 17\nCores: Titânio Natural, Azul, Preto, Branco",
+
+            "iphone16": "Marca: Apple\nModelo: iPhone 16 / 16 Pro Max\nProcessador: A18 (Base) / A18 Pro (Neural Engine Avançado)\nInteligência: Apple Intelligence Integrada\nBotão Novo: Controle de Câmera (Camera Control)\nTela: Bordas ultrafinas (6.3\" e 6.9\" nos Pros)\nCâmera Ultra-Wide: 48MP (Macro aprimorado)\nConectividade: Wi-Fi 7\nBateria: Maior autonomia da história do iPhone\nCarregamento: MagSafe 25W mais rápido\nMaterial: Titânio Grau 5 (Pro)",
+
+            "iphone17": "Marca: Apple (Lançamento Futuro)\nModelo: iPhone 17 Pro Max / 17 Air\nProcessador: Chip A19 Pro (2nm)\nMemória RAM: 12GB (Multitarefa Extrema)\nTela: 120Hz ProMotion em todos os modelos\nCâmera Frontal: 24MP (Upgrade de nitidez)\nCâmeras Traseiras: Tripla de 48MP (Principal, Ultra, Tele)\nConectividade: Chip Wi-Fi 7 Próprio da Apple\nSegurança: Face ID sob a tela (Oculto)\nBateria: Nova tecnologia de empilhamento (+Duração)\nAcabamento: Vidro Ceramic Shield de 3ª Geração",
+
+            // Outras categorias
+            "xiaomi": "Marca: Xiaomi\nModelo: Redmi Note 13 / Poco X6\nProcessador: Snapdragon\nMemória: 8GB/256GB\nTela: AMOLED 120Hz\nBateria: 5000mAh + Carga Rápida",
+            "samsung": "Marca: Samsung\nModelo: Galaxy S23/S24\nProcessador: Snapdragon Galaxy\nTela: Dynamic AMOLED 2X\nCâmera: Nightography",
+            "tv": "Marca: Samsung / LG\nResolução: 4K UHD\nSistema: Smart TV\nConexões: HDMI, USB, Bluetooth",
+            "air fryer": "Marca: Mondial / Philco\nCapacidade: 4L\nPotência: 1500W\nCesto: Antiaderente",
+            "fone": "Tipo: Bluetooth TWS\nBateria: 30h totais\nCancelamento de Ruído: Sim",
+            "generic": "Produto: Novo\nQualidade: Premium\nGarantia: 30 Dias"
+        };
+
+        const reviewsDB = {
+            "default": [
+                { text: "Produto excelente, chegou muito rápido aqui em SP!", reply: "Ficamos felizes que gostou! Aproveite." },
+                { text: "Qualidade me surpreendeu, vale cada centavo.", reply: "" },
+                { text: "Comprei de presente e a pessoa amou.", reply: "Ótima escolha para presente!" },
+                { text: "Bem embalado e conforme o anúncio.", reply: "" },
+                { text: "Tive dúvidas e o suporte me ajudou na hora. Recomendo.", reply: "Conte sempre conosco!" }
+            ],
+            "eletronico": [
+                { text: "O celular é lindo, bateria dura o dia todo tranquilo. Câmera absurda!", reply: "Essa câmera é incrível mesmo! 😉" },
+                { text: "Chegou lacrado, original. Podem comprar sem medo.", reply: "Prezamos muito pela originalidade. Obrigado!" },
+                { text: "Melhor preço que achei na internet. Entrega flash.", reply: "" },
+                { text: "A tela de 120Hz faz toda a diferença, muito fluido.", reply: "Depois do 120Hz não tem volta né? Haha" },
+                { text: "Veio com capa e película de brinde, adorei!", reply: "Mimo para nossos clientes VIPs!" }
+            ],
+            "cozinha": [
+                { text: "Gente, essa Air Fryer mudou minha vida. Batata fica crocante sem óleo.", reply: "Saúde e sabor em primeiro lugar!" },
+                { text: "As panelas são lindas e realmente não grudam nada. O ovo desliza.", reply: "Dica: use sempre espátulas de silicone para durar anos!" },
+                { text: "Chegou antes do prazo. Já testei fazendo bolo e deu super certo.", reply: "" },
+                { text: "Fácil de limpar, só passar um papel toalha e tá nova.", reply: "" },
+                { text: "Minha cozinha ficou muito mais chique com esse kit.", reply: "Sua cozinha merece!" }
+            ]
+        };
+
+        function autoFillSpecs(title) {
+            const lower = title.toLowerCase();
+            let selectedSpec = "";
+            
+            // Lógica Específica para iPhones Numéricos
+            if (lower.includes("iphone")) {
+                if (lower.includes("11")) selectedSpec = specsDB.iphone11;
+                else if (lower.includes("12")) selectedSpec = specsDB.iphone12;
+                else if (lower.includes("13")) selectedSpec = specsDB.iphone13;
+                else if (lower.includes("14")) selectedSpec = specsDB.iphone14;
+                else if (lower.includes("15")) selectedSpec = specsDB.iphone15;
+                else if (lower.includes("16")) selectedSpec = specsDB.iphone16;
+                else if (lower.includes("17")) selectedSpec = specsDB.iphone17;
+                else selectedSpec = specsDB.iphone15; // Padrão
+            }
+            // Outras Categorias
+            else if (lower.includes("samsung") || lower.includes("galaxy")) selectedSpec = specsDB.samsung;
+            else if (lower.includes("xiaomi") || lower.includes("redmi") || lower.includes("poco")) selectedSpec = specsDB.xiaomi;
+            else if (lower.includes("tv") || lower.includes("smart")) selectedSpec = specsDB.tv;
+            else if (lower.includes("air") || lower.includes("fryer")) selectedSpec = specsDB["air fryer"];
+            else if (lower.includes("fone") || lower.includes("buds")) selectedSpec = specsDB.fone;
+            
+            if (selectedSpec) {
+                document.getElementById('pSpecs').value = selectedSpec;
+                document.getElementById('autoBadge').style.display = 'inline-block';
+                document.getElementById('autoBadge').innerText = "IA: " + title.split(' ')[0] + " DETECTADO";
+                updatePreview();
+            }
+        }
+
+        // --- CONFIGURAÇÃO DOS AVATARES LOCAIS (ATUALIZADO) ---
+        const AVATAR_CONFIG = {
+            folder: 'avatar/',   // Pasta onde estão as imagens
+            total: 100,          // Total de imagens: (1).jpg até (100).jpg
+            ext: '.jpg'          // Extensão
+        };
+
+        function getRandomAvatarUrl() {
+            const num = Math.floor(Math.random() * AVATAR_CONFIG.total) + 1;
+            // Gera o formato (1).jpg, (2).jpg, etc.
+            return `${AVATAR_CONFIG.folder}(${num})${AVATAR_CONFIG.ext}`; 
+        }
+
+        function randomizeAvatar(id) { 
+            document.getElementById(`rImg${id}`).value = getRandomAvatarUrl(); 
+            updatePreview(); 
+        }
+        
+        function randomizeAllAvatars() { 
+            for(let i=1; i<=5; i++) {
+                // Só troca se o campo estiver vazio, for link externo ou antigo
+                const currentVal = document.getElementById(`rImg${i}`).value;
+                if(!currentVal || currentVal.includes('http') || currentVal.includes('randomuser')) {
+                    document.getElementById(`rImg${i}`).value = getRandomAvatarUrl();
+                }
+            }
+            updatePreview(); 
+        }
+
+        function autoFillReviews(title) {
+            const lower = title.toLowerCase();
+            let category = "default";
+            
+            if (lower.includes("iphone") || lower.includes("samsung") || lower.includes("xiaomi") || lower.includes("tv") || lower.includes("watch") || lower.includes("fone")) {
+                category = "eletronico";
+            } else if (lower.includes("air") || lower.includes("panela") || lower.includes("kit") || lower.includes("cozinha") || lower.includes("fogao")) {
+                category = "cozinha";
+            }
+
+            const reviews = [...reviewsDB[category]].sort(() => 0.5 - Math.random());
+
+            for(let i=1; i<=5; i++) {
+                if(reviews[i-1]) {
+                    document.getElementById(`rText${i}`).value = reviews[i-1].text;
+                    document.getElementById(`rReply${i}`).value = reviews[i-1].reply;
+                    
+                    const nomes = ["Maria", "João", "Ana", "Carlos", "Fernanda", "Pedro", "Larissa", "Lucas", "Beatriz", "Rafael", "Juliana", "Marcos"];
+                    const sobrenomes = ["Silva", "Santos", "Oliveira", "Souza", "Lima", "Pereira", "Ferreira", "Costa", "Almeida"];
+                    
+                    document.getElementById(`rName${i}`).value = `${nomes[Math.floor(Math.random()*nomes.length)]} ${sobrenomes[Math.floor(Math.random()*sobrenomes.length)]}`;
+                    
+                    // Força o uso do avatar local novo
+                    document.getElementById(`rImg${i}`).value = getRandomAvatarUrl();
+                }
+            }
+            updatePreview();
+        }
+
+        // GERAÇÃO DOS INPUTS DE REVIEW
+        const rc = document.getElementById('reviewsContainer');
+        rc.innerHTML = ''; 
+        for(let i=1; i<=5; i++) {
+            rc.innerHTML += `
+            <div style="border-bottom:1px solid #333; padding-bottom:15px; margin-bottom:15px; background:#111; padding:10px; border-radius:6px;">
+                <div style="font-size:11px; color:#25f4ee; margin-bottom:5px; font-weight:bold;">AVALIAÇÃO #${i}</div>
+                <div class="form-row">
+                    <input type="text" id="rName${i}" value="Cliente ${i}" oninput="updatePreview()" placeholder="Nome">
+                    <select id="rStars${i}" onchange="updatePreview()" style="background:#0a0a0a;"><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option></select>
+                </div>
+                <div style="display:flex; gap:5px; margin-top:5px;">
+                    <input type="text" id="rImg${i}" value="https://randomuser.me/api/portraits/men/${i}.jpg" oninput="updatePreview()" placeholder="Avatar URL">
+                    <button onclick="randomizeAvatar(${i})" class="btn-secondary" style="padding:0 10px;">🎲</button>
+                </div>
+                <textarea id="rText${i}" rows="2" oninput="updatePreview()" style="margin-top:5px;" placeholder="Comentário..."></textarea>
+                <input type="text" id="rPic${i}" placeholder="URLs das Fotos (separe por vírgula)" oninput="updatePreview()" style="margin-top:5px; border-color:#333;">
+                <div style="font-size:9px; color:#666; margin-bottom:5px;">Ex: foto1.jpg, foto2.jpg</div>
+                <div style="margin-top:8px; border-top:1px solid #222; padding-top:8px;">
+                    <label style="color:#fe2c55;">Resposta da Loja</label>
+                    <input type="text" id="rReply${i}" placeholder="Deixe em branco para não responder" oninput="updatePreview()">
+                </div>
+            </div>`;
+        }
+
+        // --- TEMPLATE BASE (O QUE VAI SER BAIXADO) - SEM TOP HEADER ---
+        const templateBase = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>{{PAGE_TITLE}}</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style> 
+            :root { --bg-dark: #121212; --bg-card: #1e1e1e; --text-main: #fff; --text-muted: #aaa; --primary: #fe2c55; --cyan: #25f4ee; }
+            body{background-color:var(--bg-dark)!important;color:var(--text-main)!important;margin:0;font-family:'Inter', sans-serif; padding-bottom: 90px; padding-top: 0px;} 
+            .brand-logo{font-size:20px; font-weight:900; color:#fff; display:flex; align-items:center; gap:5px;}
+            .fixed-bottom-bar{position:fixed;bottom:0;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 12px;background:#1e1e1e;box-shadow:0 -2px 10px rgba(0,0,0,0.2);z-index:1000;box-sizing:border-box;border-top:1px solid #333;color:white;} 
+            .left-group{display:flex;align-items:center;gap:15px;} 
+            .bar-item{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;color:#fff;font-size:0.7rem;font-weight:500;gap:2px;} 
+            .bar-item svg{width:20px;height:20px;stroke:#fff;} 
+            .cart-button{background:rgba(254,44,85,0.15);border-radius:12px;padding:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;} 
+            .cart-button svg{width:24px;height:24px;stroke:#fe2c55;} 
+            .buy-button{flex:1;background:#fe2c55;border-radius:24px;text-decoration:none;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center;cursor:pointer; margin-left:10px;} 
+            .buy-price{font-weight:800;font-size:1.1rem;} 
+            .buy-text{font-size:0.7rem;line-height:1;} 
+            .gallery-wrapper { position: relative; max-width: 100%; overflow: hidden; background:#fff;} 
+            .gallery-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; height: 380px; } 
+            .gallery-container::-webkit-scrollbar { display: none; } 
+            .gallery-container img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: contain; scroll-snap-align: center; } 
+            .counter { position: absolute; bottom: 10px; right: 10px; background: rgba(0, 0, 0, 0.7); color: #fff; font-size: 12px; padding: 4px 10px; border-radius: 12px; font-weight:600; } 
+            .oferta-container-ativa{padding:15px;background:#1e1e1e;border-bottom:1px solid #333;} 
+            .oferta-preco-info-ativa{display:flex;justify-content:space-between;align-items:flex-end;} 
+            .preco-atual-ativa{font-size:24px;font-weight:800;color:#fff;} 
+            .preco-antigo-ativa{text-decoration:line-through;color:#888;font-size:14px;margin-right:8px;} 
+            .desconto-tag-ativa{background:rgba(254,44,85,0.2);color:#fe2c55;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:bold;} 
+            .oferta-relampago-texto-ativa { color: #fe2c55; font-weight: bold; font-size: 12px; display: flex; align-items: center; gap: 5px; margin-top: 8px;} 
+            .oferta-relampago-texto-ativa svg { width: 14px; } .contador-tempo-ativo { font-size: 12px; color: #ccc; margin-top: 2px; }
+            .product-info-container{padding:15px;background:#1e1e1e; margin-bottom:10px;} 
+            .product-title{font-size:16px;color:#fff;margin:10px 0; font-weight:600; line-height:1.4;} 
+            .tag-row{display:flex;gap:5px;margin-bottom:8px;} 
+            .discount-tag{background:#333;color:#ccc;font-size:10px;padding:3px 6px;border-radius:4px;}
+            .rating-row { color: #ffc107; font-size: 12px; display:flex; align-items:center; gap:5px;}
+            .section-container { padding: 15px; background: #1e1e1e; margin-bottom: 10px; border-bottom: 1px solid #333; }
+            .service-item { display: flex; gap: 10px; margin-bottom: 15px; align-items: flex-start; }
+            .service-icon { width: 20px; height: 20px; stroke: #fff; flex-shrink: 0; }
+            .service-text { font-size: 12px; color: #ccc; display: flex; flex-direction: column; }
+            .delivery-tag { color: #25f4ee; font-weight: 700; }
+            .shipping-cost-old { text-decoration: line-through; color: #777; font-size: 11px;}
+            .servicos-tiktok-dark { background: #222; border: 1px solid #333; border-radius: 8px; padding: 12px; }
+            .servicos-tiktok-titulo { font-size: 13px; font-weight: 700; display:flex; gap:6px; margin-bottom:10px; align-items:center; color:#fff;}
+            .servicos-tiktok-lista { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px; color: #aaa; }
+            .servicos-tiktok-item::before { content: "✓"; color: #fe2c55; margin-right: 4px; font-weight: bold;}
+            .seller-info-container { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #1e1e1e; margin-bottom: 10px; border-top:1px solid #333;}
+            .seller-details { display: flex; gap: 10px; align-items: center; }
+            .seller-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid #333; }
+            .store-name { font-weight: 700; font-size: 14px; display:flex; align-items:center; gap:4px; }
+            .follow-button { background: transparent; border: 1px solid #fe2c55; color: #fe2c55; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+            .follow-button.following { background: #fe2c55; color: white; border-color: #fe2c55; }
+            /* EFEITO DE SHINE (BRILHO) */
+            .follow-button::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transition: none; }
+            .follow-button.animate-shine::after { animation: shine 0.5s; }
+            @keyframes shine { 100% { left: 100%; } }
+
+            .specs-section { padding: 15px; background: #1e1e1e; margin-bottom: 10px; border-top: 1px solid #333; }
+            .specs-section h3 { font-size: 15px; margin-bottom: 10px; font-weight: 700; color: #fff; }
+            .specs-list { list-style: none; padding: 0; margin: 0; font-size: 12px; color: #ccc; }
+            .specs-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #333; }
+            .specs-list li:last-child { border-bottom: none; }
+            .specs-list li strong { color: #fff; font-weight: 600; }
+            .review-section { padding: 15px; background: #1e1e1e; margin-bottom: 10px; }
+            .review-heading { font-size: 16px; font-weight: 700; margin-bottom: 15px; }
+            .review-card { background: #121212; border: 1px solid #333; padding: 12px; border-radius: 8px; margin-bottom: 10px; }
+            .reviewer-info { display: flex; align-items: center; margin-bottom: 8px; }
+            .reviewer-avatar { width: 32px; height: 32px; border-radius: 50%; margin-right: 10px; object-fit: cover; background: #333; }
+            .reviewer-name { font-weight: 600; font-size: 13px; color: white; }
+            .review-stars { display:flex; gap:2px; margin-bottom:5px; }
+            .star-icon-svg { width:12px; height:12px; fill:#FFD700; }
+            .star-empty-svg { width:12px; height:12px; fill:#444; }
+            .review-text { font-size: 12px; color: #ddd; line-height: 1.4; }
+            .review-media-grid { display: flex; gap: 5px; margin-top: 8px; overflow-x: auto; }
+            .review-media-item { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; border: 1px solid #333; cursor: zoom-in; flex-shrink: 0; background: #000; }
+            .seller-reply-box { margin-top: 10px; background: #1a1a1a; border-left: 3px solid #25f4ee; padding: 10px; border-radius: 0 4px 4px 0; font-size: 11px; color: #ccc; }
+            .seller-reply-title { color: #25f4ee; font-weight: 700; margin-bottom: 3px; display: flex; align-items: center; gap: 4px; }
+            .suggestions-section { padding: 15px; background: #121212; }
+            .masonry-grid { column-count: 2; column-gap: 10px; }
+            .product-card { break-inside: avoid; margin-bottom: 10px; background: #1e1e1e; border-radius: 8px; overflow: hidden; position: relative; border: 1px solid #333; cursor: pointer; }
+            .card-img { width: 100%; display: block; object-fit: cover; }
+            .card-info { padding: 8px; }
+            .card-title { font-size: 12px; margin-bottom: 4px; color: #fff; line-height: 1.3; }
+            .card-price { font-weight: 700; color: #fe2c55; font-size: 13px; }
+            .badge-row { display:flex; gap:4px; margin-top:4px; flex-wrap:wrap; }
+            .badge-sm { font-size: 9px; padding: 2px 4px; border-radius: 3px; background: rgba(37, 244, 238, 0.15); color: #25f4ee; }
+            .footer-menu { padding: 20px; background: #1e1e1e; font-size: 12px; color: #888; text-align: center; border-top: 1px solid #333; }
+            .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 10px; }
+            #imageModal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); justify-content: center; align-items: center; flex-direction: column; }
+            #modalContent { max-width: 95%; max-height: 90%; position: relative; display: flex; justify-content: center; align-items: center; }
+            #modalImg, #modalVideo { max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+            .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 35px; cursor: pointer; z-index: 10000; background: rgba(0,0,0,0.5); width: 40px; height: 40px; text-align: center; line-height: 40px; border-radius: 50%; }
+        </style></head><body><div class="gallery-wrapper"><div class="gallery-container" id="gallery">{{GALLERY_CONTENT}}</div><div class="counter" id="counter">1/{{IMG_COUNT}}</div></div><div class="oferta-container-ativa"><div class="oferta-preco-info-ativa"><div class="preco-atual-wrapper-ativa"><span class="preco-atual-ativa">{{PRICE_NEW}}</span></div><div class="preco-antigo-e-desconto-ativa"><span class="preco-antigo-ativa">{{PRICE_OLD}}</span><span class="desconto-tag-ativa">Economize {{DISCOUNT}}</span></div></div><div class="oferta-status-info-ativa"><span class="oferta-relampago-texto-ativa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>OFERTA RELÂMPAGO</span><div class="contador-tempo-ativo" id="timer">TERMINA EM 00:04:19</div></div></div><div class="product-info-container"><div class="tag-row"><span class="discount-tag">Preço Promocional</span><span class="discount-tag">Economize {{DISCOUNT}}</span></div><h1 class="product-title">{{PRODUCT_TITLE}}</h1><div class="rating-row">★★★★★ <span>4.9 (100+ vendidos)</span></div></div><div class="section-container"><div class="service-item"><svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg><div class="service-text"><span class="delivery-tag">Frete grátis</span><span>Receba em até 7 dias</span><span class="shipping-cost-old">Taxa: R$ 15,00</span></div></div><div class="service-item"><svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path><polyline points="12 6 16 10 8 14 12 18"></polyline></svg><div class="service-text"><span style="color:#fff; font-weight:600;">Devoluções em 30 dias</span><span>Cancelamento fácil</span></div></div></div><div class="section-container" style="padding-top:0;"><div class="servicos-tiktok-dark"><div class="servicos-tiktok-titulo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#25f4ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Proteção do Cliente</div><div class="servicos-tiktok-lista"><div class="servicos-tiktok-item">Proteção ao comprador</div><div class="servicos-tiktok-item">Pagamento seguro</div><div class="servicos-tiktok-item">Reembolso rápido</div><div class="servicos-tiktok-item">Suporte 24h</div></div></div></div><div class="review-section"><h3 class="review-heading">Avaliações dos clientes</h3>{{REVIEWS_CONTENT}}</div><div class="seller-info-container"><div class="seller-details"><img src="images/ttks.png" class="seller-avatar" onerror="this.src='https://placehold.co/40?text=S'"><div><div class="store-name">TikTok Shop <svg width="12" height="12" viewBox="0 0 24 24" fill="#25f4ee"><circle cx="12" cy="12" r="10"></circle><path d="M9 12l2 2 4-4" stroke="#000" stroke-width="2"/></svg></div><div style="font-size:11px; color:#888;">+10k vendas</div></div></div><button class="follow-button">Seguir</button></div><div class="specs-section"><h3>Especificações do Produto</h3><ul class="specs-list">{{SPECS_CONTENT}}</ul></div><div class="suggestions-section"><h3 style="color:white; margin-bottom:15px;">Você também pode gostar</h3><div class="masonry-grid">{{SUGGESTED_PRODUCTS}}</div></div><div class="footer-menu"><div class="footer-links"><span>Política de Privacidade</span> • <span>Termos de Uso</span> • <span>Ajuda</span></div><p style="margin-top:10px;">© 2025 TikTok Shop. Todos os direitos reservados.</p></div><div class="fixed-bottom-bar"><div class="left-group"><a href="index.html" class="bar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Loja</span></a><a href="#" class="bar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span>Chat</span></a></div><div class="cart-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div><a href="{{CHECKOUT_LINK}}" class="buy-button"><div class="buy-price">{{PRICE_NEW}}</div><div class="buy-text"><strong>Compre agora</strong></div></a></div><div id="imageModal"><span class="close-modal">&times;</span><div id="modalContent"><img id="modalImg" style="display:none;"><video id="modalVideo" style="display:none;" controls></video></div></div><script>const gallery=document.getElementById("gallery");const counter=document.getElementById("counter");const total={{IMG_COUNT}};if(total>1){gallery.addEventListener("scroll",()=>{const width=gallery.clientWidth;const index=Math.round(gallery.scrollLeft/width)+1;counter.textContent=index+"/"+total;});}let time=259;setInterval(()=>{if(time>0)time--;let m=Math.floor(time/60).toString().padStart(2,'0');let s=(time%60).toString().padStart(2,'0');document.getElementById('timer').innerText="TERMINA EM 00:"+m+":"+s;},1000);const modal=document.getElementById('imageModal');const modalImg=document.getElementById('modalImg');const modalVideo=document.getElementById('modalVideo');const closeBtn=document.querySelector('.close-modal');function openMedia(src,type){if(type==='video'){modalImg.style.display='none';modalVideo.style.display='block';modalVideo.src=src;modalVideo.play();}else{modalVideo.style.display='none';modalVideo.pause();modalImg.style.display='block';modalImg.src=src;}modal.style.display='flex';}document.querySelectorAll('.review-media-item').forEach(media=>{media.addEventListener('click',function(e){e.stopPropagation();const isVideo=this.tagName==='VIDEO'||this.src.endsWith('.mp4');openMedia(this.src,isVideo?'video':'image');});});closeBtn.addEventListener('click',()=>{modal.style.display='none';modalVideo.pause();});modal.addEventListener('click',(e)=>{if(e.target===modal){modal.style.display='none';modalVideo.pause();}});
+            
+            // LÓGICA DO BOTÃO SEGUIR
+            const followBtn = document.querySelector('.follow-button');
+            if(followBtn){
+                followBtn.addEventListener('click', function() {
+                    this.classList.toggle('following');
+                    if(this.classList.contains('following')) {
+                        this.innerText = "Seguindo";
+                        this.classList.add('animate-shine');
+                        setTimeout(() => this.classList.remove('animate-shine'), 500); // Remove classe após animação
+                    } else {
+                        this.innerText = "Seguir";
+                    }
+                });
+            }
+            <\/script></body></html>`;
+
+        function getStarsSVG(count) {
+            const star = '<svg class="star-icon-svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+            const empty = '<svg class="star-empty-svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+            return star.repeat(parseInt(count)) + empty.repeat(5 - parseInt(count));
+        }
+
+        function isVideoFile(src) { return src.toLowerCase().endsWith('.mp4'); }
+
+        function updatePreview() {
+            const title = document.getElementById('pTitle').value || "Título";
+            const price = document.getElementById('pPrice').value || "R$ 0,00";
+            const oldPrice = document.getElementById('pOldPrice').value || "R$ 0,00";
+            const discount = document.getElementById('pDiscount').value || "0%";
+            const pageTitle = document.getElementById('pPageTitle').value || "Loja";
+            const checkoutLink = document.getElementById('pCheckout').value || "#";
+            const specsRaw = document.getElementById('pSpecs').value;
+            
+            const imgs = [document.getElementById('pImg1').value, document.getElementById('pImg2').value, document.getElementById('pImg3').value, document.getElementById('pImg4').value].filter(i=>i.trim()!=="");
+            if(imgs.length===0) imgs.push('https://placehold.co/400x400/333/fff?text=Sem+Imagem');
+            let galleryHtml = ""; imgs.forEach(img => { galleryHtml += `<img src="${img}" alt="Produto">`; });
+
+            let specsHtml = "";
+            if(specsRaw) {
+                specsRaw.split('\n').forEach(line => {
+                    if(line.trim()) {
+                        const parts = line.split(':');
+                        const key = parts[0]; const val = parts.slice(1).join(':');
+                        specsHtml += `<li><strong>${key}:</strong> <span>${val}</span></li>`;
+                    }
+                });
+            }
+
+            let reviewsHtml = "";
+            for(let i=1; i<=5; i++) {
+                const name = document.getElementById(`rName${i}`).value;
+                const img = document.getElementById(`rImg${i}`).value;
+                const text = document.getElementById(`rText${i}`).value;
+                const picInput = document.getElementById(`rPic${i}`).value;
+                const starsCount = document.getElementById(`rStars${i}`).value;
+                const reply = document.getElementById(`rReply${i}`).value;
+                
+                if(name && text) {
+                    const starsHtml = getStarsSVG(starsCount);
+                    let mediaGridHtml = "";
+                    if(picInput.trim()) {
+                        const mediaUrls = picInput.split(',').map(u=>u.trim()).filter(u=>u!=="");
+                        if(mediaUrls.length > 0) {
+                            mediaGridHtml = '<div class="review-media-grid">';
+                            mediaUrls.forEach(url => {
+                                mediaGridHtml += isVideoFile(url) ? `<video src="${url}" class="review-media-item" muted loop playsinline></video>` : `<img src="${url}" class="review-media-item">`;
+                            });
+                            mediaGridHtml += '</div>';
+                        }
+                    }
+                    let replyHtml = "";
+                    if(reply && reply.trim() !== "") {
+                        replyHtml = `<div class="seller-reply-box"><div class="seller-reply-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Resposta da Loja:</div>${reply}</div>`;
+                    }
+                    // AQUI ESTÁ A ALTERAÇÃO PARA CARREGAR IMAGEM LOCAL NO ERRO
+                    reviewsHtml += `<div class="review-card"><div class="reviewer-info"><img src="${img}" onerror="this.src='avatar/(1).jpg'" class="reviewer-avatar"><div class="reviewer-name">${name}</div></div><div class="review-stars">${starsHtml}</div><div class="review-text">${text}</div>${mediaGridHtml}${replyHtml}</div>`;
+                }
+            }
+
+            // --- GERAÇÃO DAS SUGESTÕES (DINÂMICO) ---
+            const productsList = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            let suggestedHtml = "";
+
+            if (productsList.length > 0) {
+                productsList.forEach(p => {
+                    const pImg = p.img && p.img.trim() !== "" ? p.img : 'https://placehold.co/400?text=Sem+Img';
+                    suggestedHtml += `
+                    <div class="product-card" onclick="window.location.href='${p.link}'">
+                        <img src="${pImg}" class="card-img" style="aspect-ratio: 1/1; background:white;">
+                        <div class="card-info">
+                            <div class="card-title">${p.title}</div>
+                            <div class="card-price">${p.price}</div>
+                            <div class="badge-row"><span class="badge-sm">Oferta</span></div>
+                        </div>
+                    </div>`;
+                });
+            } else {
+                suggestedHtml = `<div style="grid-column: 1 / -1; text-align:center; color:#666; padding:20px; font-size:11px;">Salve produtos na vitrine para vê-los aqui.</div>`;
+            }
+
+            let content = templateBase;
+            content = content.replace(/{{PAGE_TITLE}}/g, pageTitle).replace(/{{PRODUCT_TITLE}}/g, title).replace(/{{PRICE_NEW}}/g, price).replace(/{{PRICE_OLD}}/g, oldPrice).replace(/{{DISCOUNT}}/g, discount).replace(/{{GALLERY_CONTENT}}/g, galleryHtml).replace(/{{IMG_COUNT}}/g, imgs.length).replace(/{{REVIEWS_CONTENT}}/g, reviewsHtml).replace(/{{CHECKOUT_LINK}}/g, checkoutLink).replace(/{{SUGGESTED_PRODUCTS}}/g, suggestedHtml).replace(/{{SPECS_CONTENT}}/g, specsHtml);
+
+            const iframe = document.getElementById('previewFrame');
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open(); doc.write(content); doc.close();
+        }
+
+        function generateFile() {
+            const title = document.getElementById('pTitle').value;
+            if(!title) { alert("Digite um título!"); return; }
+            const iframe = document.getElementById('previewFrame');
+            const content = iframe.contentDocument.documentElement.outerHTML;
+            const blob = new Blob([content], {type: "text/html"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const filename = title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 30) + ".html";
+            a.href = url; a.download = filename;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        }
+
+        window.onload = updatePreview;
+    </script>
+</body>
+</html>

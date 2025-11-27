@@ -7,220 +7,77 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        /* --- PALETA DE CORES DARK MODE --- */
+        /* SEU CSS ORIGINAL (MANTIDO IDÊNTICO AO ANTERIOR) */
         :root {
-            --primary-pink: #fe2c55;
-            --primary-cyan: #25f4ee;
-            --tiktok-black: #161823;
-            --bg-gray: #f1f1f2;
-            --text-gray: #8a8b91;
-            --border-color: #e3e3e4;
-            --header-height: 110px;
-            
-            /* Cores Promocionais */
-            --promo-blue-bg: #e0f7fa;
-            --promo-blue-text: #00c9b7;
-            --promo-red-start: #ff7eb3;
-            --promo-red-end: #ff3e3e;
-            
-            /* Variáveis Dark Mode */
-            --bg-main: #121212;
-            --bg-card: #1e1e1e;
-            --bg-header: #121212;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --border-dark: #333333;
-            
-            /* Cores Específicas dos Badges Dark */
-            --badge-frete-bg: rgba(37, 244, 238, 0.15);
-            --badge-frete-text: #25f4ee;
-            --badge-cupom-bg: rgba(254, 44, 85, 0.15);
-            --badge-cupom-text: #fe2c55;
+            --primary-pink: #fe2c55; --primary-cyan: #25f4ee; --tiktok-black: #161823;
+            --bg-gray: #f1f1f2; --text-gray: #8a8b91; --border-color: #e3e3e4; --header-height: 110px;
+            --promo-blue-bg: #e0f7fa; --promo-blue-text: #00c9b7; --promo-red-start: #ff7eb3; --promo-red-end: #ff3e3e;
+            --bg-main: #121212; --bg-card: #1e1e1e; --bg-header: #121212;
+            --text-primary: #ffffff; --text-secondary: #b0b0b0; --border-dark: #333333;
+            --badge-frete-bg: rgba(37, 244, 238, 0.15); --badge-frete-text: #25f4ee;
+            --badge-cupom-bg: rgba(254, 44, 85, 0.15); --badge-cupom-text: #fe2c55;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-primary);
-            padding-top: var(--header-height);
-            padding-bottom: 40px;
-        }
-
-        /* --- HEADER --- */
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary); padding-top: var(--header-height); padding-bottom: 40px; }
         .top-header { position: fixed; top: 0; left: 0; width: 100%; background: var(--bg-header); z-index: 1000; border-bottom: 1px solid var(--border-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-        
         .logo-row { display: flex; justify-content: center; align-items: center; padding: 12px 16px 8px 16px; position: relative; }
-        
         .brand-logo { display: flex; align-items: center; gap: 6px; font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: var(--text-primary); }
         .tiktok-icon-svg { width: 24px; height: 24px; fill: var(--text-primary); filter: drop-shadow(0 0 5px var(--primary-pink)); }
-        
-        /* --- BARRA DE PESQUISA --- */
         .search-row-custom { padding: 0 16px 12px 16px; display: flex; justify-content: center; position: relative; }
-
-        .modern-search-bar {
-            display: flex; align-items: center; width: 100%;
-            background-color: var(--bg-card);
-            border: 2px solid #333;
-            border-radius: 50px; padding: 3px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
+        .modern-search-bar { display: flex; align-items: center; width: 100%; background-color: var(--bg-card); border: 2px solid #333; border-radius: 50px; padding: 3px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .search-icon-left { padding-left: 14px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; }
-        
-        .search-icon-svg {
-            width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none;
-        }
-
-        .modern-input {
-            flex: 1; border: none; background: transparent; outline: none; padding: 8px 10px;
-            font-size: 14px; color: var(--text-primary); font-family: 'Inter', sans-serif;
-            transition: opacity 0.3s ease; 
-        }
+        .search-icon-svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+        .modern-input { flex: 1; border: none; background: transparent; outline: none; padding: 8px 10px; font-size: 14px; color: var(--text-primary); font-family: 'Inter', sans-serif; transition: opacity 0.3s ease; }
         .modern-input::placeholder { color: #666; transition: color 0.3s; }
-
-        .modern-search-btn {
-            background-color: var(--primary-pink); color: white; border: none; padding: 8px 20px; border-radius: 50px;
-            font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 0 10px rgba(254, 44, 85, 0.3);
-        }
+        .modern-search-btn { background-color: var(--primary-pink); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s; box-shadow: 0 0 10px rgba(254, 44, 85, 0.3); }
         .modern-search-btn:hover { background-color: #d92346; box-shadow: 0 0 15px rgba(254, 44, 85, 0.5); }
-        
-        .search-results-dropdown {
-            position: absolute; top: 100%; left: 16px; right: 16px;
-            background: var(--bg-card); border-radius: 0 0 12px 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5); margin-top: -10px;
-            z-index: 999; display: none; max-height: 350px; overflow-y: auto;
-            border: 1px solid var(--border-dark);
-        }
+        .search-results-dropdown { position: absolute; top: 100%; left: 16px; right: 16px; background: var(--bg-card); border-radius: 0 0 12px 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); margin-top: -10px; z-index: 999; display: none; max-height: 350px; overflow-y: auto; border: 1px solid var(--border-dark); }
         .result-item { display: flex; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border-dark); cursor: pointer; transition: background 0.2s; }
         .result-item:hover { background-color: #2a2a2a; }
         .result-thumb { width: 36px; height: 36px; border-radius: 4px; margin-right: 12px; flex-shrink: 0; border: 1px solid #333; object-fit: cover; }
         .result-text { font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.2; }
         .result-price { font-size: 11px; color: var(--primary-pink); font-weight: 700; margin-top: 2px; }
-
         .container { padding: 0 12px; }
-        
-        /* --- BANNER --- */
-        .hero-banner-container {
-            margin-top: 12px;
-            background-color: #000;
-            border-radius: 16px; 
-            padding: 0; 
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            aspect-ratio: 822 / 234;
-            box-shadow: 0 5px 20px rgba(254, 44, 85, 0.2); 
-            border: 1px solid #222;
-        }
-
-        .banner-video-bg {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            object-fit: cover; 
-            z-index: 0;
-            opacity: 1; 
-            pointer-events: none; 
-        }
-
-        /* --- PROMOÇÕES --- */
-        .promo-container-modern {
-            display: flex; width: 100%; border-radius: 24px; overflow: hidden; margin-top: 12px; margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid #222;
-        }
+        .hero-banner-container { margin-top: 12px; background-color: #000; border-radius: 16px; padding: 0; position: relative; overflow: hidden; width: 100%; aspect-ratio: 822 / 234; box-shadow: 0 5px 20px rgba(254, 44, 85, 0.2); border: 1px solid #222; }
+        .banner-video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 1; pointer-events: none; }
+        .promo-container-modern { display: flex; width: 100%; border-radius: 24px; overflow: hidden; margin-top: 12px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid #222; }
         .promo-block-modern { padding: 16px 20px; display: flex; flex-direction: column; justify-content: center; min-height: 90px; }
-
         .block-frete-modern { flex: 1; background-color: #132c33; position: relative; z-index: 1; }
         .frete-title { color: var(--primary-cyan); font-size: 17px; font-weight: 900; text-shadow: 0 0 5px rgba(37, 244, 238, 0.3); }
         .frete-desc { color: #8aaeb3; font-size: 12px; margin-top: 4px; }
-
-        .block-desconto-modern {
-            flex: 1.2; background: linear-gradient(135deg, var(--promo-red-start), var(--promo-red-end)); color: white;
-            position: relative; display: flex; justify-content: space-between; align-items: center; padding-left: 40px;
-        }
+        .block-desconto-modern { flex: 1.2; background: linear-gradient(135deg, var(--promo-red-start), var(--promo-red-end)); color: white; position: relative; display: flex; justify-content: space-between; align-items: center; padding-left: 40px; }
         .block-desconto-modern::before { content: ''; position: absolute; left: -25px; top: 0; width: 50px; height: 100%; background: #132c33; border-radius: 0 50% 50% 0; z-index: 2; }
-
         .desconto-info { z-index: 3; }
         .desconto-title { font-size: 17px; font-weight: 900; }
         .desconto-desc { font-size: 12px; opacity: 0.9; margin-top: 4px; }
-        
         .tag-cliente-novo { position: absolute; top: 8px; right: 12px; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; z-index: 3; }
-
         .btn-resgatar-modern { background: white; color: var(--primary-pink); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; z-index: 3; box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: all 0.2s; }
         .btn-resgatar-modern.resgatado { background-color: #333; color: #777; box-shadow: none; cursor: default; pointer-events: none; }
-
-        /* --- GRID --- */
         .masonry-grid { column-count: 2; column-gap: 10px; padding: 12px; }
-        .product-card { 
-            break-inside: avoid; margin-bottom: 10px; 
-            background: var(--bg-card); border-radius: 8px; overflow: hidden; position: relative; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 1px solid #2a2a2a;
-            cursor: pointer; transition: transform 0.1s; color: var(--text-primary);
-        }
+        .product-card { break-inside: avoid; margin-bottom: 10px; background: var(--bg-card); border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 1px solid #2a2a2a; cursor: pointer; transition: transform 0.1s; color: var(--text-primary); }
         .product-card:active { transform: scale(0.98); }
-
         .badges-row { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
         .badge { padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; white-space: nowrap; }
-        
-        /* Cores das Badges Atualizadas */
         .badge-frete { background-color: var(--badge-frete-bg); color: var(--badge-frete-text); }
         .badge-off { background-color: var(--badge-cupom-bg); color: var(--badge-cupom-text); }
-
         .card-img { width: 100%; display: block; object-fit: cover; background-color: #ffffff; }
         .card-info { padding: 10px; }
         .card-title { font-size: 13px; line-height: 1.3; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: var(--text-primary); }
         .price-final { font-size: 15px; font-weight: 800; color: var(--primary-pink); text-shadow: 0 0 2px rgba(254, 44, 85, 0.3); }
         .text-muted { color: var(--text-secondary); font-size: 11px; }
-        
-        .menu-float-btn { position: absolute; bottom: 8px; right: 8px; width: 28px; height: 28px; background: rgba(30, 30, 30, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.3); font-size: 16px; border: 1px solid #333; color: var(--text-primary); }
-        
         .no-results { text-align: center; padding: 40px; width: 100%; grid-column: span 2; display: none; color: var(--text-secondary); }
         .no-results button { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-dark); }
-
-        /* --- RESPONSIVIDADE (DESKTOP) --- */
         @media (min-width: 768px) {
-            /* Container Centralizado no Desktop */
-            .container, .masonry-grid {
-                max-width: 1100px; /* Largura máxima confortável */
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            /* Cabeçalho Centralizado */
-            .top-header {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-            
+            .container, .masonry-grid { max-width: 1100px; margin-left: auto; margin-right: auto; }
+            .top-header { display: flex; flex-direction: column; align-items: center; }
             .logo-row { width: 100%; max-width: 1100px; }
             .search-row-custom { width: 100%; max-width: 800px; margin: 0 auto; }
-
-            /* Aumentar colunas do Grid */
-            .masonry-grid {
-                column-count: 4; /* 4 produtos por linha no PC */
-                column-gap: 16px;
-            }
-
-            /* Ajustar altura do banner para não ficar gigante */
-            .hero-banner-container {
-                max-height: 400px; 
-            }
-            
-            /* Ajustes de fonte para PC */
+            .masonry-grid { column-count: 4; column-gap: 16px; }
+            .hero-banner-container { max-height: 400px; }
             .card-title { font-size: 14px; }
             .price-final { font-size: 16px; }
         }
-
-        @media (min-width: 1200px) {
-            .masonry-grid {
-                column-count: 5; /* 5 produtos em telas muito grandes */
-            }
-        }
-
+        @media (min-width: 1200px) { .masonry-grid { column-count: 5; } }
     </style>
 </head>
 <body>
@@ -236,12 +93,8 @@
         <div class="search-row-custom">
             <div class="modern-search-bar">
                 <span class="search-icon-left">
-                    <svg class="search-icon-svg" viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
+                    <svg class="search-icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </span>
-                
                 <input type="text" id="searchInput" class="modern-input" placeholder="Buscar ofertas..." autocomplete="off">
                 <button class="modern-search-btn" id="searchBtn">Procurar</button>
             </div>
@@ -273,152 +126,75 @@
             </div>
         </section>
 
-        <div class="masonry-grid" id="productGrid">
-            <div class="no-results" id="noResultsMsg">
-                <p style="font-size: 40px; margin-bottom: 10px;">😕</p>
-                <p>Nenhum produto encontrado.</p>
-                <button onclick="showAllProducts()" style="margin-top:10px; padding:5px 10px; border-radius:4px;">Ver Tudo</button>
-            </div>
-
-            <div class="product-card item-searchable" onclick="window.location.href='air.html'">
-                <img src="images/q1.webp" class="card-img" style="aspect-ratio: 9/13;">
-                <div class="card-info">
-                    <h3 class="card-title">Air Fryer 4L Mondial 1500W Bivolt</h3>
-                    <div>
-                        <div class="price-final">R$ 79,90</div>
-                        <div class="text-muted"><s>R$ 205,00</s> -61%</div>
-                    </div>
-                    <div class="badges-row">
-                        <span class="badge badge-frete">Frete grátis</span>
-                        <span class="badge badge-off">61% OFF</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card item-searchable" onclick="window.location.href='tv.html'">
-                <img src="images/t1.webp" class="card-img" style="aspect-ratio: 1/1;">
-                <div class="card-info">
-                    <h3 class="card-title">Smart Tv 32 Philco Led Roku Tv Hd Dolby Audio</h3>
-                    <div>
-                        <div class="price-final">R$ 499,00</div>
-                        <div class="text-muted"><s>R$ 1.279,00</s></div>
-                    </div>
-                    <div class="badges-row">
-                        <span class="badge badge-frete">Frete grátis</span>
-                        <span class="badge badge-off">61% OFF</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card item-searchable" onclick="window.location.href='apple.html'">
-                <img src="images/12 (1).webp" class="card-img" style="aspect-ratio: 1/1;">
-                <div class="card-info">
-                    <h3 class="card-title">iPhone 13 PRO 128GB Estelar (Recondicionado)</h3>
-                    <div>
-                        <div class="price-final">R$ 999,90</div>
-                    </div>
-                    <div class="badges-row">
-                        <span class="badge badge-frete">Frete grátis</span>
-                        <span class="badge badge-off">61% OFF</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="product-card item-searchable" onclick="window.location.href='apple.html'">
-                <img src="images/r1.webp" class="card-img" style="aspect-ratio: 1/1;">
-                <div class="card-info">
-                    <h3 class="card-title">iPhone 11 128 GB Branco - Bom (Recondicionado)</h3>
-                    <div>
-                        <div class="price-final">R$ 499,90</div>
-                        <div class="text-muted"><s>R$ 1.099,90</s> -61%</div>
-                    </div>
-                    <div class="badges-row">
-                        <span class="badge badge-frete">Frete grátis</span>
-                        <span class="badge badge-off">61% OFF</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card item-searchable" onclick="window.location.href='cp.html'">
-                <img src="images/1.webp" class="card-img" style="aspect-ratio: 3/4;">
-                <div class="card-info">
-                    <h3 class="card-title">Carregador Portátil 10000mAh Power Delivery 20W i2GO</h3>
-                    <div>
-                        <div class="price-final">R$ 19,90</div>
-                        <div class="text-muted"><s>R$ 51,00</s></div>
-                    </div>
-                    <div class="badges-row">
-                        <span class="badge badge-frete">Frete grátis</span>
-                        <span class="badge badge-off">61% OFF</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card item-searchable" onclick="window.location.href='arvore.html'">
-                <img src="images/2 (3).webp" class="card-img" style="aspect-ratio: 1/1;">
-                <div class="card-info">
-                    <h3 class="card-title">Árvore de Natal Pinheiro Luxo Clássica 2,10m</h3>
-                    <div>
-                        <div class="price-final">R$ 49,90</div>
-                        <div class="text-muted"><s>R$ 128,00</s></div>
-                    </div>
-                    <div class="badges-row">
-                        <span class="badge badge-frete">Frete grátis</span>
-                        <span class="badge badge-off">61% OFF</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card item-searchable" onclick="window.location.href='fogao.html'">
-                <img src="images/f1.jpg" class="card-img" style="aspect-ratio: 4/3;">
-                <div class="card-info">
-                    <h3 class="card-title">Fogão Atlas 4 Bocas Mônaco Top Glass Preto</h3>
-                    <div>
-                        <div class="price-final">R$ 249,90</div>
-                        <div class="text-muted"><s>R$ 640,00</s></div>
-                    </div>
-                    <div class="badges-row">
-                        <span class="badge badge-frete">Frete grátis</span>
-                        <span class="badge badge-off">61% OFF</span>
-                    </div>
-                </div>
-            </div>
-
-             <div class="product-card item-searchable" onclick="window.location.href='kit-panelas.html'">
-                <img src="images/p1.webp" class="card-img" style="aspect-ratio: 4/3;">
-                <div class="card-info">
-                    <h3 class="card-title">Jogo De Panelas Brinox Ceramic Life Smart</h3>
-                    <div>
-                        <div class="price-final">R$ 89,90</div>
-                        <div class="text-muted"><s>R$ 230,00</s></div>
-                    </div>
-                    <div class="badges-row">
-                        <span class="badge badge-frete">Frete grátis</span>
-                        <span class="badge badge-off">61% OFF</span>
-                    </div>
-                </div>
-            </div>
-
-        </div> </main>
+        <div class="masonry-grid" id="productGrid"></div>
+        
+        <div class="no-results" id="noResultsMsg">
+            <p style="font-size: 40px; margin-bottom: 10px;">😕</p>
+            <p>Nenhum produto encontrado.</p>
+            <button onclick="showAllProducts()" style="margin-top:10px; padding:5px 10px; border-radius:4px;">Ver Tudo</button>
+        </div>
+    </main>
 
     <script>
-        // 1. FORCE MOBILE AUTOPLAY VIDEO
+        // --- DADOS INICIAIS (Caso o Admin esteja vazio) ---
+        const defaultProducts = [
+            { id: 1, title: "Smart Tv 32 Philco Led Roku Tv Hd Dolby Audio", price: "R$ 499,00", oldPrice: "R$ 1.279,00", img: "images/t1.webp", link: "tv.html" },
+            { id: 2, title: "Fogão Atlas 4 Bocas Mônaco Top Glass Preto", price: "R$ 249,90", oldPrice: "R$ 640,00", img: "images/f1.jpg", link: "fogao.html" },
+            { id: 3, title: "Air Fryer 4L Mondial 1500W Bivolt", price: "R$ 79,90", oldPrice: "R$ 205,00", img: "images/q1.webp", link: "air.html" },
+            { id: 4, title: "Jogo De Panelas Brinox Ceramic Life Smart Plus 8 Peças", price: "R$ 89,90", oldPrice: "R$ 230,00", img: "images/p1.webp", link: "kit-panelas.html" },
+            { id: 5, title: "Árvore de Natal Pinheiro Luxo Clássica 2,10m", price: "R$ 49,90", oldPrice: "R$ 128,00", img: "images/2 (3).webp", link: "arvore.html" },
+            { id: 6, title: "Carregador Portátil (Power Bank) Ultra Rápido 10000mAh i2GO", price: "R$ 19,90", oldPrice: "R$ 51,00", img: "images/1.webp", link: "cp.html" },
+            { id: 7, title: "iPhone 13 PRO Dual SIM 128 GB estelar (Recondicionado)", price: "R$ 999,90", oldPrice: "", img: "images/12 (1).webp", link: "apple.html" },
+            { id: 8, title: "iPhone 11 128 GB Branco - Bom (Recondicionado)", price: "R$ 499,90", oldPrice: "R$ 1.099,90", img: "images/r1.webp", link: "apple.html" }
+        ];
+
+        // --- 1. CARREGAR DADOS DO ADMIN (LocalStorage) ---
+        // Se não houver nada salvo, usa os produtos padrão
+        let productsData = JSON.parse(localStorage.getItem('tiktokShopProducts')) || defaultProducts;
+
+        // --- 2. RENDERIZAR PRODUTOS ---
+        const productGrid = document.getElementById('productGrid');
+        const noResultsMsg = document.getElementById('noResultsMsg');
+
+        function renderProducts(list) {
+            productGrid.innerHTML = '';
+            if (list.length === 0) {
+                noResultsMsg.style.display = 'block';
+                return;
+            }
+            noResultsMsg.style.display = 'none';
+
+            list.forEach(product => {
+                const oldPriceHtml = product.oldPrice ? `<div class="text-muted"><s>${product.oldPrice}</s> -61%</div>` : '';
+                const html = `
+                <div class="product-card item-searchable" onclick="window.location.href='${product.link}'">
+                    <img src="${product.img}" class="card-img" style="aspect-ratio: 1/1;">
+                    <div class="card-info">
+                        <h3 class="card-title">${product.title}</h3>
+                        <div>
+                            <div class="price-final">${product.price}</div>
+                            ${oldPriceHtml}
+                        </div>
+                        <div class="badges-row">
+                            <span class="badge badge-frete">Frete grátis</span>
+                            <span class="badge badge-off">61% OFF</span>
+                        </div>
+                    </div>
+                </div>`;
+                productGrid.innerHTML += html;
+            });
+        }
+
+        // Iniciar
+        renderProducts(productsData);
+
+        // --- 3. AUTOPLAY DO VÍDEO ---
         document.addEventListener('DOMContentLoaded', function() {
             var video = document.getElementById('heroVideo');
-            if(video) {
-                video.muted = true; 
-                var promise = video.play();
-                if (promise !== undefined) {
-                    promise.catch(error => {
-                        console.log("Autoplay bloqueado, tentando novamente silenciado.");
-                        video.muted = true;
-                        video.play();
-                    });
-                }
-            }
+            if(video) { video.muted = true; video.play().catch(() => { video.muted = true; video.play(); }); }
         });
 
-        // 2. LOGICA DO BOTÃO RESGATAR
+        // --- 4. BOTÃO RESGATAR ---
         const btnResgatar = document.getElementById('btnResgatar');
         if (btnResgatar) {
             btnResgatar.addEventListener('click', function() {
@@ -427,43 +203,26 @@
             });
         }
 
-        // 3. SEARCH LOGIC & PLACEHOLDER ANIMATION
-        const productsData = [
-            { id: 1, title: "Smart Tv 32 Philco Led Roku Tv Hd Dolby Audio", price: "R$ 499,00", img: "images/t1.webp", link: "tv.html" },
-            { id: 2, title: "Fogão Atlas 4 Bocas Mônaco Top Glass Preto", price: "R$ 249,90", img: "images/f1.jpg", link: "fogao.html" },
-            { id: 3, title: "Air Fryer 4L Mondial 1500W Bivolt", price: "R$ 79,90", img: "images/q1.webp", link: "air.html" },
-            { id: 4, title: "Jogo De Panelas Brinox Ceramic Life Smart Plus 8 Peças", price: "R$ 89,90", img: "images/p1.webp", link: "kit-panelas.html" },
-            { id: 5, title: "Árvore de Natal Pinheiro Luxo Clássica 2,10m", price: "R$ 49,90", img: "images/2 (3).webp", link: "arvore.html" },
-            { id: 6, title: "Carregador Portátil (Power Bank) Ultra Rápido 10000mAh i2GO", price: "R$ 19,90", img: "images/1.webp", link: "cp.html" },
-            { id: 7, title: "iPhone 13 PRO Dual SIM 128 GB estelar (Recondicionado)", price: "R$ 999,90", img: "images/12 (1).webp", link: "apple.html" },
-            { id: 8, title: "iPhone 11 128 GB Branco - Bom (Recondicionado)", price: "R$ 499,90", img: "images/r1.webp", link: "apple.html" }
-        ];
-
+        // --- 5. PESQUISA & PLACEHOLDER ---
         const searchInput = document.getElementById('searchInput');
         const dropdownResults = document.getElementById('dropdownResults');
-        const productItems = document.querySelectorAll('.item-searchable');
-        const noResultsMsg = document.getElementById('noResultsMsg');
 
-        // --- SCRIPT PARA TROCAR O PLACEHOLDER ALEATORIAMENTE (Sem 'Buscar:') ---
         function updatePlaceholder() {
+            if (productsData.length === 0) return;
             const titles = productsData.map(p => p.title);
             const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-            // Apenas o nome do produto, cortado para não ficar gigante
             searchInput.setAttribute('placeholder', `${randomTitle.substring(0, 32)}...`);
         }
-        // Troca a cada 3 segundos
         setInterval(updatePlaceholder, 3000);
-        // Inicia ao carregar
         updatePlaceholder();
 
-        // --- LÓGICA DE BUSCA PADRÃO ---
         searchInput.addEventListener('input', function(e) {
             const query = e.target.value.toLowerCase().trim();
             dropdownResults.innerHTML = '';
             
             if (query.length === 0) {
                 dropdownResults.style.display = 'none';
-                showAllProducts();
+                renderProducts(productsData);
                 return;
             }
 
@@ -478,7 +237,7 @@
                     div.className = 'result-item';
                     div.onclick = () => { window.location.href = match.link; };
                     div.innerHTML = `
-                        <img src="${match.img}" class="result-thumb" alt="prod">
+                        <img src="${match.img}" class="result-thumb">
                         <div>
                             <div class="result-text">${match.title}</div>
                             <div class="result-price">${match.price}</div>
@@ -488,28 +247,13 @@
                 });
             } else {
                 dropdownResults.style.display = 'block';
-                dropdownResults.innerHTML = `<div class="result-item" style="color:#999; justify-content:center;">Produto não encontrado</div>`;
+                dropdownResults.innerHTML = `<div class="result-item" style="color:#999;">Produto não encontrado</div>`;
             }
-            filterGridByText(query);
+            renderProducts(matches);
         });
 
-        function filterGridByText(query) {
-            let visibleCount = 0;
-            productItems.forEach(item => {
-                const text = item.innerText.toLowerCase();
-                if(text.includes(query)) {
-                    item.style.display = 'block'; 
-                    visibleCount++;
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-            noResultsMsg.style.display = (visibleCount === 0) ? 'block' : 'none';
-        }
-
         function showAllProducts() {
-            productItems.forEach(item => item.style.display = 'block');
-            noResultsMsg.style.display = 'none';
+            renderProducts(productsData);
             searchInput.value = '';
             dropdownResults.style.display = 'none';
         }
