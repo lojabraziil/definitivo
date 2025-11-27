@@ -694,7 +694,67 @@
                         if(mediaUrls.length > 0) {
                             mediaGridHtml = '<div class="review-media-grid">';
                             mediaUrls.forEach(url => {
-                                mediaGridHtml += isVideoFile(url) ? `<video src="${url}" class="review-media-item" muted loop playsinline></video>` : `<img src="${url}" class="review-media-item">`;
+                                // --- AQUI ESTÁ A MUDANÇA PARA O VÍDEO RODAR SOZINHO ---
+                                mediaGridHtml += isVideoFile(url) ? `<video src="${url}" class="review-media-item" autoplay muted loop playsinline preload="auto" style="background:#222; object-fit:cover;"></video>` : `<img src="${url}" class="review-media-item">`;
+                            });
+                            mediaGridHtml += '</div>';
+                        }
+                    }
+                    let replyHtml = "";
+                    if(reply && reply.trim() !== "") {
+                        replyHtml = `<div class="seller-reply-box"><div class="seller-reply-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Resposta da Loja:</div>${reply}</div>`;
+                    }
+                    reviewsHtml += `<div class="review-card"><div class="reviewer-info"><img src="${img}" onerror="this.src='avatar/(1).jpg'" class="reviewer-avatar"><div class="reviewer-name">${name}</div></div><div class="review-stars">${starsHtml}</div><div class="review-text">${text}</div>${mediaGridHtml}${replyHtml}</div>`;
+                }
+            }
+
+            // --- GERAÇÃO DAS SUGESTÕES (DINÂMICO) ---
+            const productsList = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            let suggestedHtml = "";
+
+            if (productsList.length > 0) {
+                productsList.forEach(p => {
+                    const pImg = p.img && p.img.trim() !== "" ? p.img : 'https://placehold.co/400?text=Sem+Img';
+                    suggestedHtml += `
+                    <div class="product-card" onclick="window.location.href='${p.link}'">
+                        <img src="${pImg}" class="card-img" style="aspect-ratio: 1/1; background:white;">
+                        <div class="card-info">
+                            <div class="card-title">${p.title}</div>
+                            <div class="card-price">${p.price}</div>
+                            <div class="badge-row"><span class="badge-sm">Oferta</span></div>
+                        </div>
+                    </div>`;
+                });
+            } else {
+                suggestedHtml = `<div style="grid-column: 1 / -1; text-align:center; color:#666; padding:20px; font-size:11px;">Salve produtos na vitrine para vê-los aqui.</div>`;
+            }
+
+            let content = templateBase;
+            content = content.replace(/{{PAGE_TITLE}}/g, pageTitle).replace(/{{PRODUCT_TITLE}}/g, title).replace(/{{PRICE_NEW}}/g, price).replace(/{{PRICE_OLD}}/g, oldPrice).replace(/{{DISCOUNT}}/g, discount).replace(/{{GALLERY_CONTENT}}/g, galleryHtml).replace(/{{IMG_COUNT}}/g, imgs.length).replace(/{{REVIEWS_CONTENT}}/g, reviewsHtml).replace(/{{CHECKOUT_LINK}}/g, checkoutLink).replace(/{{SUGGESTED_PRODUCTS}}/g, suggestedHtml).replace(/{{SPECS_CONTENT}}/g, specsHtml);
+
+            const iframe = document.getElementById('previewFrame');
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open(); doc.write(content); doc.close();
+        }
+
+            let reviewsHtml = "";
+            for(let i=1; i<=5; i++) {
+                const name = document.getElementById(`rName${i}`).value;
+                const img = document.getElementById(`rImg${i}`).value;
+                const text = document.getElementById(`rText${i}`).value;
+                const picInput = document.getElementById(`rPic${i}`).value;
+                const starsCount = document.getElementById(`rStars${i}`).value;
+                const reply = document.getElementById(`rReply${i}`).value;
+                
+                if(name && text) {
+                    const starsHtml = getStarsSVG(starsCount);
+                    let mediaGridHtml = "";
+                    if(picInput.trim()) {
+                        const mediaUrls = picInput.split(',').map(u=>u.trim()).filter(u=>u!=="");
+                        if(mediaUrls.length > 0) {
+                            mediaGridHtml = '<div class="review-media-grid">';
+                            mediaUrls.forEach(url => {
+                                mediaGridHtml += isVideoFile(url) ? `<video src="${url}" class="review-media-item" autoplay muted loop playsinline preload="auto" style="background:#222;"></video>` : `<img src="${url}" class="review-media-item">`;
                             });
                             mediaGridHtml += '</div>';
                         }
