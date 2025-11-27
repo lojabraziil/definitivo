@@ -384,29 +384,121 @@
             "fone": "Tipo: Bluetooth TWS\nBateria: 30h totais"
         };
 
+        // --- BANCO DE DADOS DE REVIEWS MELHORADO (v2.0) ---
         const reviewsDB = {
-            "default": [
-                { text: "Produto excelente, chegou muito rápido!", reply: "Agradecemos a preferência!" },
-                { text: "Qualidade me surpreendeu.", reply: "" },
-                { text: "Ótimo custo benefício.", reply: "" },
-                { text: "Chegou bem embalado.", reply: "" },
-                { text: "Recomendo a todos.", reply: "Obrigado pela recomendação!" }
+            // Comentários que servem para qualquer produto
+            "generico": [
+                { text: "Chegou super rápido, bem antes do prazo! A embalagem veio intacta.", reply: "Que notícia boa! Nosso time de logística voa! 🚀" },
+                { text: "Produto de excelente qualidade, me surpreendeu positivamente. Recomendo de olhos fechados.", reply: "Ficamos muito felizes em superar suas expectativas! 😊" },
+                { text: "Comprarei novamente com certeza. Atendimento nota 10.", reply: "Será um prazer te atender novamente!" },
+                { text: "Gostei bastante, cumpre o que promete. Ótimo custo benefício.", reply: "" },
+                { text: "Veio tudo certinho, igual ao anúncio. Podem comprar sem medo.", reply: "Transparência é nosso lema! Obrigado pela confiança." },
+                { text: "A entrega foi relâmpago! Comprei na terça e chegou na quinta.", reply: "" },
+                { text: "Tive um probleminha com o rastreio, mas o suporte resolveu na hora. Produto top!", reply: "Pedimos desculpas pelo susto, mas que bom que resolvemos! Conte com a gente." },
+                { text: "Sensacional! Vale cada centavo.", reply: "" },
+                { text: "Muito bom, material resistente e acabamento impecável.", reply: "" },
+                { text: "Já é a terceira vez que compro nessa loja, nunca decepcionam.", reply: "Cliente fiel tem lugar especial no nosso coração! ❤️" }
             ],
-            "eletronico": [
-                { text: "Celular incrível, câmera top!", reply: "Que bom que gostou!" },
-                { text: "Bateria dura muito.", reply: "" },
-                { text: "Chegou lacrado, original.", reply: "Só trabalhamos com originais!" },
-                { text: "Melhor preço que achei.", reply: "" },
-                { text: "Muito rápido o sistema.", reply: "" }
+            // Específico para Celulares, Tablets e Eletrônicos
+            "smartphone": [
+                { text: "O celular é lindo demais! A câmera é absurda de boa, fotos ficam profissionais.", reply: "Prepare-se para chover likes nas suas fotos! 📸" },
+                { text: "Bateria dura o dia todo tranquilo, mesmo jogando. Processador muito rápido.", reply: "Desempenho monstro! Aproveite muito." },
+                { text: "Chegou lacrado, originalzinho. Já verifiquei o IMEI e tá tudo certo.", reply: "Segurança e originalidade garantidas aqui!" },
+                { text: "A tela tem uma fluidez incrível, 120Hz faz muita diferença.", reply: "Depois que acostuma, não tem volta né? rs" },
+                { text: "Melhor preço que achei na internet. E ainda veio com capinha de brinde!", reply: "Mimo merecido! 😉" },
+                { text: "Migrei do Android pro iPhone e tô amando. Sistema muito fluido.", reply: "" },
+                { text: "Carregamento ultra rápido, em 30min já tá quase cheio.", reply: "" }
             ],
+            // Específico para Smartwatches e Fones
+            "acessorios": [
+                { text: "O relógio é muito bonito, troca pulseira fácil. As notificações chegam certinho.", reply: "Estilo e praticidade no pulso!" },
+                { text: "Fone com grave muito potente! O cancelamento de ruído isola tudo.", reply: "Pra curtir a música no volume máximo! 🎧" },
+                { text: "Bateria do fone dura uma semana comigo. Conecta super rápido no bluetooth.", reply: "" },
+                { text: "As funções de saúde do relógio são bem precisas, comparei com o aparelho de pressão.", reply: "Saúde em primeiro lugar sempre." },
+                { text: "Pelo preço, entrega muito mais que os da concorrência. Top!", reply: "" }
+            ],
+            // Específico para Cozinha (Air Fryer, Panelas)
             "cozinha": [
-                { text: "Facilitou minha vida na cozinha.", reply: "Praticidade é tudo!" },
-                { text: "Muito fácil de limpar.", reply: "" },
-                { text: "Chegou antes do prazo.", reply: "" },
-                { text: "Funciona perfeitamente.", reply: "" },
-                { text: "Adorei o design.", reply: "" }
+                { text: "Gente, essa Air Fryer mudou minha vida! Batata fica crocante sem uma gota de óleo.", reply: "Saúde e sabor andando juntos! 🍟" },
+                { text: "As panelas são lindas e realmente não grudam nada. O ovo desliza na frigideira kkk", reply: "Dica: use espátula de silicone pra elas durarem pra sempre!" },
+                { text: "Fácil demais de limpar, só passar um papel toalha e tá nova.", reply: "Praticidade é tudo na cozinha, né?" },
+                { text: "Chegou bem embalado, sem nenhum amassado. Já testei fazendo bolo e deu super certo.", reply: "" },
+                { text: "Minha cozinha ficou muito mais chique com esse kit. Amei a cor!", reply: "Sua cozinha merece esse upgrade!" }
+            ],
+            // Específico para Casa e Decoração
+            "casa": [
+                { text: "O material é muito bom, parece ser bem durável. Ficou lindo na sala.", reply: "" },
+                { text: "Fácil de montar, eu mesma consegui sozinha. Manual bem explicado.", reply: "Que orgulho! Mão na massa! 💪" },
+                { text: "Superou as expectativas, pessoalmente é mais bonito que na foto.", reply: "" },
+                { text: "Chegou antes do prazo e o entregador foi super educado.", reply: "" }
             ]
         };
+
+        // --- GERADOR DE NOMES BRASILEIROS ---
+        const nomesBR = [
+            "Ana", "Bruno", "Carla", "Daniel", "Eduarda", "Felipe", "Gabriela", "Hugo", "Isabela", "João",
+            "Karina", "Lucas", "Mariana", "Nicolas", "Olívia", "Pedro", "Quintino", "Rafael", "Sofia", "Thiago",
+            "Ursula", "Vinícius", "Wanessa", "Xavier", "Yasmim", "Zeca", "Amanda", "Beatriz", "Caio", "Diego",
+            "Elaine", "Fernando", "Gustavo", "Heloísa", "Igor", "Júlia", "Kevin", "Larissa", "Matheus", "Natália"
+        ];
+        const sobrenomesBR = [
+            "Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Ferreira", "Alves", "Pereira", "Lima", "Gomes",
+            "Costa", "Ribeiro", "Martins", "Carvalho", "Almeida", "Lopes", "Soares", "Fernandes", "Vieira", "Barbosa",
+            "Rocha", "Dias", "Nascimento", "Andrade", "Moreira", "Nunes", "Marques", "Machado", "Mendes", "Freitas"
+        ];
+
+        function gerarNomeAleatorio() {
+            const nome = nomesBR[Math.floor(Math.random() * nomesBR.length)];
+            const sobrenome = sobrenomesBR[Math.floor(Math.random() * sobrenomesBR.length)];
+            return `${nome} ${sobrenome}`;
+        }
+
+        // --- LÓGICA INTELIGENTE DE SELEÇÃO ---
+        function autoFillReviews(title) {
+            const lower = title.toLowerCase();
+            let category = "generico"; // Padrão
+            
+            // Detecta categoria pelo título
+            if (lower.includes("iphone") || lower.includes("samsung") || lower.includes("celular") || lower.includes("xiaomi") || lower.includes("motorola") || lower.includes("tablet")) {
+                category = "smartphone";
+            } else if (lower.includes("air") || lower.includes("fryer") || lower.includes("panela") || lower.includes("cozinha") || lower.includes("fogao") || lower.includes("liquidificador")) {
+                category = "cozinha";
+            } else if (lower.includes("watch") || lower.includes("relogio") || lower.includes("fone") || lower.includes("buds") || lower.includes("tws") || lower.includes("headphone")) {
+                category = "acessorios";
+            } else if (lower.includes("sofa") || lower.includes("cadeira") || lower.includes("mesa") || lower.includes("tapete") || lower.includes("lampada")) {
+                category = "casa";
+            }
+
+            // Mistura comentários da categoria específica + genéricos para dar variedade
+            let pool = [...reviewsDB[category]];
+            
+            // Adiciona alguns genéricos na mistura (30% de chance de pegar um genérico extra)
+            pool = pool.concat(reviewsDB["generico"]);
+
+            // Embaralha a lista
+            pool.sort(() => 0.5 - Math.random());
+
+            for(let i=1; i<=5; i++) {
+                // Pega um review da lista embaralhada (garante que não repete se tiver bastante opção)
+                const review = pool[i-1] || pool[0]; 
+
+                if(review) {
+                    document.getElementById(`rText${i}`).value = review.text;
+                    document.getElementById(`rReply${i}`).value = review.reply;
+                    document.getElementById(`rName${i}`).value = gerarNomeAleatorio();
+                    
+                    // Randomiza as estrelas (maioria 5, alguns 4)
+                    const stars = Math.random() > 0.2 ? "5" : "4";
+                    document.getElementById(`rStars${i}`).value = stars;
+
+                    // Atualiza o avatar local
+                    if(typeof getRandomAvatarUrl === "function") {
+                        document.getElementById(`rImg${i}`).value = getRandomAvatarUrl();
+                    }
+                }
+            }
+            updatePreview();
+        }
 
         function autoFillSpecs(title) {
             const lower = title.toLowerCase();
