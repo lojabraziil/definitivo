@@ -3,123 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Admin 3.5 - Editor & Importador</title>
+    <title>Master Admin 5.0 - Final</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- ESTILOS DO PAINEL (DARK ENTERPRISE) --- */
-        :root {
-            --bg-body: #0d0d0d;
-            --bg-panel: #141414;
-            --bg-input: #1a1a1a;
-            --border: #2a2a2a;
-            --accent: #25f4ee;
-            --accent-hover: #1ccbc6;
-            --pink: #fe2c55;
-            --text-main: #ececec;
-            --text-muted: #888;
-            --sidebar-width: 240px;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
-        
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-            font-size: 13px;
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: var(--sidebar-width);
-            background: var(--bg-panel);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            flex-shrink: 0;
-        }
-        .brand { font-size: 18px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-        .brand span { color: var(--accent); }
-        .menu-group { margin-bottom: 20px; }
-        .menu-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding-left: 10px; }
-        .nav-btn { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px; background: transparent; border: none; color: var(--text-muted); border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 500; font-size: 13px; text-align: left; }
-        .nav-btn:hover { background: var(--border); color: #fff; }
-        .nav-btn.active { background: rgba(37, 244, 238, 0.08); color: var(--accent); border: 1px solid rgba(37, 244, 238, 0.1); }
-        .nav-btn svg { width: 16px; height: 16px; }
-
-        /* MAIN */
-        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-        .top-bar { height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; }
-        .top-title h1 { font-size: 16px; font-weight: 600; }
-        .top-actions .btn-link { color: var(--text-muted); text-decoration: none; font-size: 12px; display:flex; align-items:center; gap:5px; transition:0.2s; }
-        .top-actions .btn-link:hover { color: var(--accent); }
-
-        /* WORKSPACE */
-        .workspace { flex: 1; overflow: hidden; position: relative; }
-        .tab-view { display: none; height: 100%; }
-        .tab-view.active { display: flex; }
-        .creator-layout { display: grid; grid-template-columns: 400px 1fr; height: 100%; width: 100%; }
-        
-        /* CONTROLS */
-        .control-panel { background: var(--bg-panel); border-right: 1px solid var(--border); overflow-y: auto; padding: 20px; }
-        .control-panel::-webkit-scrollbar { width: 5px; }
-        .control-panel::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-
-        details { background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
-        summary { padding: 12px 15px; cursor: pointer; font-weight: 600; user-select: none; display: flex; align-items: center; justify-content: space-between; background: var(--bg-panel); }
-        summary:hover { background: #1f1f1f; }
-        .details-content { padding: 15px; border-top: 1px solid var(--border); }
-
-        .form-group { margin-bottom: 12px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        label { display: block; margin-bottom: 6px; font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; }
-        input, textarea, select { width: 100%; background: #0a0a0a; border: 1px solid var(--border); border-radius: 6px; padding: 10px; color: #fff; font-family: 'Inter', sans-serif; font-size: 13px; transition: 0.2s; }
-        input:focus, textarea:focus, select:focus { border-color: var(--accent); background: #111; }
-
-        .action-bar { padding: 15px; background: var(--bg-panel); border-top: 1px solid var(--border); display: flex; gap: 10px; position: sticky; bottom: 0; }
-        .btn { flex: 1; padding: 12px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; font-size: 13px; transition: 0.2s; }
-        .btn-primary { background: var(--accent); color: #000; }
-        .btn-primary:hover { background: var(--accent-hover); }
-        .btn-secondary { background: #2a2a2a; color: #fff; border: 1px solid var(--border); }
-        .btn-secondary:hover { background: #333; border-color: #444; }
-        
-        /* ESTILO DO BOTÃO DE UPLOAD */
-        .upload-wrapper {
-            margin-bottom: 20px;
-            border: 2px dashed var(--border);
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            background: rgba(255,255,255,0.02);
-            transition: 0.3s;
-        }
-        .upload-wrapper:hover { border-color: var(--accent); background: rgba(37, 244, 238, 0.05); }
-        .btn-upload { background: transparent; border: none; color: var(--accent); font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
-
-        /* PREVIEW */
-        .preview-stage { background: #000; display: flex; align-items: center; justify-content: center; padding: 40px; background-image: radial-gradient(#1a1a1a 1px, transparent 1px); background-size: 20px 20px; }
-        .device-mockup { width: 340px; height: 680px; background: #fff; border-radius: 40px; border: 10px solid #222; box-shadow: 0 30px 60px rgba(0,0,0,0.6); overflow: hidden; position: relative; }
-        .device-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 25px; background: #222; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; z-index: 10; }
-        #previewFrame { width: 100%; height: 100%; border: none; }
-
-        /* VITRINE TABLE */
-        .vitrine-layout { padding: 30px; overflow-y: auto; width: 100%; }
-        .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .data-table th { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 500; }
-        .data-table td { padding: 10px; border-bottom: 1px solid #222; vertical-align: middle; }
-        .data-table tr:hover td { background: #1a1a1a; }
-        .thumb-sm { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; border: 1px solid var(--border); }
-        .status-pill { background: rgba(37, 244, 238, 0.1); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 11px; }
-        .btn-icon { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 5px; border-radius: 4px; }
-        .btn-icon:hover { background: #222; color: var(--pink); }
-        
-        .badge-ai { font-size: 9px; background: #112a2a; color: var(--accent); padding: 2px 5px; border-radius: 3px; margin-left: 5px; border: 1px solid #1a4444; display: none; }
-
-        @media (max-width: 900px) { body { flex-direction: column; height: auto; overflow: auto; } .sidebar { width: 100%; padding: 20px; flex-direction: row; align-items: center; flex-wrap: wrap; } .creator-layout { grid-template-columns: 1fr; } }
+        /* --- ESTILOS DO PAINEL (MANTIDOS) --- */
+        :root { --bg-body:#0d0d0d; --bg-panel:#141414; --bg-input:#1a1a1a; --border:#2a2a2a; --accent:#25f4ee; --accent-hover:#1ccbc6; --pink:#fe2c55; --text-main:#ececec; --text-muted:#888; --sidebar-width:240px; }
+        * { margin:0; padding:0; box-sizing:border-box; outline:none; }
+        body { background-color:var(--bg-body); color:var(--text-main); font-family:'Inter', sans-serif; display:flex; height:100vh; overflow:hidden; font-size:13px; }
+        .sidebar { width:var(--sidebar-width); background:var(--bg-panel); border-right:1px solid var(--border); display:flex; flex-direction:column; padding:20px; flex-shrink:0; }
+        .brand { font-size:18px; font-weight:700; color:#fff; display:flex; align-items:center; gap:8px; padding-bottom:20px; border-bottom:1px solid var(--border); margin-bottom:20px; }
+        .brand span { color:var(--accent); }
+        .menu-group { margin-bottom:20px; }
+        .menu-title { font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; padding-left:10px; }
+        .nav-btn { width:100%; display:flex; align-items:center; gap:10px; padding:10px; background:transparent; border:none; color:var(--text-muted); border-radius:6px; cursor:pointer; transition:all 0.2s; font-weight:500; font-size:13px; text-align:left; }
+        .nav-btn:hover { background:var(--border); color:#fff; }
+        .nav-btn.active { background:rgba(37, 244, 238, 0.08); color:var(--accent); border:1px solid rgba(37, 244, 238, 0.1); }
+        .nav-btn svg { width:16px; height:16px; }
+        .main-content { flex:1; display:flex; flex-direction:column; overflow:hidden; position:relative; }
+        .top-bar { height:60px; background:var(--bg-panel); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 25px; }
+        .top-title h1 { font-size:16px; font-weight:600; }
+        .top-actions .btn-link { color:var(--text-muted); text-decoration:none; font-size:12px; display:flex; align-items:center; gap:5px; transition:0.2s; }
+        .top-actions .btn-link:hover { color:var(--accent); }
+        .workspace { flex:1; overflow:hidden; position:relative; }
+        .tab-view { display:none; height:100%; }
+        .tab-view.active { display:flex; }
+        .creator-layout { display:grid; grid-template-columns:400px 1fr; height:100%; width:100%; }
+        .control-panel { background:var(--bg-panel); border-right:1px solid var(--border); overflow-y:auto; padding:20px; }
+        .control-panel::-webkit-scrollbar { width:5px; }
+        .control-panel::-webkit-scrollbar-thumb { background:#333; border-radius:3px; }
+        details { background:var(--bg-input); border:1px solid var(--border); border-radius:8px; margin-bottom:10px; overflow:hidden; }
+        summary { padding:12px 15px; cursor:pointer; font-weight:600; user-select:none; display:flex; align-items:center; justify-content:space-between; background:var(--bg-panel); }
+        summary:hover { background:#1f1f1f; }
+        .details-content { padding:15px; border-top:1px solid var(--border); }
+        .form-group { margin-bottom:12px; }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        label { display:block; margin-bottom:6px; font-size:11px; font-weight:500; color:var(--text-muted); text-transform:uppercase; }
+        input, textarea, select { width:100%; background:#0a0a0a; border:1px solid var(--border); border-radius:6px; padding:10px; color:#fff; font-family:'Inter', sans-serif; font-size:13px; transition:0.2s; }
+        input:focus, textarea:focus, select:focus { border-color:var(--accent); background:#111; }
+        .action-bar { padding:15px; background:var(--bg-panel); border-top:1px solid var(--border); display:flex; gap:10px; position:sticky; bottom:0; }
+        .btn { flex:1; padding:12px; border-radius:6px; border:none; font-weight:600; cursor:pointer; font-size:13px; transition:0.2s; }
+        .btn-primary { background:var(--accent); color:#000; }
+        .btn-primary:hover { background:var(--accent-hover); }
+        .btn-secondary { background:#2a2a2a; color:#fff; border:1px solid var(--border); }
+        .btn-secondary:hover { background:#333; border-color:#444; }
+        .upload-wrapper { margin-bottom:20px; border:2px dashed var(--border); border-radius:8px; padding:15px; text-align:center; background:rgba(255,255,255,0.02); transition:0.3s; }
+        .upload-wrapper:hover { border-color:var(--accent); background:rgba(37, 244, 238, 0.05); }
+        .btn-upload { background:transparent; border:none; color:var(--accent); font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; width:100%; }
+        .preview-stage { background:#000; display:flex; align-items:center; justify-content:center; padding:40px; background-image:radial-gradient(#1a1a1a 1px, transparent 1px); background-size:20px 20px; }
+        .device-mockup { width:340px; height:680px; background:#fff; border-radius:40px; border:10px solid #222; box-shadow:0 30px 60px rgba(0,0,0,0.6); overflow:hidden; position:relative; }
+        .device-notch { position:absolute; top:0; left:50%; transform:translateX(-50%); width:150px; height:25px; background:#222; border-bottom-left-radius:16px; border-bottom-right-radius:16px; z-index:10; }
+        #previewFrame { width:100%; height:100%; border:none; }
+        .vitrine-layout { padding:30px; overflow-y:auto; width:100%; }
+        .data-table { width:100%; border-collapse:collapse; font-size:13px; }
+        .data-table th { text-align:left; padding:10px; border-bottom:1px solid var(--border); color:var(--text-muted); font-weight:500; }
+        .data-table td { padding:10px; border-bottom:1px solid #222; vertical-align:middle; }
+        .data-table tr:hover td { background:#1a1a1a; }
+        .thumb-sm { width:40px; height:40px; border-radius:4px; object-fit:cover; border:1px solid var(--border); }
+        .status-pill { background:rgba(37, 244, 238, 0.1); color:var(--accent); padding:2px 8px; border-radius:4px; font-size:11px; }
+        .btn-icon { background:none; border:none; color:var(--text-muted); cursor:pointer; padding:5px; border-radius:4px; }
+        .btn-icon:hover { background:#222; color:var(--pink); }
+        .badge-ai { font-size:9px; background:#112a2a; color:var(--accent); padding:2px 5px; border-radius:3px; margin-left:5px; border:1px solid #1a4444; display:none; }
+        @media (max-width: 900px) { body { flex-direction:column; height:auto; overflow:auto; } .sidebar { width:100%; padding:20px; flex-direction:row; align-items:center; flex-wrap:wrap; } .creator-layout { grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
@@ -152,10 +96,8 @@
         </div>
 
         <div class="workspace">
-            
             <div id="tab-creator" class="tab-view active creator-layout">
                 <div class="control-panel">
-                    
                     <div class="upload-wrapper">
                         <input type="file" id="htmlLoader" accept=".html" style="display: none;" onchange="loadHtmlFile(this)">
                         <button class="btn-upload" onclick="document.getElementById('htmlLoader').click()">
@@ -169,7 +111,7 @@
                         <div class="details-content">
                             <div class="form-group">
                                 <label>Título do Produto <span id="autoBadge" class="badge-ai">IA ATIVA</span></label>
-                                <input type="text" id="pTitle" placeholder="Ex: iPhone 15, Air Fryer..." oninput="updatePreview()" onkeyup="autoFillSpecs(this.value); autoFillReviews(this.value)">
+                                <input type="text" id="pTitle" placeholder="Ex: Cooktop 5 Bocas, iPhone 13..." oninput="updatePreview()" onkeyup="handleTitleChange(this.value)">
                             </div>
                             <div class="form-group">
                                 <label>Link de Compra</label>
@@ -247,339 +189,248 @@
         function loadHtmlFile(input) {
             const file = input.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(e) {
                 const content = e.target.result;
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(content, 'text/html');
-
                 try {
-                    const title = doc.querySelector('.product-title').innerText;
-                    const price = doc.querySelector('.preco-atual-ativa').innerText;
-                    const oldPrice = doc.querySelector('.preco-antigo-ativa').innerText;
-                    const discountText = doc.querySelector('.desconto-tag-ativa').innerText.replace('Economize ', '');
-                    const pageTitle = doc.querySelector('title').innerText;
-                    const checkoutLink = doc.querySelector('.buy-button').getAttribute('href');
-
-                    document.getElementById('pTitle').value = title;
-                    document.getElementById('pPrice').value = price;
-                    document.getElementById('pOldPrice').value = oldPrice;
-                    document.getElementById('pDiscount').value = discountText;
-                    document.getElementById('pPageTitle').value = pageTitle;
-                    document.getElementById('pCheckout').value = checkoutLink;
-
+                    document.getElementById('pTitle').value = doc.querySelector('.product-title').innerText;
+                    document.getElementById('pPrice').value = doc.querySelector('.preco-atual-ativa').innerText;
+                    document.getElementById('pOldPrice').value = doc.querySelector('.preco-antigo-ativa').innerText;
+                    document.getElementById('pDiscount').value = doc.querySelector('.desconto-tag-ativa').innerText.replace('Economize ', '');
+                    document.getElementById('pPageTitle').value = doc.querySelector('title').innerText;
+                    document.getElementById('pCheckout').value = doc.querySelector('.buy-button').getAttribute('href');
+                    
                     const imgs = doc.getElementById('gallery').querySelectorAll('img');
-                    for(let i = 1; i <= 4; i++) {
-                        document.getElementById(`pImg${i}`).value = imgs[i-1] ? imgs[i-1].src : '';
-                    }
-
+                    for(let i = 1; i <= 4; i++) { document.getElementById(`pImg${i}`).value = imgs[i-1] ? imgs[i-1].src : ''; }
+                    
                     const specItems = doc.querySelectorAll('.specs-list li');
                     let specString = "";
-                    specItems.forEach(li => {
-                        const key = li.querySelector('strong').innerText.replace(':', '');
-                        const val = li.querySelector('span').innerText;
-                        specString += `${key}: ${val}\n`;
-                    });
+                    specItems.forEach(li => { specString += `${li.querySelector('strong').innerText.replace(':', '')}: ${li.querySelector('span').innerText}\n`; });
                     document.getElementById('pSpecs').value = specString;
-
+                    
                     const reviews = doc.querySelectorAll('.review-card');
                     reviews.forEach((card, index) => {
                         const i = index + 1;
                         if(i > 5) return;
-
-                        const name = card.querySelector('.reviewer-name').innerText;
-                        const avatar = card.querySelector('.reviewer-avatar').src;
-                        const text = card.querySelector('.review-text').innerText;
+                        document.getElementById(`rName${i}`).value = card.querySelector('.reviewer-name').innerText;
+                        document.getElementById(`rImg${i}`).value = card.querySelector('.reviewer-avatar').src;
+                        document.getElementById(`rText${i}`).value = card.querySelector('.review-text').innerText;
+                        document.getElementById(`rStars${i}`).value = card.querySelectorAll('.star-icon-svg').length;
                         
-                        const stars = card.querySelectorAll('.star-icon-svg').length;
-                        
-                        let pics = [];
-                        const mediaItems = card.querySelectorAll('.review-media-item');
-                        mediaItems.forEach(m => pics.push(m.src));
-                        
-                        let reply = "";
-                        const replyBox = card.querySelector('.seller-reply-box');
-                        if (replyBox) {
-                            reply = replyBox.innerText.replace('Resposta da Loja:', '').trim();
+                        const timeSpan = card.querySelector('.review-time-ago');
+                        if (timeSpan) {
+                            document.getElementById(`rTime${i}`).value = timeSpan.innerText.replace('• ', '');
+                        } else {
+                            document.getElementById(`rTime${i}`).value = gerarTempoAleatorio();
                         }
 
-                        document.getElementById(`rName${i}`).value = name;
-                        document.getElementById(`rImg${i}`).value = avatar;
-                        document.getElementById(`rText${i}`).value = text;
-                        document.getElementById(`rStars${i}`).value = stars;
+                        const replyBox = card.querySelector('.seller-reply-box');
+                        document.getElementById(`rReply${i}`).value = replyBox ? replyBox.innerText.replace('Resposta da Loja:', '').trim() : "";
+                        const pics = []; card.querySelectorAll('.review-media-item').forEach(m => pics.push(m.src));
                         document.getElementById(`rPic${i}`).value = pics.join(', ');
-                        document.getElementById(`rReply${i}`).value = reply;
                     });
-
-                    for(let j = reviews.length + 1; j <= 5; j++) {
-                        document.getElementById(`rName${j}`).value = "";
-                        document.getElementById(`rText${j}`).value = "";
-                        document.getElementById(`rReply${j}`).value = "";
-                    }
-
-                    alert("Arquivo carregado com sucesso! Você pode editar agora.");
-                    updatePreview(); 
-
-                } catch (err) {
-                    alert("Erro ao ler o arquivo. Certifique-se de que é um HTML criado por este painel.");
-                    console.error(err);
-                }
+                    alert("Arquivo carregado com sucesso!"); updatePreview();
+                } catch (err) { alert("Erro ao ler o arquivo."); console.error(err); }
             };
             reader.readAsText(file);
         }
 
-        // --- LÓGICA DA VITRINE (LOCALSTORAGE) ---
+        // --- LÓGICA DA VITRINE ---
         const STORAGE_KEY = 'tiktokShopProducts';
         function addToStore() {
             const title = document.getElementById('pTitle').value;
-            const price = document.getElementById('pPrice').value;
-            const img = document.getElementById('pImg1').value;
             if(!title) { alert("Preencha o título!"); return; }
-            const filename = title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 30) + ".html";
-            const newProd = { id: Date.now(), title: title, price: price, oldPrice: document.getElementById('pOldPrice').value, img: img, link: filename };
+            const newProd = { id: Date.now(), title: title, price: document.getElementById('pPrice').value, oldPrice: document.getElementById('pOldPrice').value, img: document.getElementById('pImg1').value, link: title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 30) + ".html" };
             let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
             products.unshift(newProd);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-            alert("Produto salvo na Vitrine! Ele aparecerá nas sugestões.");
-            renderStoreList();
-            updatePreview(); 
+            alert("Salvo na Vitrine!"); renderStoreList(); updatePreview();
         }
         function renderStoreList() {
             const list = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
             const tbody = document.getElementById('storeListBody');
-            tbody.innerHTML = list.length ? '' : '<tr><td colspan="5" style="text-align:center; padding:20px; color:#666;">Sua vitrine está vazia.<br>Crie e salve produtos para começar.</td></tr>';
-            list.forEach((p, index) => {
-                tbody.innerHTML += `<tr><td><img src="${p.img}" class="thumb-sm" onerror="this.src='https://placehold.co/40'"></td><td><div style="font-weight:600; color:#fff;">${p.title}</div><div style="font-size:11px; color:#666;">${p.link}</div></td><td style="color:#fff;">${p.price}</td><td><span class="status-pill">Ativo</span></td><td><button class="btn-icon" onclick="removeStoreItem(${index})">🗑️</button></td></tr>`;
-            });
+            tbody.innerHTML = list.length ? '' : '<tr><td colspan="5" style="text-align:center; padding:20px; color:#666;">Vitrine vazia.</td></tr>';
+            list.forEach((p, index) => { tbody.innerHTML += `<tr><td><img src="${p.img}" class="thumb-sm" onerror="this.src='https://placehold.co/40'"></td><td><div style="font-weight:600; color:#fff;">${p.title}</div></td><td style="color:#fff;">${p.price}</td><td><span class="status-pill">Ativo</span></td><td><button class="btn-icon" onclick="removeStoreItem(${index})">🗑️</button></td></tr>`; });
         }
-        function removeStoreItem(index) { 
-            let l = JSON.parse(localStorage.getItem(STORAGE_KEY)); 
-            l.splice(index, 1); 
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(l)); 
-            renderStoreList(); 
-            updatePreview(); 
-        }
-        function resetStore() { if(confirm("Limpar toda a vitrine? Isso removerá as sugestões dos produtos.")) { localStorage.removeItem(STORAGE_KEY); renderStoreList(); updatePreview(); } }
-        function switchTab(tab, el) {
-            document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active')); document.getElementById('tab-'+tab).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); el.classList.add('active');
-            document.getElementById('page-title').innerText = tab==='creator'?'Editor de Produto':'Gerenciar Vitrine';
-            if(tab==='vitrine') renderStoreList();
-        }
+        function removeStoreItem(index) { let l = JSON.parse(localStorage.getItem(STORAGE_KEY)); l.splice(index, 1); localStorage.setItem(STORAGE_KEY, JSON.stringify(l)); renderStoreList(); updatePreview(); }
+        function resetStore() { if(confirm("Limpar tudo?")) { localStorage.removeItem(STORAGE_KEY); renderStoreList(); updatePreview(); } }
+        function switchTab(tab, el) { document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active')); document.getElementById('tab-'+tab).classList.add('active'); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); if(tab==='vitrine') renderStoreList(); }
 
-        // --- BASE DE DADOS AVANÇADA ---
+        // ============================================================
+        // 1. SUPER BASE DE DADOS DE ESPECIFICAÇÕES (MEGA DETALHADA)
+        // ============================================================
         const specsDB = {
-            "iphone11": "Marca: Apple\nModelo: iPhone 11\nProcessador: A13 Bionic (6-core)\nMemória RAM: 4GB\nArmazenamento: 64GB / 128GB\nTela: Liquid Retina LCD 6.1\"\nCâmera Traseira: Dupla 12MP (Wide) + 12MP (Ultra Wide)\nCâmera Frontal: 12MP TrueDepth\nBateria: Até 17h de vídeo\nMaterial: Alumínio e Vidro\nSegurança: Face ID\nConectividade: 4G LTE, Wi-Fi 6\nResistência: IP68\nCarregamento: Lightning",
-            "iphone12": "Marca: Apple\nModelo: iPhone 12 / 12 Pro\nProcessador: A14 Bionic (5nm)\nMemória RAM: 4GB / 6GB\nArmazenamento: 64GB / 128GB\nTela: Super Retina XDR OLED\nCâmera: 12MP (Sistema Avançado)\nBateria: Até 17h (Base)\nConectividade: 5G, Wi-Fi 6\nCarregamento: MagSafe",
-            "iphone13": "Marca: Apple\nModelo: iPhone 13\nProcessador: A15 Bionic\nMemória RAM: 4GB\nTela: Super Retina XDR OLED\nCâmera: Modo Cinema\nBateria: Melhoria vs iPhone 12\nConectividade: 5G\nCarregamento: MagSafe",
-            "iphone14": "Marca: Apple\nModelo: iPhone 14\nProcessador: A15 Bionic\nMemória RAM: 6GB\nTela: Super Retina XDR\nSegurança: SOS via Satélite\nConectividade: 5G",
-            "iphone15": "Marca: Apple\nModelo: iPhone 15\nProcessador: A16 Bionic\nConexão: USB-C\nTela: Dynamic Island\nCâmera: 48MP\nMemória RAM: 6GB",
-            "iphone16": "Marca: Apple\nModelo: iPhone 16\nProcessador: A18\nInteligência: Apple Intelligence\nBotão: Controle de Câmera\nTela: Bordas ultrafinas",
-            "iphone17": "Marca: Apple (Futuro)\nModelo: iPhone 17\nProcessador: A19 Pro\nMemória RAM: 12GB\nTela: 120Hz ProMotion\nCâmera Frontal: 24MP",
-            "xiaomi": "Marca: Xiaomi\nModelo: Redmi Note 13\nProcessador: Snapdragon\nMemória: 8GB/256GB\nTela: AMOLED 120Hz",
-            "samsung": "Marca: Samsung\nModelo: Galaxy S24\nProcessador: Snapdragon Galaxy\nTela: Dynamic AMOLED 2X",
-            "tv": "Marca: Samsung/LG\nResolução: 4K UHD\nSistema: Smart TV",
-            "air fryer": "Marca: Mondial\nCapacidade: 4L\nPotência: 1500W",
-            "fone": "Tipo: Bluetooth TWS\nBateria: 30h totais"
+            "iphone11": "Marca: Apple\nModelo: iPhone 11\nProcessador: A13 Bionic (6-core)\nMemória RAM: 4GB\nArmazenamento: 64GB / 128GB\nTela: Liquid Retina HD LCD 6.1\"\nCâmera Traseira: Dupla 12MP (Ultra-angular)\nBateria: Até 17h de vídeo\nConectividade: 4G LTE\nResistência: IP68 (água e poeira)\nConteúdo: iPhone, Cabo USB-C",
+            "iphone12": "Marca: Apple\nModelo: iPhone 12\nProcessador: A14 Bionic (5nm)\nTela: Super Retina XDR OLED 6.1\"\nConectividade: 5G\nCâmera: Dupla 12MP (Modo Noite)\nResistência: Ceramic Shield\nMagSafe: Compatível\nBateria: Até 17h vídeo\nConteúdo: iPhone, Cabo USB-C",
+            "iphone13": "Marca: Apple\nModelo: iPhone 13\nProcessador: A15 Bionic\nArmazenamento: Início 128GB\nTela: Super Retina XDR OLED 6.1\"\nModo Cinema: 1080p a 30 qps\nBateria: Até 19h vídeo\nResistência: IP68\nConectividade: 5G, Wi-Fi 6\nConteúdo: iPhone, Cabo USB-C",
+            "iphone14": "Marca: Apple\nModelo: iPhone 14\nProcessador: A15 Bionic (GPU 5 núcleos)\nTela: Super Retina XDR OLED 6.1\"\nSegurança: Detecção de Acidentes\nCâmera Principal: 12MP (ƒ/1.5)\nModo Ação: Vídeos estabilizados\nBateria: Até 20h vídeo\nConectividade: 5G",
+            "iphone15": "Marca: Apple\nModelo: iPhone 15\nProcessador: A16 Bionic\nConexão: USB-C\nTela: Dynamic Island\nCâmera Principal: 48MP\nZoom: Óptico de 2x\nDesign: Vidro colorido e alumínio\nSegurança: SOS via satélite\nBateria: Dia todo",
+            "iphone16": "Marca: Apple\nModelo: iPhone 16\nProcessador: A18 (Neural Engine)\nInteligência: Apple Intelligence\nBotão Novo: Controle da Câmera\nTela: Bordas ultrafinas\nCâmera Ultra-Wide: 48MP Macro\nConectividade: Wi-Fi 7\nCarregamento: MagSafe 25W",
+            "iphone17": "Marca: Apple (Futuro)\nModelo: iPhone 17 Pro Max\nProcessador: A19 Pro (2nm)\nMemória RAM: 12GB\nTela: 6.9\" ProMotion 120Hz\nCâmera Frontal: 24MP\nConectividade: Chip Wi-Fi Apple\nSegurança: Face ID sob a tela\nAcabamento: Titânio Grau 5",
+            "samsung": "Marca: Samsung\nLinha: Galaxy S / A\nTela: Dynamic AMOLED 2X 120Hz\nProcessador: Snapdragon 8 Gen / Exynos\nMemória RAM: 8GB / 12GB\nArmazenamento: 128GB a 1TB\nCâmera: Nightography\nZoom: Space Zoom até 100x (Ultra)\nBateria: 5000mAh\nCarregamento: Super Fast 45W",
+            "xiaomi": "Marca: Xiaomi / Redmi / Poco\nProcessador: Snapdragon / MediaTek\nMemória RAM: 6GB / 8GB / 12GB\nArmazenamento: UFS rápido\nTela: AMOLED ou IPS 120Hz\nCâmera: Até 200MP com OIS\nBateria: 5000mAh a 6000mAh\nCarregamento: HyperCharge (33W a 120W)\nSistema: HyperOS / MIUI",
+            "air fryer": "Capacidade: 3,5L / 4L / 5,5L\nPotência: 1500W a 1900W\nTecnologia: Ar Quente 360º\nCesto: Antiaderente Removível\nLimpeza: Fácil de lavar\nTimer: 60 min com desligamento\nTemperatura: 80ºC a 200ºC\nLuzes: Funcionamento e Aquecimento\nAcabamento: Inox ou Black Piano\nVoltagem: 127V ou 220V",
+            "geladeira": "Tipo: Frost Free\nConfiguração: Duplex ou Inverse\nCapacidade: 375L a 579L\nEficiência: A+++\nTecnologia: Inverter\nPrateleiras: Vidro Temperado\nGavetão: Hortifruti\nCongelamento: Turbo Freezer\nIluminação: LED",
+            "fogao": "Bocas: 4, 5 ou 6 Queimadores\nAcendimento: Automático Total\nMesa: Vidro Temperado\nQueimadores: 1 Tripla Chama\nGrades: Ferro Fundido\nForno: Limpa Fácil com Luz\nVidro Forno: Duplo panorâmico\nCapacidade Forno: 50L a 96L\nPuxador: Alumínio escovado",
+            "cooktop": "Instalação: Bancada (Nicho)\nBocas: 4 ou 5\nAlimentação: Gás ou Indução\nMesa: Vidro Temperado 6mm\nAcendimento: Superautomático\nQueimadores: Selados\nPotência: 1 Rápido (3000W)\nGrades: Aço Esmaltado ou Ferro\nEficiência: Classe A",
+            "microondas": "Capacidade: 20L a 32L\nPotência: 1200W\nFunções: Descongelar, Pipoca, Kids\nPainel: Digital Touch\nPorta: Espelhada\nPrato: Giratório de vidro\nEficiência: Classe A",
+            "lavaloucas": "Serviços: 8, 10 ou 14\nProgramas: 6 Ciclos de Lavagem\nEconomia: Baixo consumo de água\nFunção: Secagem Extra\nFiltro: Resíduos\nPainel: Touch Blue",
+            "liquidificador": "Potência: 1200W\nVelocidades: 12 + Pulsar\nLâminas: 6 facas em aço inox\nCopo: Resistente a quedas (3L)\nFiltro: Incluso",
+            "batedeira": "Tipo: Planetária\nVelocidades: 8 a 12\nBatedores: 3 (Leves, Médias, Pesadas)\nTigela: Inox ou Plástico (4L)\nSistema: Soft Start",
+            "cafeteira": "Tipo: Expresso / Cápsula\nPressão: 15 a 19 Bar\nReservatório: Removível\nAquecimento: Rápido\nDesligamento: Automático",
+            "panelas": "Material: Alumínio com Revestimento Cerâmico\nPeças: Jogo de 5 a 7 unidades\nAntiaderente: Classificação A (Não gruda)\nCabos: Soft-Touch (Não esquenta)\nCompatibilidade: Gás e Elétrico (Verificar indução)",
+            "potes": "Material: Vidro Borossilicato\nVedação: Hermética com Silicone\nTravas: 4 laterais\nUso: Freezer, Micro-ondas e Forno (S/ tampa)\nLivre de BPA: Sim",
+            "aspirador": "Tipo: Robô ou Vertical\nFiltro: HEPA (Retém ácaros)\nBateria: 30 a 90 min\nFunção: Aspira e Passa Pano (Robô)\nReservatório: Fácil limpeza",
+            "lavadora": "Capacidade: 11kg a 16kg\nCiclos: Múltiplos programas\nCesto: Aço Inox\nEconomia: Reaproveitamento de água\nCentrifugação: Turbo",
+            "sofa": "Modelo: Retrátil e Reclinável\nLugares: 2, 3 ou 4\nTecido: Suede ou Veludo\nEstrutura: Madeira Eucalipto\nAssento: Espuma D28 / Molas\nEstilo: Moderno",
+            "cadeira": "Tipo: Gamer ou Escritório\nErgonomia: Ajuste de altura\nRodízios: Anti-risco\nRevestimento: Couro ou Mesh\nPeso: Até 120kg",
+            "furadeira": "Função: Furadeira e Parafusadeira\nMandril: 3/8\" (10mm)\nVelocidade: Variável\nImpacto: Sim (Concreto)\nKit: Maleta inclusa",
+            "generic": "Produto: 100% Original\nDisponibilidade: Pronta Entrega\nEnvio: Imediato para todo Brasil\nGarantia: Do Fabricante (3 a 12 meses)\nNota Fiscal: Emitida no seu nome\nEstado: Novo, lacrado\nManual: Instruções em Português"
         };
 
-        // --- BANCO DE DADOS DE REVIEWS MELHORADO (v2.0) ---
+        // ============================================================
+        // 2. DATABASE DE REVIEWS (SEPARADA E HUMANIZADA)
+        // ============================================================
         const reviewsDB = {
-            // Comentários que servem para qualquer produto
+            "tech_mobile": [ 
+                { text: "Celular top dms! 😍 A camera de noite fica perfeita. Bateria ta durando o dia todo cmg mexendo direto.", reply: "Arrase nas fotos! 📸" },
+                { text: "Chegou hj, bem antes do prazo. Aparelho lacrado, td certinho. Transferi meus dados e ta rodando liso.", reply: "Segurança é com a gente! 😉" },
+                { text: "Melhor custo beneficio. Carrega mto rapido, em 40 min ja ta 100%.", reply: "" },
+                { text: "Tava com medo de comprar online mas a loja é confiavel. Produto original msm, conferi o imei.", reply: "Obrigado pela confiança!" },
+                { text: "Design mt chique, pessoalmente é mais bonito q na foto. Veio bem embalado.", reply: "" } 
+            ],
+            
+            "fogao_cooktop": [ 
+                { text: "O fogão é lindo! A chama é muito forte 🔥, a agua ferve rapidinho. O forno assa o bolo por igual.", reply: "Sua cozinha ficou mais moderna! 🍰" },
+                { text: "Cooktop top, facil de limpar o vidro, só passar um pano. Instalação foi tranquila.", reply: "" },
+                { text: "As grades de ferro sao pesadas, a panela nao escorrega. Passa mta segurança.", reply: "Segurança na cozinha é tudo!" },
+                { text: "Chegou sem nenhum arranhão, embalagem reforçada. O design dele é mto moderno.", reply: "" },
+                { text: "Amei os botões removiveis, facilita mto a limpeza dps de fazer fritura.", reply: "" }
+            ],
+
+            "geladeira": [ 
+                { text: "Geladeira giganteeee! Cabe a compra do mês de boa. Gela muito rapido, cerveja fica trincando 🍺", reply: "Espaço não vai faltar! ❄️" },
+                { text: "Muito silenciosa, nem parece q ta ligada. O motor inverter economiza mto luz.", reply: "Eficiência e silêncio!" },
+                { text: "O freezer é enorme, cabe pote de sorvete e carne pra semana toda. Adorei.", reply: "" },
+                { text: "Design moderno, deixou minha cozinha com cara de rica kkk Chegou no prazo.", reply: "" },
+                { text: "Prateleiras de vidro sao resistentes. O painel touch na porta é mto chique.", reply: "" }
+            ],
+
+            "cozinha_eletro": [ 
+                { text: "Gente, essa Air Fryer é vida! Faço tudo sem oleo e fica crocante. Nao vivo mais sem 🍟", reply: "Saúde e sabor! 🥰" },
+                { text: "Muito potente, tritura até gelo. O copo é resistente, caiu no chão e nao quebrou.", reply: "" },
+                { text: "Chegou certinho, voltagem correta. Linda na bancada, todo mundo elogia.", reply: "" },
+                { text: "Batedeira top, bate clara em neve em segundos. Bowl grande.", reply: "" },
+                { text: "Café sai quentinho. Entrega a jato, comprei num dia chegou no outro.", reply: "" }
+            ],
+
+            "moveis": [
+                { text: "Sofá nuvem de tao confortavel! O tecido é macio. Chegou antes do prazo.", reply: "Conforto total! 🛋️" },
+                { text: "Cadeira salvou minhas costas, passo o dia sentado e nao sinto dor.", reply: "Ergonomia é saúde!" },
+                { text: "Facil de montar, veio com a chavinha. Cor igual da foto.", reply: "" },
+                { text: "Mesa firme, nao balança. Custo beneficio excelente.", reply: "" },
+                { text: "Guarda roupa espaçoso, gavetas correm bem. Lindo dms.", reply: "" }
+            ],
+
             "generico": [
-                { text: "Chegou super rápido, bem antes do prazo! A embalagem veio intacta.", reply: "Que notícia boa! Nosso time de logística voa! 🚀" },
-                { text: "Produto de excelente qualidade, me surpreendeu positivamente. Recomendo de olhos fechados.", reply: "Ficamos muito felizes em superar suas expectativas! 😊" },
-                { text: "Comprarei novamente com certeza. Atendimento nota 10.", reply: "Será um prazer te atender novamente!" },
-                { text: "Gostei bastante, cumpre o que promete. Ótimo custo benefício.", reply: "" },
-                { text: "Veio tudo certinho, igual ao anúncio. Podem comprar sem medo.", reply: "Transparência é nosso lema! Obrigado pela confiança." },
-                { text: "A entrega foi relâmpago! Comprei na terça e chegou na quinta.", reply: "" },
-                { text: "Tive um probleminha com o rastreio, mas o suporte resolveu na hora. Produto top!", reply: "Pedimos desculpas pelo susto, mas que bom que resolvemos! Conte com a gente." },
-                { text: "Sensacional! Vale cada centavo.", reply: "" },
-                { text: "Muito bom, material resistente e acabamento impecável.", reply: "" },
-                { text: "Já é a terceira vez que compro nessa loja, nunca decepcionam.", reply: "Cliente fiel tem lugar especial no nosso coração! ❤️" }
-            ],
-            // Específico para Celulares, Tablets e Eletrônicos
-            "smartphone": [
-                { text: "O celular é lindo demais! A câmera é absurda de boa, fotos ficam profissionais.", reply: "Prepare-se para chover likes nas suas fotos! 📸" },
-                { text: "Bateria dura o dia todo tranquilo, mesmo jogando. Processador muito rápido.", reply: "Desempenho monstro! Aproveite muito." },
-                { text: "Chegou lacrado, originalzinho. Já verifiquei o IMEI e tá tudo certo.", reply: "Segurança e originalidade garantidas aqui!" },
-                { text: "A tela tem uma fluidez incrível, 120Hz faz muita diferença.", reply: "Depois que acostuma, não tem volta né? rs" },
-                { text: "Melhor preço que achei na internet. E ainda veio com capinha de brinde!", reply: "Mimo merecido! 😉" },
-                { text: "Migrei do Android pro iPhone e tô amando. Sistema muito fluido.", reply: "" },
-                { text: "Carregamento ultra rápido, em 30min já tá quase cheio.", reply: "" }
-            ],
-            // Específico para Smartwatches e Fones
-            "acessorios": [
-                { text: "O relógio é muito bonito, troca pulseira fácil. As notificações chegam certinho.", reply: "Estilo e praticidade no pulso!" },
-                { text: "Fone com grave muito potente! O cancelamento de ruído isola tudo.", reply: "Pra curtir a música no volume máximo! 🎧" },
-                { text: "Bateria do fone dura uma semana comigo. Conecta super rápido no bluetooth.", reply: "" },
-                { text: "As funções de saúde do relógio são bem precisas, comparei com o aparelho de pressão.", reply: "Saúde em primeiro lugar sempre." },
-                { text: "Pelo preço, entrega muito mais que os da concorrência. Top!", reply: "" }
-            ],
-            // Específico para Cozinha (Air Fryer, Panelas)
-            "cozinha": [
-                { text: "Gente, essa Air Fryer mudou minha vida! Batata fica crocante sem uma gota de óleo.", reply: "Saúde e sabor andando juntos! 🍟" },
-                { text: "As panelas são lindas e realmente não grudam nada. O ovo desliza na frigideira kkk", reply: "Dica: use espátula de silicone pra elas durarem pra sempre!" },
-                { text: "Fácil demais de limpar, só passar um papel toalha e tá nova.", reply: "Praticidade é tudo na cozinha, né?" },
-                { text: "Chegou bem embalado, sem nenhum amassado. Já testei fazendo bolo e deu super certo.", reply: "" },
-                { text: "Minha cozinha ficou muito mais chique com esse kit. Amei a cor!", reply: "Sua cozinha merece esse upgrade!" }
-            ],
-            // Específico para Casa e Decoração
-            "casa": [
-                { text: "O material é muito bom, parece ser bem durável. Ficou lindo na sala.", reply: "" },
-                { text: "Fácil de montar, eu mesma consegui sozinha. Manual bem explicado.", reply: "Que orgulho! Mão na massa! 💪" },
-                { text: "Superou as expectativas, pessoalmente é mais bonito que na foto.", reply: "" },
-                { text: "Chegou antes do prazo e o entregador foi super educado.", reply: "" }
+                { text: "Chegou super rapido aqui no RJ. Produto de qualidade, igual no anuncio. 👍", reply: "Logística vapt-vupt! 🚀" },
+                { text: "Gostei bastante! Tive duvida no rastreio e o suporte atendeu super bem.", reply: "Estamos à disposição!" },
+                { text: "Pelo preço vale mto a pena. Acabamento bom. Veio bem embalado.", reply: "" },
+                { text: "Fiquei com medo mas me surpreendi. Podem comprar sem medo, é confiavel.", reply: "Obrigado pela preferência! ❤️" },
+                { text: "Produto top, chegou tudo certinho. Recomendo.", reply: "" }
             ]
         };
 
-        // --- GERADOR DE NOMES BRASILEIROS ---
-        const nomesBR = [
-            "Ana", "Bruno", "Carla", "Daniel", "Eduarda", "Felipe", "Gabriela", "Hugo", "Isabela", "João",
-            "Karina", "Lucas", "Mariana", "Nicolas", "Olívia", "Pedro", "Quintino", "Rafael", "Sofia", "Thiago",
-            "Ursula", "Vinícius", "Wanessa", "Xavier", "Yasmim", "Zeca", "Amanda", "Beatriz", "Caio", "Diego",
-            "Elaine", "Fernando", "Gustavo", "Heloísa", "Igor", "Júlia", "Kevin", "Larissa", "Matheus", "Natália"
-        ];
-        const sobrenomesBR = [
-            "Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Ferreira", "Alves", "Pereira", "Lima", "Gomes",
-            "Costa", "Ribeiro", "Martins", "Carvalho", "Almeida", "Lopes", "Soares", "Fernandes", "Vieira", "Barbosa",
-            "Rocha", "Dias", "Nascimento", "Andrade", "Moreira", "Nunes", "Marques", "Machado", "Mendes", "Freitas"
-        ];
+        const nomesBR = ["Ana", "Bruno", "Carla", "Daniel", "Eduarda", "Felipe", "Gabriela", "Hugo", "Isabela", "João", "Karina", "Lucas", "Mariana", "Nicolas", "Olívia", "Pedro", "Quintino", "Rafael", "Sofia", "Thiago", "Ursula", "Vinícius", "Wanessa", "Xavier", "Yasmim", "Zeca", "Amanda", "Beatriz", "Caio", "Diego", "Elaine", "Fernando", "Gustavo", "Heloísa", "Igor", "Júlia", "Kevin", "Larissa", "Matheus", "Natália", "Patrícia", "Renato", "Sérgio", "Tatiane", "Vitor"];
+        const sobrenomesBR = ["Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Ferreira", "Alves", "Pereira", "Lima", "Gomes", "Costa", "Ribeiro", "Martins", "Carvalho", "Almeida", "Lopes", "Soares", "Fernandes", "Vieira", "Barbosa", "Rocha", "Dias", "Nascimento", "Andrade", "Moreira", "Nunes", "Marques", "Machado", "Mendes", "Freitas", "Cardoso", "Ramos"];
+        function gerarNomeAleatorio() { return `${nomesBR[Math.floor(Math.random()*nomesBR.length)]} ${sobrenomesBR[Math.floor(Math.random()*sobrenomesBR.length)]}`; }
 
-        function gerarNomeAleatorio() {
-            const nome = nomesBR[Math.floor(Math.random() * nomesBR.length)];
-            const sobrenome = sobrenomesBR[Math.floor(Math.random() * sobrenomesBR.length)];
-            return `${nome} ${sobrenome}`;
+        function gerarTempoAleatorio() {
+            const min = 50; 
+            const max = 4320; // 3 dias em minutos
+            const rand = Math.floor(Math.random() * (max - min + 1)) + min;
+
+            if (rand < 60) return `${rand} min atrás`;
+            if (rand < 1440) {
+                const h = Math.floor(rand / 60);
+                return `${h} ${h === 1 ? 'hora' : 'horas'} atrás`;
+            }
+            const d = Math.floor(rand / 1440);
+            return `${d} ${d === 1 ? 'dia' : 'dias'} atrás`;
         }
 
-        // --- LÓGICA INTELIGENTE DE SELEÇÃO ---
-        function autoFillReviews(title) {
-            const lower = title.toLowerCase();
-            let category = "generico"; // Padrão
+        // --- GATILHO (CHAIN REACTION) ---
+        function handleTitleChange(title) {
+            autoFillSpecs(title);
+        }
+
+        function autoFillSpecs(title) {
+            const t = title.toLowerCase();
+            let foundSpec = specsDB.generic;
+            const keys = Object.keys(specsDB).sort((a, b) => b.length - a.length);
             
-            // Detecta categoria pelo título
-            if (lower.includes("iphone") || lower.includes("samsung") || lower.includes("celular") || lower.includes("xiaomi") || lower.includes("motorola") || lower.includes("tablet")) {
-                category = "smartphone";
-            } else if (lower.includes("air") || lower.includes("fryer") || lower.includes("panela") || lower.includes("cozinha") || lower.includes("fogao") || lower.includes("liquidificador")) {
-                category = "cozinha";
-            } else if (lower.includes("watch") || lower.includes("relogio") || lower.includes("fone") || lower.includes("buds") || lower.includes("tws") || lower.includes("headphone")) {
-                category = "acessorios";
-            } else if (lower.includes("sofa") || lower.includes("cadeira") || lower.includes("mesa") || lower.includes("tapete") || lower.includes("lampada")) {
-                category = "casa";
+            for (let key of keys) {
+                if (t.includes(key)) {
+                    foundSpec = specsDB[key];
+                    document.getElementById('autoBadge').style.display = 'inline-block';
+                    document.getElementById('autoBadge').innerText = "IA: " + key.toUpperCase();
+                    break;
+                }
+            }
+            
+            const specsField = document.getElementById('pSpecs');
+            specsField.value = foundSpec;
+            
+            autoFillReviews(title, foundSpec);
+            updatePreview();
+        }
+
+        function autoFillReviews(title, specs) {
+            const textToAnalyze = (title + " " + specs).toLowerCase();
+            let category = "generico";
+
+            if (textToAnalyze.includes("fogao") || textToAnalyze.includes("fogão") || textToAnalyze.includes("cooktop") || textToAnalyze.includes("bocas") || textToAnalyze.includes("chama")) {
+                category = "fogao_cooktop";
+            } 
+            else if (textToAnalyze.includes("geladeira") || textToAnalyze.includes("refrigerador") || textToAnalyze.includes("frost free") || textToAnalyze.includes("gela")) {
+                category = "geladeira";
+            }
+            else if (textToAnalyze.match(/(iphone|samsung|galaxy|xiaomi|motorola|celular|smartphone)/)) {
+                category = "tech_mobile";
+            }
+            else if (textToAnalyze.match(/(air fryer|fritadeira|batedeira|liquidificador|cafeteira)/)) {
+                category = "cozinha_eletro";
+            }
+            else if (textToAnalyze.match(/(sofa|sofá|cadeira|poltrona|mesa|cama)/)) {
+                category = "moveis";
             }
 
-            // Mistura comentários da categoria específica + genéricos para dar variedade
-            let pool = [...reviewsDB[category]];
-            
-            // Adiciona alguns genéricos na mistura (30% de chance de pegar um genérico extra)
-            pool = pool.concat(reviewsDB["generico"]);
-
-            // Embaralha a lista
+            let pool = [...(reviewsDB[category] || reviewsDB["generico"])];
+            if (Math.random() > 0.6) pool = pool.concat(reviewsDB["generico"]);
             pool.sort(() => 0.5 - Math.random());
 
             for(let i=1; i<=5; i++) {
-                // Pega um review da lista embaralhada (garante que não repete se tiver bastante opção)
-                const review = pool[i-1] || pool[0]; 
-
+                const review = pool[i-1] || pool[0];
                 if(review) {
                     document.getElementById(`rText${i}`).value = review.text;
                     document.getElementById(`rReply${i}`).value = review.reply;
                     document.getElementById(`rName${i}`).value = gerarNomeAleatorio();
+                    document.getElementById(`rTime${i}`).value = gerarTempoAleatorio();
+                    document.getElementById(`rStars${i}`).value = Math.random() > 0.2 ? "5" : "4";
                     
-                    // Randomiza as estrelas (maioria 5, alguns 4)
-                    const stars = Math.random() > 0.2 ? "5" : "4";
-                    document.getElementById(`rStars${i}`).value = stars;
-
-                    // Atualiza o avatar local
-                    if(typeof getRandomAvatarUrl === "function") {
-                        document.getElementById(`rImg${i}`).value = getRandomAvatarUrl();
+                    if(typeof getRandomAvatarUrl === "function") { 
+                        document.getElementById(`rImg${i}`).value = getRandomAvatarUrl(); 
                     }
                 }
             }
-            updatePreview();
         }
 
-        function autoFillSpecs(title) {
-            const lower = title.toLowerCase();
-            let selectedSpec = "";
-            
-            if (lower.includes("iphone")) {
-                if (lower.includes("11")) selectedSpec = specsDB.iphone11;
-                else if (lower.includes("12")) selectedSpec = specsDB.iphone12;
-                else if (lower.includes("13")) selectedSpec = specsDB.iphone13;
-                else if (lower.includes("14")) selectedSpec = specsDB.iphone14;
-                else if (lower.includes("15")) selectedSpec = specsDB.iphone15;
-                else if (lower.includes("16")) selectedSpec = specsDB.iphone16;
-                else if (lower.includes("17")) selectedSpec = specsDB.iphone17;
-                else selectedSpec = specsDB.iphone15;
-            }
-            else if (lower.includes("samsung")) selectedSpec = specsDB.samsung;
-            else if (lower.includes("xiaomi")) selectedSpec = specsDB.xiaomi;
-            else if (lower.includes("tv")) selectedSpec = specsDB.tv;
-            else if (lower.includes("air")) selectedSpec = specsDB["air fryer"];
-            else if (lower.includes("fone")) selectedSpec = specsDB.fone;
-            
-            if (selectedSpec) {
-                document.getElementById('pSpecs').value = selectedSpec;
-                document.getElementById('autoBadge').style.display = 'inline-block';
-                document.getElementById('autoBadge').innerText = "IA: " + title.split(' ')[0] + " DETECTADO";
-                updatePreview();
-            }
-        }
-
-        const AVATAR_CONFIG = {
-            folder: 'avatar/',
-            total: 100,
-            ext: '.jpg'
-        };
-
-        function getRandomAvatarUrl() {
-            const num = Math.floor(Math.random() * AVATAR_CONFIG.total) + 1;
-            return `${AVATAR_CONFIG.folder}(${num})${AVATAR_CONFIG.ext}`; 
-        }
-
-        function randomizeAvatar(id) { 
-            document.getElementById(`rImg${id}`).value = getRandomAvatarUrl(); 
-            updatePreview(); 
-        }
-        
-        function randomizeAllAvatars() { 
-            for(let i=1; i<=5; i++) {
-                const currentVal = document.getElementById(`rImg${i}`).value;
-                if(!currentVal || currentVal.includes('http') || currentVal.includes('randomuser')) {
-                    document.getElementById(`rImg${i}`).value = getRandomAvatarUrl();
-                }
-            }
-            updatePreview(); 
-        }
-
-        function autoFillReviews(title) {
-            const lower = title.toLowerCase();
-            let category = "default";
-            
-            if (lower.includes("iphone") || lower.includes("samsung") || lower.includes("xiaomi") || lower.includes("tv") || lower.includes("watch") || lower.includes("fone")) {
-                category = "eletronico";
-            } else if (lower.includes("air") || lower.includes("panela") || lower.includes("kit") || lower.includes("cozinha") || lower.includes("fogao")) {
-                category = "cozinha";
-            }
-
-            const reviews = [...reviewsDB[category]].sort(() => 0.5 - Math.random());
-
-            for(let i=1; i<=5; i++) {
-                if(reviews[i-1]) {
-                    document.getElementById(`rText${i}`).value = reviews[i-1].text;
-                    document.getElementById(`rReply${i}`).value = reviews[i-1].reply;
-                    
-                    const nomes = ["Maria", "João", "Ana", "Carlos", "Fernanda", "Pedro", "Larissa", "Lucas", "Beatriz", "Rafael", "Juliana", "Marcos"];
-                    const sobrenomes = ["Silva", "Santos", "Oliveira", "Souza", "Lima", "Pereira", "Ferreira", "Costa", "Almeida"];
-                    
-                    document.getElementById(`rName${i}`).value = `${nomes[Math.floor(Math.random()*nomes.length)]} ${sobrenomes[Math.floor(Math.random()*sobrenomes.length)]}`;
-                    document.getElementById(`rImg${i}`).value = getRandomAvatarUrl();
-                }
-            }
-            updatePreview();
-        }
+        const AVATAR_CONFIG = { folder: 'avatar/', total: 100, ext: '.jpg' };
+        function getRandomAvatarUrl() { const num = Math.floor(Math.random() * AVATAR_CONFIG.total) + 1; return `${AVATAR_CONFIG.folder}(${num})${AVATAR_CONFIG.ext}`; }
+        function randomizeAvatar(id) { document.getElementById(`rImg${id}`).value = getRandomAvatarUrl(); updatePreview(); }
+        function randomizeAllAvatars() { for(let i=1; i<=5; i++) { const v = document.getElementById(`rImg${i}`).value; if(!v || v.includes('http')) document.getElementById(`rImg${i}`).value = getRandomAvatarUrl(); } updatePreview(); }
 
         const rc = document.getElementById('reviewsContainer');
         rc.innerHTML = ''; 
@@ -590,6 +441,9 @@
                 <div class="form-row">
                     <input type="text" id="rName${i}" value="Cliente ${i}" oninput="updatePreview()" placeholder="Nome">
                     <select id="rStars${i}" onchange="updatePreview()" style="background:#0a0a0a;"><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option></select>
+                </div>
+                <div class="form-row" style="margin-top:5px;">
+                    <input type="text" id="rTime${i}" placeholder="Tempo (ex: 2 horas atrás)" oninput="updatePreview()" style="border:1px solid #444;">
                 </div>
                 <div style="display:flex; gap:5px; margin-top:5px;">
                     <input type="text" id="rImg${i}" value="https://randomuser.me/api/portraits/men/${i}.jpg" oninput="updatePreview()" placeholder="Avatar URL">
@@ -733,6 +587,7 @@
                 const picInput = document.getElementById(`rPic${i}`).value;
                 const starsCount = document.getElementById(`rStars${i}`).value;
                 const reply = document.getElementById(`rReply${i}`).value;
+                const time = document.getElementById(`rTime${i}`).value; // Pega o tempo
                 
                 if(name && text) {
                     const starsHtml = getStarsSVG(starsCount);
@@ -751,7 +606,8 @@
                     if(reply && reply.trim() !== "") {
                         replyHtml = `<div class="seller-reply-box"><div class="seller-reply-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Resposta da Loja:</div>${reply}</div>`;
                     }
-                    reviewsHtml += `<div class="review-card"><div class="reviewer-info"><img src="${img}" onerror="this.src='avatar/(1).jpg'" class="reviewer-avatar"><div class="reviewer-name">${name}</div></div><div class="review-stars">${starsHtml}</div><div class="review-text">${text}</div>${mediaGridHtml}${replyHtml}</div>`;
+                    // Adiciona o tempo ao lado do nome
+                    reviewsHtml += `<div class="review-card"><div class="reviewer-info"><img src="${img}" onerror="this.src='avatar/(1).jpg'" class="reviewer-avatar"><div class="reviewer-name">${name} <span class="review-time-ago" style="font-size:10px; color:#888; font-weight:400; margin-left:5px;">• ${time}</span></div></div><div class="review-stars">${starsHtml}</div><div class="review-text">${text}</div>${mediaGridHtml}${replyHtml}</div>`;
                 }
             }
 
