@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Alves 7 - Admin (Online)</title>
+    <title>Painel Alves 7 - Admin (Seguro)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
         /* CSS MANTIDO IGUAL AO ORIGINAL */
@@ -16,7 +16,7 @@
         .menu-label { font-size: 12px; color: var(--text-muted); font-weight: 700; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
         .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; color: white; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; margin-bottom: 8px; }
         .menu-item.active { background-color: rgba(37, 244, 238, 0.1); color: var(--primary-cyan); }
-        .menu-item:hover:not(.active) { background-color: #2a2a2a; }
+        .menu-item:hover:not(.active) { background-color: #2a2a2a; cursor: pointer; }
         .menu-icon { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
         .main-content { flex: 1; padding: 30px; overflow-y: auto; scroll-behavior: smooth; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
@@ -49,13 +49,46 @@
         .btn-delete-icon { background: rgba(254, 44, 85, 0.1); color: var(--primary-pink); }
         .btn-edit-icon { background: rgba(244, 162, 37, 0.1); color: var(--primary-amber); }
         
+        /* Loading Overlay */
         #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; }
+
+        /* --- ESTILOS DO LOGIN --- */
+        #loginScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #0d0d0d; z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column;
+        }
+        .login-box {
+            background: #1e1e1e; padding: 40px; border-radius: 16px;
+            border: 1px solid #333; width: 350px; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .login-title { font-size: 24px; font-weight: 800; margin-bottom: 20px; color: white; }
+        .login-input { margin-bottom: 15px; width: 100%; }
+        .login-btn { width: 100%; padding: 12px; background: var(--primary-pink); border: none; border-radius: 8px; color: white; font-weight: 700; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .login-btn:hover { background: #d92346; }
+        .error-msg { color: #ff3e3e; font-size: 12px; margin-top: 10px; display: none; }
 
         @media (max-width: 900px) { body { flex-direction: column; height: auto; overflow: auto; } .sidebar { width: 100%; padding: 20px; flex-direction: row; align-items: center; flex-wrap: wrap; } .content-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <div id="loadingOverlay">Conectando ao Banco de Dados...</div>
+    
+    <div id="loginScreen">
+        <div class="login-box">
+            <div class="brand" style="justify-content: center; margin-bottom: 20px;">
+                Alves 7 <span class="role-badge">Admin</span>
+            </div>
+            <div class="login-title">Acesso Restrito</div>
+            <input type="text" id="username" class="login-input" placeholder="Usuário">
+            <input type="password" id="password" class="login-input" placeholder="Senha">
+            <button class="login-btn" onclick="checkLogin()">Entrar no Painel</button>
+            <p id="errorMsg" class="error-msg">Usuário ou senha incorretos!</p>
+        </div>
+    </div>
+
+    <div id="loadingOverlay" style="display:none;">Conectando ao Banco de Dados...</div>
 
     <aside class="sidebar">
         <div>
@@ -63,6 +96,12 @@
             <div class="menu-label">Gerenciamento</div>
             <a href="#" class="menu-item active">Produtos (Nuvem)</a>
             <a href="criador.html" target="_blank" class="menu-item">Criador de Páginas</a>
+        </div>
+        <div class="sidebar-footer">
+            <a onclick="logout()" class="menu-item" style="color: #ff3e3e; justify-content: center; border: 1px solid #333;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Sair do Painel
+            </a>
         </div>
     </aside>
 
@@ -104,132 +143,180 @@
         </div>
     </main>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    <script>
+        // --- 1. LÓGICA DE LOGIN (SEM FIREBASE) ---
+        const USER_DATA = { u: "Alves7", p: "911686" };
+        const loginScreen = document.getElementById('loginScreen');
+        const loadingOverlay = document.getElementById('loadingOverlay');
 
-        // SUAS CREDENCIAIS AQUI
-        const firebaseConfig = {
-            apiKey: "AIzaSyCvXcgBkLNFBX8G0c6bUYxGd_6St_l7H4s",
-            authDomain: "lojatiktok-9db54.firebaseapp.com",
-            databaseURL: "https://lojatiktok-9db54-default-rtdb.firebaseio.com",
-            projectId: "lojatiktok-9db54",
-            storageBucket: "lojatiktok-9db54.firebasestorage.app",
-            messagingSenderId: "569412749516",
-            appId: "1:569412749516:web:e7ca0fc5c6dbe6b3985a69",
-            measurementId: "G-7ZQ2NFR3QV"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        
-        let products = [];
-        let editId = null;
-
-        const loading = document.getElementById('loadingOverlay');
-        const listDiv = document.getElementById('productList');
-        const countSpan = document.getElementById('totalProductsCount');
-        const btnSave = document.getElementById('btnSave');
-        const btnCancel = document.getElementById('btnCancel');
-        const formHeader = document.getElementById('formHeader');
-
-        // LER DADOS
-        const productsRef = ref(db, 'products');
-        onValue(productsRef, (snapshot) => {
-            loading.style.display = 'none';
-            const data = snapshot.val();
-            
-            products = [];
-            if(data) {
-                Object.keys(data).forEach(key => {
-                    products.push({ id: key, ...data[key] });
-                });
-            }
-            products.reverse();
-            renderList();
-        });
-
-        function renderList() {
-            listDiv.innerHTML = '';
-            countSpan.innerText = products.length;
-
-            if (products.length === 0) {
-                listDiv.innerHTML = '<div class="empty-state"><p>Nenhum produto na nuvem.</p></div>';
-                return;
-            }
-
-            products.forEach((p) => {
-                const item = document.createElement('div');
-                item.className = 'product-item';
-                item.innerHTML = `
-                    <div class="product-info-flex">
-                        <img src="${p.img}" class="product-thumb" onerror="this.src='https://placehold.co/60x60?text=Err'">
-                        <div class="product-details"><h4>${p.title}</h4><p>${p.price}</p></div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn-icon btn-edit-icon" id="edit-${p.id}">✏️</button>
-                        <button class="btn-icon btn-delete-icon" id="del-${p.id}">🗑️</button>
-                    </div>
-                `;
-                listDiv.appendChild(item);
-                
-                document.getElementById(`edit-${p.id}`).onclick = () => startEdit(p);
-                document.getElementById(`del-${p.id}`).onclick = () => deleteProduct(p.id);
-            });
+        // Verifica se já está logado ao abrir
+        if (sessionStorage.getItem('isLoggedIn') === 'true') {
+            loginScreen.style.display = 'none';
+            loadingOverlay.style.display = 'flex'; // Mostra loading do banco
         }
 
-        btnSave.onclick = () => {
-            const title = document.getElementById('pTitle').value;
-            const price = document.getElementById('pPrice').value;
-            const oldPrice = document.getElementById('pOldPrice').value;
-            const img = document.getElementById('pImg').value;
-            const link = document.getElementById('pLink').value;
+        function checkLogin() {
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const err = document.getElementById('errorMsg');
 
-            if(!title || !price || !img) { alert('Preencha os dados!'); return; }
-
-            const productData = { title, price, oldPrice, img, link };
-
-            if(editId) {
-                update(ref(db, 'products/' + editId), productData)
-                    .then(() => { alert('Produto atualizado!'); cancelEdit(); })
-                    .catch((e) => alert('Erro: ' + e.message));
+            if (u === USER_DATA.u && p === USER_DATA.p) {
+                sessionStorage.setItem('isLoggedIn', 'true');
+                location.reload(); // Recarrega para iniciar o Firebase
             } else {
-                push(ref(db, 'products'), productData)
-                    .then(() => { alert('Produto criado na nuvem!'); cancelEdit(); })
-                    .catch((e) => alert('Erro: ' + e.message));
+                err.style.display = 'block';
+                // Tremidinha no erro
+                document.querySelector('.login-box').animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-10px)' },
+                    { transform: 'translateX(10px)' },
+                    { transform: 'translateX(0)' }
+                ], { duration: 300 });
             }
-        };
+        }
 
-        window.startEdit = (p) => {
-            editId = p.id;
-            document.getElementById('pTitle').value = p.title;
-            document.getElementById('pPrice').value = p.price;
-            document.getElementById('pOldPrice').value = p.oldPrice;
-            document.getElementById('pImg').value = p.img;
-            document.getElementById('pLink').value = p.link;
+        function logout() {
+            sessionStorage.removeItem('isLoggedIn');
+            location.reload();
+        }
 
-            btnSave.innerText = 'Salvar Alteração';
-            btnSave.classList.add('editing');
-            formHeader.innerText = '✏️ Editando';
-            btnCancel.style.display = 'block';
-            document.querySelector('.main-content').scrollTo(0,0);
-        };
+        // Permite dar Enter para entrar
+        document.getElementById('password').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') checkLogin();
+        });
+    </script>
 
-        window.deleteProduct = (id) => {
-            if(confirm('Tem certeza? Isso apagará para todos os clientes.')) {
-                remove(ref(db, 'products/' + id));
+    <script type="module">
+        // --- 2. SÓ CARREGA O FIREBASE SE ESTIVER LOGADO ---
+        if (sessionStorage.getItem('isLoggedIn') === 'true') {
+            
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+            import { getDatabase, ref, set, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+            // 🔴 COLE SUAS CREDENCIAIS DO FIREBASE AQUI EMBAIXO
+            const firebaseConfig = {
+					  apiKey: "AIzaSyCvXcgBkLNFBX8G0c6bUYxGd_6St_l7H4s",
+					  authDomain: "lojatiktok-9db54.firebaseapp.com",
+					  databaseURL: "https://lojatiktok-9db54-default-rtdb.firebaseio.com",
+					  projectId: "lojatiktok-9db54",
+					  storageBucket: "lojatiktok-9db54.firebasestorage.app",
+					  messagingSenderId: "569412749516",
+					  appId: "1:569412749516:web:e7ca0fc5c6dbe6b3985a69",
+					  measurementId: "G-7ZQ2NFR3QV"
+					};
+            // ----------------------------------------------------
+
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase(app);
+            
+            let products = [];
+            let editId = null;
+
+            const loading = document.getElementById('loadingOverlay');
+            const listDiv = document.getElementById('productList');
+            const countSpan = document.getElementById('totalProductsCount');
+            const btnSave = document.getElementById('btnSave');
+            const btnCancel = document.getElementById('btnCancel');
+            const formHeader = document.getElementById('formHeader');
+
+            // LER DADOS
+            const productsRef = ref(db, 'products');
+            onValue(productsRef, (snapshot) => {
+                loading.style.display = 'none';
+                const data = snapshot.val();
+                
+                products = [];
+                if(data) {
+                    Object.keys(data).forEach(key => {
+                        products.push({ id: key, ...data[key] });
+                    });
+                }
+                products.reverse();
+                renderList();
+            });
+
+            function renderList() {
+                listDiv.innerHTML = '';
+                countSpan.innerText = products.length;
+
+                if (products.length === 0) {
+                    listDiv.innerHTML = '<div class="empty-state"><p>Nenhum produto na nuvem.</p></div>';
+                    return;
+                }
+
+                products.forEach((p) => {
+                    const item = document.createElement('div');
+                    item.className = 'product-item';
+                    item.innerHTML = `
+                        <div class="product-info-flex">
+                            <img src="${p.img}" class="product-thumb" onerror="this.src='https://placehold.co/60x60?text=Err'">
+                            <div class="product-details"><h4>${p.title}</h4><p>${p.price}</p></div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-icon btn-edit-icon" id="edit-${p.id}">✏️</button>
+                            <button class="btn-icon btn-delete-icon" id="del-${p.id}">🗑️</button>
+                        </div>
+                    `;
+                    listDiv.appendChild(item);
+                    
+                    document.getElementById(`edit-${p.id}`).onclick = () => startEdit(p);
+                    document.getElementById(`del-${p.id}`).onclick = () => deleteProduct(p.id);
+                });
             }
-        };
 
-        window.cancelEdit = () => {
-            editId = null;
-            document.querySelectorAll('input').forEach(i => i.value = '');
-            btnSave.innerText = '+ Publicar na Nuvem';
-            btnSave.classList.remove('editing');
-            formHeader.innerText = '✨ Adicionar Novo Produto';
-            btnCancel.style.display = 'none';
-        };
-        btnCancel.onclick = window.cancelEdit;
+            btnSave.onclick = () => {
+                const title = document.getElementById('pTitle').value;
+                const price = document.getElementById('pPrice').value;
+                const oldPrice = document.getElementById('pOldPrice').value;
+                const img = document.getElementById('pImg').value;
+                const link = document.getElementById('pLink').value;
+
+                if(!title || !price || !img) { alert('Preencha os dados!'); return; }
+
+                const productData = { title, price, oldPrice, img, link };
+
+                if(editId) {
+                    update(ref(db, 'products/' + editId), productData)
+                        .then(() => { alert('Produto atualizado!'); cancelEdit(); })
+                        .catch((e) => alert('Erro: ' + e.message));
+                } else {
+                    push(ref(db, 'products'), productData)
+                        .then(() => { alert('Produto criado na nuvem!'); cancelEdit(); })
+                        .catch((e) => alert('Erro: ' + e.message));
+                }
+            };
+
+            window.startEdit = (p) => {
+                editId = p.id;
+                document.getElementById('pTitle').value = p.title;
+                document.getElementById('pPrice').value = p.price;
+                document.getElementById('pOldPrice').value = p.oldPrice;
+                document.getElementById('pImg').value = p.img;
+                document.getElementById('pLink').value = p.link;
+
+                btnSave.innerText = 'Salvar Alteração';
+                btnSave.classList.add('editing');
+                formHeader.innerText = '✏️ Editando';
+                btnCancel.style.display = 'block';
+                document.querySelector('.main-content').scrollTo(0,0);
+            };
+
+            window.deleteProduct = (id) => {
+                if(confirm('Tem certeza? Isso apagará para todos os clientes.')) {
+                    remove(ref(db, 'products/' + id));
+                }
+            };
+
+            window.cancelEdit = () => {
+                editId = null;
+                document.querySelectorAll('input').forEach(i => i.value = '');
+                btnSave.innerText = '+ Publicar na Nuvem';
+                btnSave.classList.remove('editing');
+                formHeader.innerText = '✨ Adicionar Novo Produto';
+                btnCancel.style.display = 'none';
+            };
+            btnCancel.onclick = window.cancelEdit;
+        }
     </script>
 </body>
 </html>
