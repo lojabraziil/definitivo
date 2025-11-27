@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Shop</title>
+    <title>TikTok Shop - Ofertas</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        /* SEU CSS ORIGINAL (MANTIDO IDÊNTICO AO ANTERIOR) */
+        /* MANTIDO O MESMO CSS DO SEU ARQUIVO ORIGINAL */
         :root {
             --primary-pink: #fe2c55; --primary-cyan: #25f4ee; --tiktok-black: #161823;
             --bg-gray: #f1f1f2; --text-gray: #8a8b91; --border-color: #e3e3e4; --header-height: 110px;
@@ -21,7 +21,7 @@
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary); padding-top: var(--header-height); padding-bottom: 40px; }
         .top-header { position: fixed; top: 0; left: 0; width: 100%; background: var(--bg-header); z-index: 1000; border-bottom: 1px solid var(--border-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
         .logo-row { display: flex; justify-content: center; align-items: center; padding: 12px 16px 8px 16px; position: relative; }
-        .brand-logo { display: flex; align-items: center; gap: 6px; font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: var(--text-primary); }
+        .brand-logo { display: flex; align-items: center; gap: 6px; font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: var(--text-primary); cursor: pointer; text-decoration: none;}
         .tiktok-icon-svg { width: 24px; height: 24px; fill: var(--text-primary); filter: drop-shadow(0 0 5px var(--primary-pink)); }
         .search-row-custom { padding: 0 16px 12px 16px; display: flex; justify-content: center; position: relative; }
         .modern-search-bar { display: flex; align-items: center; width: 100%; background-color: var(--bg-card); border: 2px solid #333; border-radius: 50px; padding: 3px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
@@ -84,10 +84,10 @@
 
     <header class="top-header">
         <div class="logo-row">
-            <div class="brand-logo">
+            <a href="admin.html" class="brand-logo" title="Ir para o Painel Admin">
                 <svg class="tiktok-icon-svg" viewBox="0 0 448 512"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
                 <span>TikTok Shop</span>
-            </div>
+            </a>
         </div>
         
         <div class="search-row-custom">
@@ -136,11 +136,23 @@
     </main>
 
     <script>
-        // --- DADOS INICIAIS (Caso o Admin esteja vazio) ---
+        // --- DADOS PADRÃO (Para quando a loja for aberta pela primeira vez) ---
+        const defaultProducts = [
+            { id: 1, title: "Smart Tv 32 Philco Led Roku Tv Hd Dolby Audio", price: "R$ 499,00", oldPrice: "R$ 1.279,00", img: "https://placehold.co/400?text=TV+Philco", link: "#" },
+            { id: 2, title: "Fogão Atlas 4 Bocas Mônaco Top Glass Preto", price: "R$ 249,90", oldPrice: "R$ 640,00", img: "https://placehold.co/400?text=Fogao", link: "#" },
+            { id: 3, title: "Air Fryer 4L Mondial 1500W Bivolt", price: "R$ 79,90", oldPrice: "R$ 205,00", img: "https://placehold.co/400?text=AirFryer", link: "#" },
+            { id: 4, title: "iPhone 13 PRO Dual SIM 128 GB estelar", price: "R$ 999,90", oldPrice: "", img: "https://placehold.co/400?text=iPhone+13", link: "#" },
+            { id: 5, title: "iPhone 11 128 GB Branco - Bom", price: "R$ 499,90", oldPrice: "R$ 1.099,90", img: "https://placehold.co/400?text=iPhone+11", link: "#" }
+        ];
 
-        // --- 1. CARREGAR DADOS DO ADMIN (LocalStorage) ---
-        // Se não houver nada salvo, usa os produtos padrão
+        // --- 1. CARREGAR DADOS ---
+        // Tenta pegar do Admin (LocalStorage). Se não tiver, usa o padrão.
         let productsData = JSON.parse(localStorage.getItem('tiktokShopProducts')) || defaultProducts;
+
+        // Se o LocalStorage estiver vazio, salvamos o padrão lá para o Admin ver também
+        if(!localStorage.getItem('tiktokShopProducts')) {
+            localStorage.setItem('tiktokShopProducts', JSON.stringify(defaultProducts));
+        }
 
         // --- 2. RENDERIZAR PRODUTOS ---
         const productGrid = document.getElementById('productGrid');
@@ -156,9 +168,10 @@
 
             list.forEach(product => {
                 const oldPriceHtml = product.oldPrice ? `<div class="text-muted"><s>${product.oldPrice}</s> -61%</div>` : '';
+                // Se o link for um arquivo local (ex: produto.html), ele abrirá na mesma aba
                 const html = `
                 <div class="product-card item-searchable" onclick="window.location.href='${product.link}'">
-                    <img src="${product.img}" class="card-img" style="aspect-ratio: 1/1;">
+                    <img src="${product.img}" class="card-img" style="aspect-ratio: 1/1;" onerror="this.src='https://placehold.co/400?text=Sem+Imagem'">
                     <div class="card-info">
                         <h3 class="card-title">${product.title}</h3>
                         <div>
@@ -167,7 +180,7 @@
                         </div>
                         <div class="badges-row">
                             <span class="badge badge-frete">Frete grátis</span>
-                            <span class="badge badge-off">61% OFF</span>
+                            <span class="badge badge-off">Oferta</span>
                         </div>
                     </div>
                 </div>`;
@@ -175,13 +188,15 @@
             });
         }
 
-        // Iniciar
         renderProducts(productsData);
 
         // --- 3. AUTOPLAY DO VÍDEO ---
         document.addEventListener('DOMContentLoaded', function() {
             var video = document.getElementById('heroVideo');
-            if(video) { video.muted = true; video.play().catch(() => { video.muted = true; video.play(); }); }
+            if(video) { 
+                video.muted = true; 
+                video.play().catch(e => console.log("Vídeo autoplay bloqueado")); 
+            }
         });
 
         // --- 4. BOTÃO RESGATAR ---
@@ -193,7 +208,7 @@
             });
         }
 
-        // --- 5. PESQUISA & PLACEHOLDER ---
+        // --- 5. PESQUISA ---
         const searchInput = document.getElementById('searchInput');
         const dropdownResults = document.getElementById('dropdownResults');
 
@@ -201,9 +216,9 @@
             if (productsData.length === 0) return;
             const titles = productsData.map(p => p.title);
             const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-            searchInput.setAttribute('placeholder', `${randomTitle.substring(0, 32)}...`);
+            searchInput.setAttribute('placeholder', `Procure por "${randomTitle.substring(0, 20)}..."`);
         }
-        setInterval(updatePlaceholder, 3000);
+        setInterval(updatePlaceholder, 4000);
         updatePlaceholder();
 
         searchInput.addEventListener('input', function(e) {
@@ -227,7 +242,7 @@
                     div.className = 'result-item';
                     div.onclick = () => { window.location.href = match.link; };
                     div.innerHTML = `
-                        <img src="${match.img}" class="result-thumb">
+                        <img src="${match.img}" class="result-thumb" onerror="this.src='https://placehold.co/40'">
                         <div>
                             <div class="result-text">${match.title}</div>
                             <div class="result-price">${match.price}</div>
@@ -249,7 +264,7 @@
         }
 
         document.addEventListener('click', function(e) {
-            if (!document.querySelector('.search-container').contains(e.target)) {
+            if (!document.querySelector('.search-row-custom').contains(e.target)) {
                 dropdownResults.style.display = 'none';
             }
         });
