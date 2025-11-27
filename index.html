@@ -5,47 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TikTok Shop - Ofertas</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
     <style>
-        /* MANTIDO O MESMO CSS DO SEU ARQUIVO ORIGINAL */
-        :root {
-            --primary-pink: #fe2c55; --primary-cyan: #25f4ee; --tiktok-black: #161823;
-            --bg-gray: #f1f1f2; --text-gray: #8a8b91; --border-color: #e3e3e4; --header-height: 110px;
-            --promo-blue-bg: #e0f7fa; --promo-blue-text: #00c9b7; --promo-red-start: #ff7eb3; --promo-red-end: #ff3e3e;
-            --bg-main: #121212; --bg-card: #1e1e1e; --bg-header: #121212;
-            --text-primary: #ffffff; --text-secondary: #b0b0b0; --border-dark: #333333;
-            --badge-frete-bg: rgba(37, 244, 238, 0.15); --badge-frete-text: #25f4ee;
-            --badge-cupom-bg: rgba(254, 44, 85, 0.15); --badge-cupom-text: #fe2c55;
-        }
+        /* CSS ORIGINAL MANTIDO */
+        :root { --primary-pink: #fe2c55; --primary-cyan: #25f4ee; --tiktok-black: #161823; --bg-gray: #f1f1f2; --text-gray: #8a8b91; --border-color: #e3e3e4; --header-height: 110px; --bg-main: #121212; --bg-card: #1e1e1e; --bg-header: #121212; --text-primary: #ffffff; --text-secondary: #b0b0b0; --border-dark: #333333; --badge-frete-bg: rgba(37, 244, 238, 0.15); --badge-frete-text: #25f4ee; --badge-cupom-bg: rgba(254, 44, 85, 0.15); --badge-cupom-text: #fe2c55; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary); padding-top: var(--header-height); padding-bottom: 40px; }
-        .top-header { position: fixed; top: 0; left: 0; width: 100%; background: var(--bg-header); z-index: 1000; border-bottom: 1px solid var(--border-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-        .logo-row { display: flex; justify-content: center; align-items: center; padding: 12px 16px 8px 16px; position: relative; }
+        .top-header { position: fixed; top: 0; left: 0; width: 100%; background: var(--bg-header); z-index: 1000; border-bottom: 1px solid var(--border-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; flex-direction: column; align-items: center;}
+        .logo-row { display: flex; justify-content: center; align-items: center; padding: 12px 16px 8px 16px; position: relative; width: 100%; max-width: 1100px; }
         .brand-logo { display: flex; align-items: center; gap: 6px; font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: var(--text-primary); cursor: pointer; text-decoration: none;}
         .tiktok-icon-svg { width: 24px; height: 24px; fill: var(--text-primary); filter: drop-shadow(0 0 5px var(--primary-pink)); }
-        .search-row-custom { padding: 0 16px 12px 16px; display: flex; justify-content: center; position: relative; }
+        .search-row-custom { padding: 0 16px 12px 16px; display: flex; justify-content: center; position: relative; width: 100%; max-width: 800px; margin: 0 auto; }
         .modern-search-bar { display: flex; align-items: center; width: 100%; background-color: var(--bg-card); border: 2px solid #333; border-radius: 50px; padding: 3px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .search-icon-left { padding-left: 14px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; }
-        .search-icon-svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
-        .modern-input { flex: 1; border: none; background: transparent; outline: none; padding: 8px 10px; font-size: 14px; color: var(--text-primary); font-family: 'Inter', sans-serif; transition: opacity 0.3s ease; }
-        .modern-input::placeholder { color: #666; transition: color 0.3s; }
+        .search-icon-svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; }
+        .modern-input { flex: 1; border: none; background: transparent; outline: none; padding: 8px 10px; font-size: 14px; color: var(--text-primary); transition: opacity 0.3s ease; }
         .modern-search-btn { background-color: var(--primary-pink); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s; box-shadow: 0 0 10px rgba(254, 44, 85, 0.3); }
-        .modern-search-btn:hover { background-color: #d92346; box-shadow: 0 0 15px rgba(254, 44, 85, 0.5); }
         .search-results-dropdown { position: absolute; top: 100%; left: 16px; right: 16px; background: var(--bg-card); border-radius: 0 0 12px 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); margin-top: -10px; z-index: 999; display: none; max-height: 350px; overflow-y: auto; border: 1px solid var(--border-dark); }
         .result-item { display: flex; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border-dark); cursor: pointer; transition: background 0.2s; }
         .result-item:hover { background-color: #2a2a2a; }
         .result-thumb { width: 36px; height: 36px; border-radius: 4px; margin-right: 12px; flex-shrink: 0; border: 1px solid #333; object-fit: cover; }
         .result-text { font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.2; }
         .result-price { font-size: 11px; color: var(--primary-pink); font-weight: 700; margin-top: 2px; }
-        .container { padding: 0 12px; }
+        .container { padding: 0 12px; max-width: 1100px; margin: 0 auto; }
         .hero-banner-container { margin-top: 12px; background-color: #000; border-radius: 16px; padding: 0; position: relative; overflow: hidden; width: 100%; aspect-ratio: 822 / 234; box-shadow: 0 5px 20px rgba(254, 44, 85, 0.2); border: 1px solid #222; }
+        @media (min-width: 768px) { .hero-banner-container { max-height: 400px; } }
         .banner-video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 1; pointer-events: none; }
         .promo-container-modern { display: flex; width: 100%; border-radius: 24px; overflow: hidden; margin-top: 12px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid #222; }
         .promo-block-modern { padding: 16px 20px; display: flex; flex-direction: column; justify-content: center; min-height: 90px; }
         .block-frete-modern { flex: 1; background-color: #132c33; position: relative; z-index: 1; }
-        .frete-title { color: var(--primary-cyan); font-size: 17px; font-weight: 900; text-shadow: 0 0 5px rgba(37, 244, 238, 0.3); }
+        .frete-title { color: var(--primary-cyan); font-size: 17px; font-weight: 900; }
         .frete-desc { color: #8aaeb3; font-size: 12px; margin-top: 4px; }
-        .block-desconto-modern { flex: 1.2; background: linear-gradient(135deg, var(--promo-red-start), var(--promo-red-end)); color: white; position: relative; display: flex; justify-content: space-between; align-items: center; padding-left: 40px; }
+        .block-desconto-modern { flex: 1.2; background: linear-gradient(135deg, #ff7eb3, #ff3e3e); color: white; position: relative; display: flex; justify-content: space-between; align-items: center; padding-left: 40px; }
         .block-desconto-modern::before { content: ''; position: absolute; left: -25px; top: 0; width: 50px; height: 100%; background: #132c33; border-radius: 0 50% 50% 0; z-index: 2; }
         .desconto-info { z-index: 3; }
         .desconto-title { font-size: 17px; font-weight: 900; }
@@ -53,7 +43,9 @@
         .tag-cliente-novo { position: absolute; top: 8px; right: 12px; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; z-index: 3; }
         .btn-resgatar-modern { background: white; color: var(--primary-pink); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; z-index: 3; box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: all 0.2s; }
         .btn-resgatar-modern.resgatado { background-color: #333; color: #777; box-shadow: none; cursor: default; pointer-events: none; }
-        .masonry-grid { column-count: 2; column-gap: 10px; padding: 12px; }
+        .masonry-grid { column-count: 2; column-gap: 10px; padding: 12px; max-width: 1100px; margin: 0 auto; }
+        @media (min-width: 768px) { .masonry-grid { column-count: 4; column-gap: 16px; } }
+        @media (min-width: 1200px) { .masonry-grid { column-count: 5; } }
         .product-card { break-inside: avoid; margin-bottom: 10px; background: var(--bg-card); border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 1px solid #2a2a2a; cursor: pointer; transition: transform 0.1s; color: var(--text-primary); }
         .product-card:active { transform: scale(0.98); }
         .badges-row { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
@@ -67,35 +59,24 @@
         .text-muted { color: var(--text-secondary); font-size: 11px; }
         .no-results { text-align: center; padding: 40px; width: 100%; grid-column: span 2; display: none; color: var(--text-secondary); }
         .no-results button { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-dark); }
-        @media (min-width: 768px) {
-            .container, .masonry-grid { max-width: 1100px; margin-left: auto; margin-right: auto; }
-            .top-header { display: flex; flex-direction: column; align-items: center; }
-            .logo-row { width: 100%; max-width: 1100px; }
-            .search-row-custom { width: 100%; max-width: 800px; margin: 0 auto; }
-            .masonry-grid { column-count: 4; column-gap: 16px; }
-            .hero-banner-container { max-height: 400px; }
-            .card-title { font-size: 14px; }
-            .price-final { font-size: 16px; }
-        }
-        @media (min-width: 1200px) { .masonry-grid { column-count: 5; } }
+        
+        #loadingBar { position:fixed; top:0; left:0; height:3px; background:var(--primary-cyan); width:0%; transition: width 0.3s; z-index:2000; }
     </style>
 </head>
 <body>
+    <div id="loadingBar"></div>
 
     <header class="top-header">
         <div class="logo-row">
-            <a href="admin.html" class="brand-logo" title="Ir para o Painel Admin">
+            <a href="admin.html" class="brand-logo">
                 <svg class="tiktok-icon-svg" viewBox="0 0 448 512"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
                 <span>TikTok Shop</span>
             </a>
         </div>
-        
         <div class="search-row-custom">
             <div class="modern-search-bar">
-                <span class="search-icon-left">
-                    <svg class="search-icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                </span>
-                <input type="text" id="searchInput" class="modern-input" placeholder="Buscar ofertas..." autocomplete="off">
+                <span class="search-icon-left"><svg class="search-icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+                <input type="text" id="searchInput" class="modern-input" placeholder="Carregando produtos..." autocomplete="off">
                 <button class="modern-search-btn" id="searchBtn">Procurar</button>
             </div>
             <div id="dropdownResults" class="search-results-dropdown"></div>
@@ -109,17 +90,10 @@
                     <source src="images/an.mp4" type="video/mp4">
                 </video>
             </div>
-
             <div class="promo-container-modern">
-                <div class="promo-block-modern block-frete-modern">
-                    <div class="frete-title">Frete grátis</div>
-                    <div class="frete-desc">em pedidos acima de R$ 9</div>
-                </div>
+                <div class="promo-block-modern block-frete-modern"><div class="frete-title">Frete grátis</div><div class="frete-desc">em pedidos acima de R$ 9</div></div>
                 <div class="promo-block-modern block-desconto-modern">
-                    <div class="desconto-info">
-                        <div class="desconto-title">Desconto</div>
-                        <div class="desconto-desc">nos pedidos...</div>
-                    </div>
+                    <div class="desconto-info"><div class="desconto-title">Desconto</div><div class="desconto-desc">nos pedidos...</div></div>
                     <button class="btn-resgatar-modern" id="btnResgatar">Resgatar tudo</button>
                     <div class="tag-cliente-novo">Cliente novo</div>
                 </div>
@@ -130,33 +104,55 @@
         
         <div class="no-results" id="noResultsMsg">
             <p style="font-size: 40px; margin-bottom: 10px;">😕</p>
-            <p>Nenhum produto encontrado.</p>
-            <button onclick="showAllProducts()" style="margin-top:10px; padding:5px 10px; border-radius:4px;">Ver Tudo</button>
+            <p>Nenhum produto encontrado na nuvem.</p>
         </div>
     </main>
 
-    <script>
-        // --- DADOS PADRÃO (Para quando a loja for aberta pela primeira vez) ---
-        const defaultProducts = [
-            { id: 1, title: "Smart Tv 32 Philco Led Roku Tv Hd Dolby Audio", price: "R$ 499,00", oldPrice: "R$ 1.279,00", img: "https://placehold.co/400?text=TV+Philco", link: "#" },
-            { id: 2, title: "Fogão Atlas 4 Bocas Mônaco Top Glass Preto", price: "R$ 249,90", oldPrice: "R$ 640,00", img: "https://placehold.co/400?text=Fogao", link: "#" },
-            { id: 3, title: "Air Fryer 4L Mondial 1500W Bivolt", price: "R$ 79,90", oldPrice: "R$ 205,00", img: "https://placehold.co/400?text=AirFryer", link: "#" },
-            { id: 4, title: "iPhone 13 PRO Dual SIM 128 GB estelar", price: "R$ 999,90", oldPrice: "", img: "https://placehold.co/400?text=iPhone+13", link: "#" },
-            { id: 5, title: "iPhone 11 128 GB Branco - Bom", price: "R$ 499,90", oldPrice: "R$ 1.099,90", img: "https://placehold.co/400?text=iPhone+11", link: "#" }
-        ];
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // --- 1. CARREGAR DADOS ---
-        // Tenta pegar do Admin (LocalStorage). Se não tiver, usa o padrão.
-        let productsData = JSON.parse(localStorage.getItem('tiktokShopProducts')) || defaultProducts;
+        // SUAS CREDENCIAIS AQUI
+        const firebaseConfig = {
+            apiKey: "AIzaSyCvXcgBkLNFBX8G0c6bUYxGd_6St_l7H4s",
+            authDomain: "lojatiktok-9db54.firebaseapp.com",
+            databaseURL: "https://lojatiktok-9db54-default-rtdb.firebaseio.com",
+            projectId: "lojatiktok-9db54",
+            storageBucket: "lojatiktok-9db54.firebasestorage.app",
+            messagingSenderId: "569412749516",
+            appId: "1:569412749516:web:e7ca0fc5c6dbe6b3985a69",
+            measurementId: "G-7ZQ2NFR3QV"
+        };
 
-        // Se o LocalStorage estiver vazio, salvamos o padrão lá para o Admin ver também
-        if(!localStorage.getItem('tiktokShopProducts')) {
-            localStorage.setItem('tiktokShopProducts', JSON.stringify(defaultProducts));
-        }
-
-        // --- 2. RENDERIZAR PRODUTOS ---
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        let productsData = [];
         const productGrid = document.getElementById('productGrid');
         const noResultsMsg = document.getElementById('noResultsMsg');
+        const loadingBar = document.getElementById('loadingBar');
+
+        // LER DADOS (REALTIME)
+        loadingBar.style.width = "50%";
+        const productsRef = ref(db, 'products');
+        
+        onValue(productsRef, (snapshot) => {
+            const data = snapshot.val();
+            productsData = [];
+            
+            if(data) {
+                Object.keys(data).forEach(key => {
+                    productsData.push({ id: key, ...data[key] });
+                });
+                productsData.reverse();
+            }
+            
+            loadingBar.style.width = "100%";
+            setTimeout(() => loadingBar.style.display = 'none', 500);
+            
+            document.getElementById('searchInput').placeholder = "Buscar ofertas...";
+            renderProducts(productsData);
+        });
 
         function renderProducts(list) {
             productGrid.innerHTML = '';
@@ -168,58 +164,32 @@
 
             list.forEach(product => {
                 const oldPriceHtml = product.oldPrice ? `<div class="text-muted"><s>${product.oldPrice}</s> -61%</div>` : '';
-                // Se o link for um arquivo local (ex: produto.html), ele abrirá na mesma aba
                 const html = `
                 <div class="product-card item-searchable" onclick="window.location.href='${product.link}'">
-                    <img src="${product.img}" class="card-img" style="aspect-ratio: 1/1;" onerror="this.src='https://placehold.co/400?text=Sem+Imagem'">
+                    <img src="${product.img}" class="card-img" style="aspect-ratio: 1/1;" onerror="this.src='https://placehold.co/400?text=Sem+Img'">
                     <div class="card-info">
                         <h3 class="card-title">${product.title}</h3>
-                        <div>
-                            <div class="price-final">${product.price}</div>
-                            ${oldPriceHtml}
-                        </div>
-                        <div class="badges-row">
-                            <span class="badge badge-frete">Frete grátis</span>
-                            <span class="badge badge-off">Oferta</span>
-                        </div>
+                        <div><div class="price-final">${product.price}</div>${oldPriceHtml}</div>
+                        <div class="badges-row"><span class="badge badge-frete">Frete grátis</span><span class="badge badge-off">Oferta</span></div>
                     </div>
                 </div>`;
                 productGrid.innerHTML += html;
             });
         }
 
-        renderProducts(productsData);
-
-        // --- 3. AUTOPLAY DO VÍDEO ---
-        document.addEventListener('DOMContentLoaded', function() {
+        // Lógica de UI (Vídeo, Botão, Pesquisa)
+        document.addEventListener('DOMContentLoaded', () => {
             var video = document.getElementById('heroVideo');
-            if(video) { 
-                video.muted = true; 
-                video.play().catch(e => console.log("Vídeo autoplay bloqueado")); 
-            }
+            if(video) { video.muted = true; video.play().catch(()=>{}); }
+        });
+        
+        document.getElementById('btnResgatar').addEventListener('click', function() {
+            this.innerText = "Resgatado";
+            this.classList.add('resgatado');
         });
 
-        // --- 4. BOTÃO RESGATAR ---
-        const btnResgatar = document.getElementById('btnResgatar');
-        if (btnResgatar) {
-            btnResgatar.addEventListener('click', function() {
-                this.innerText = "Resgatado";
-                this.classList.add('resgatado');
-            });
-        }
-
-        // --- 5. PESQUISA ---
         const searchInput = document.getElementById('searchInput');
         const dropdownResults = document.getElementById('dropdownResults');
-
-        function updatePlaceholder() {
-            if (productsData.length === 0) return;
-            const titles = productsData.map(p => p.title);
-            const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-            searchInput.setAttribute('placeholder', `Procure por "${randomTitle.substring(0, 20)}..."`);
-        }
-        setInterval(updatePlaceholder, 4000);
-        updatePlaceholder();
 
         searchInput.addEventListener('input', function(e) {
             const query = e.target.value.toLowerCase().trim();
@@ -231,9 +201,7 @@
                 return;
             }
 
-            const matches = productsData.filter(product => 
-                product.title.toLowerCase().includes(query)
-            );
+            const matches = productsData.filter(product => product.title.toLowerCase().includes(query));
 
             if (matches.length > 0) {
                 dropdownResults.style.display = 'block';
@@ -241,23 +209,17 @@
                     const div = document.createElement('div');
                     div.className = 'result-item';
                     div.onclick = () => { window.location.href = match.link; };
-                    div.innerHTML = `
-                        <img src="${match.img}" class="result-thumb" onerror="this.src='https://placehold.co/40'">
-                        <div>
-                            <div class="result-text">${match.title}</div>
-                            <div class="result-price">${match.price}</div>
-                        </div>
-                    `;
+                    div.innerHTML = `<img src="${match.img}" class="result-thumb"><div><div class="result-text">${match.title}</div><div class="result-price">${match.price}</div></div>`;
                     dropdownResults.appendChild(div);
                 });
             } else {
                 dropdownResults.style.display = 'block';
-                dropdownResults.innerHTML = `<div class="result-item" style="color:#999;">Produto não encontrado</div>`;
+                dropdownResults.innerHTML = `<div class="result-item" style="color:#999;">Nada encontrado</div>`;
             }
             renderProducts(matches);
         });
 
-        function showAllProducts() {
+        window.showAllProducts = () => {
             renderProducts(productsData);
             searchInput.value = '';
             dropdownResults.style.display = 'none';
