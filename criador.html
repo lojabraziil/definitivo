@@ -255,7 +255,6 @@
                 const doc = parser.parseFromString(content, 'text/html');
 
                 try {
-                    // 1. Título e Preços
                     const title = doc.querySelector('.product-title').innerText;
                     const price = doc.querySelector('.preco-atual-ativa').innerText;
                     const oldPrice = doc.querySelector('.preco-antigo-ativa').innerText;
@@ -270,13 +269,11 @@
                     document.getElementById('pPageTitle').value = pageTitle;
                     document.getElementById('pCheckout').value = checkoutLink;
 
-                    // 2. Imagens
                     const imgs = doc.getElementById('gallery').querySelectorAll('img');
                     for(let i = 1; i <= 4; i++) {
                         document.getElementById(`pImg${i}`).value = imgs[i-1] ? imgs[i-1].src : '';
                     }
 
-                    // 3. Especificações
                     const specItems = doc.querySelectorAll('.specs-list li');
                     let specString = "";
                     specItems.forEach(li => {
@@ -286,7 +283,6 @@
                     });
                     document.getElementById('pSpecs').value = specString;
 
-                    // 4. Avaliações (Parsing Complexo)
                     const reviews = doc.querySelectorAll('.review-card');
                     reviews.forEach((card, index) => {
                         const i = index + 1;
@@ -296,23 +292,18 @@
                         const avatar = card.querySelector('.reviewer-avatar').src;
                         const text = card.querySelector('.review-text').innerText;
                         
-                        // Contar estrelas preenchidas
                         const stars = card.querySelectorAll('.star-icon-svg').length;
                         
-                        // Fotos da review (se houver)
                         let pics = [];
                         const mediaItems = card.querySelectorAll('.review-media-item');
                         mediaItems.forEach(m => pics.push(m.src));
                         
-                        // Resposta da loja (se houver)
                         let reply = "";
                         const replyBox = card.querySelector('.seller-reply-box');
                         if (replyBox) {
-                            // Pega o texto removendo o título "Resposta da Loja:"
                             reply = replyBox.innerText.replace('Resposta da Loja:', '').trim();
                         }
 
-                        // Popular campos
                         document.getElementById(`rName${i}`).value = name;
                         document.getElementById(`rImg${i}`).value = avatar;
                         document.getElementById(`rText${i}`).value = text;
@@ -321,7 +312,6 @@
                         document.getElementById(`rReply${i}`).value = reply;
                     });
 
-                    // Limpar avaliações excedentes no form se o arquivo tiver menos que 5
                     for(let j = reviews.length + 1; j <= 5; j++) {
                         document.getElementById(`rName${j}`).value = "";
                         document.getElementById(`rText${j}`).value = "";
@@ -329,7 +319,7 @@
                     }
 
                     alert("Arquivo carregado com sucesso! Você pode editar agora.");
-                    updatePreview(); // Atualiza o preview com os dados carregados
+                    updatePreview(); 
 
                 } catch (err) {
                     alert("Erro ao ler o arquivo. Certifique-se de que é um HTML criado por este painel.");
@@ -353,7 +343,7 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
             alert("Produto salvo na Vitrine! Ele aparecerá nas sugestões.");
             renderStoreList();
-            updatePreview(); // Atualiza o preview para mostrar o novo produto nas sugestões
+            updatePreview(); 
         }
         function renderStoreList() {
             const list = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -378,52 +368,43 @@
             if(tab==='vitrine') renderStoreList();
         }
 
-        // --- BASE DE DADOS AVANÇADA (IPHONE ATUALIZADO) ---
+        // --- BASE DE DADOS AVANÇADA ---
         const specsDB = {
-            "iphone11": "Marca: Apple\nModelo: iPhone 11\nProcessador: A13 Bionic (6-core)\nMemória RAM: 4GB\nArmazenamento: 64GB / 128GB\nTela: Liquid Retina LCD 6.1\"\nCâmera Traseira: Dupla 12MP (Wide) + 12MP (Ultra Wide)\nCâmera Frontal: 12MP TrueDepth\nBateria: Até 17h de vídeo\nMaterial: Alumínio e Vidro\nSegurança: Face ID\nConectividade: 4G LTE, Wi-Fi 6\nResistência: IP68 (2 metros por 30 min)\nCarregamento: Lightning",
-            
-            "iphone12": "Marca: Apple\nModelo: iPhone 12 / 12 Pro\nProcessador: A14 Bionic (5nm)\nMemória RAM: 4GB (Base) / 6GB (Pro)\nArmazenamento: 64GB / 128GB / 256GB\nTela: Super Retina XDR OLED (Ceramic Shield)\nCâmera: 12MP (Sistema Avançado)\nVídeo: Gravação Dolby Vision HDR\nBateria: Até 17h (Base) / 20h (Pro Max)\nConectividade: 5G (Primeira Geração), Wi-Fi 6\nDesign: Bordas Planas (Flat Edge)\nCarregamento: MagSafe e Lightning\nResistência: IP68",
-
-            "iphone13": "Marca: Apple\nModelo: iPhone 13 / 13 Pro Max\nProcessador: A15 Bionic\nMemória RAM: 4GB (Base) / 6GB (Pro)\nTela: Super Retina XDR OLED (Notch reduzido)\nTaxa de Atualização: 60Hz (Base) / 120Hz ProMotion (Pro)\nCâmera: Modo Cinema (1080p a 30 qps)\nArmazenamento: Início em 128GB\nBateria: Melhoria significativa vs iPhone 12\nConectividade: 5G, Wi-Fi 6\nResistência: IP68\nCarregamento: MagSafe e Lightning",
-
-            "iphone14": "Marca: Apple\nModelo: iPhone 14 / 14 Pro Max\nProcessador: A15 (Base) / A16 Bionic (Pro)\nMemória RAM: 6GB\nTela: Super Retina XDR\nInovação: Dynamic Island (Apenas modelos Pro)\nSegurança: Detecção de Acidentes e SOS via Satélite\nCâmera Pro: 48MP Principal (Modelos Pro)\nModo Ação: Vídeos ultra estáveis\nConectividade: 5G, Bluetooth 5.3\nBateria: Até 29h de vídeo (Pro Max)\nCarregamento: MagSafe e Lightning",
-
-            "iphone15": "Marca: Apple\nModelo: iPhone 15 / 15 Pro Max\nProcessador: A16 (Base) / A17 Pro (Pro)\nEstrutura: Alumínio (Base) / Titânio Aeroespacial (Pro)\nBotão: Ação (Modelos Pro)\nConexão: USB-C (Alta velocidade no Pro)\nTela: Dynamic Island em todos os modelos\nCâmera: 48MP (Todos) + Zoom Óptico 5x (Pro Max)\nMemória RAM: 6GB (Base) / 8GB (Pro)\nBateria: Dia todo de duração\nSistema: iOS 17\nCores: Titânio Natural, Azul, Preto, Branco",
-
-            "iphone16": "Marca: Apple\nModelo: iPhone 16 / 16 Pro Max\nProcessador: A18 (Base) / A18 Pro (Neural Engine Avançado)\nInteligência: Apple Intelligence Integrada\nBotão Novo: Controle de Câmera (Camera Control)\nTela: Bordas ultrafinas (6.3\" e 6.9\" nos Pros)\nCâmera Ultra-Wide: 48MP (Macro aprimorado)\nConectividade: Wi-Fi 7\nBateria: Maior autonomia da história do iPhone\nCarregamento: MagSafe 25W mais rápido\nMaterial: Titânio Grau 5 (Pro)",
-
-            "iphone17": "Marca: Apple (Lançamento Futuro)\nModelo: iPhone 17 Pro Max / 17 Air\nProcessador: Chip A19 Pro (2nm)\nMemória RAM: 12GB (Multitarefa Extrema)\nTela: 120Hz ProMotion em todos os modelos\nCâmera Frontal: 24MP (Upgrade de nitidez)\nCâmeras Traseiras: Tripla de 48MP (Principal, Ultra, Tele)\nConectividade: Chip Wi-Fi 7 Próprio da Apple\nSegurança: Face ID sob a tela (Oculto)\nBateria: Nova tecnologia de empilhamento (+Duração)\nAcabamento: Vidro Ceramic Shield de 3ª Geração",
-
-            // Outras categorias
-            "xiaomi": "Marca: Xiaomi\nModelo: Redmi Note 13 / Poco X6\nProcessador: Snapdragon\nMemória: 8GB/256GB\nTela: AMOLED 120Hz\nBateria: 5000mAh + Carga Rápida",
-            "samsung": "Marca: Samsung\nModelo: Galaxy S23/S24\nProcessador: Snapdragon Galaxy\nTela: Dynamic AMOLED 2X\nCâmera: Nightography",
-            "tv": "Marca: Samsung / LG\nResolução: 4K UHD\nSistema: Smart TV\nConexões: HDMI, USB, Bluetooth",
-            "air fryer": "Marca: Mondial / Philco\nCapacidade: 4L\nPotência: 1500W\nCesto: Antiaderente",
-            "fone": "Tipo: Bluetooth TWS\nBateria: 30h totais\nCancelamento de Ruído: Sim",
-            "generic": "Produto: Novo\nQualidade: Premium\nGarantia: 30 Dias"
+            "iphone11": "Marca: Apple\nModelo: iPhone 11\nProcessador: A13 Bionic (6-core)\nMemória RAM: 4GB\nArmazenamento: 64GB / 128GB\nTela: Liquid Retina LCD 6.1\"\nCâmera Traseira: Dupla 12MP (Wide) + 12MP (Ultra Wide)\nCâmera Frontal: 12MP TrueDepth\nBateria: Até 17h de vídeo\nMaterial: Alumínio e Vidro\nSegurança: Face ID\nConectividade: 4G LTE, Wi-Fi 6\nResistência: IP68\nCarregamento: Lightning",
+            "iphone12": "Marca: Apple\nModelo: iPhone 12 / 12 Pro\nProcessador: A14 Bionic (5nm)\nMemória RAM: 4GB / 6GB\nArmazenamento: 64GB / 128GB\nTela: Super Retina XDR OLED\nCâmera: 12MP (Sistema Avançado)\nBateria: Até 17h (Base)\nConectividade: 5G, Wi-Fi 6\nCarregamento: MagSafe",
+            "iphone13": "Marca: Apple\nModelo: iPhone 13\nProcessador: A15 Bionic\nMemória RAM: 4GB\nTela: Super Retina XDR OLED\nCâmera: Modo Cinema\nBateria: Melhoria vs iPhone 12\nConectividade: 5G\nCarregamento: MagSafe",
+            "iphone14": "Marca: Apple\nModelo: iPhone 14\nProcessador: A15 Bionic\nMemória RAM: 6GB\nTela: Super Retina XDR\nSegurança: SOS via Satélite\nConectividade: 5G",
+            "iphone15": "Marca: Apple\nModelo: iPhone 15\nProcessador: A16 Bionic\nConexão: USB-C\nTela: Dynamic Island\nCâmera: 48MP\nMemória RAM: 6GB",
+            "iphone16": "Marca: Apple\nModelo: iPhone 16\nProcessador: A18\nInteligência: Apple Intelligence\nBotão: Controle de Câmera\nTela: Bordas ultrafinas",
+            "iphone17": "Marca: Apple (Futuro)\nModelo: iPhone 17\nProcessador: A19 Pro\nMemória RAM: 12GB\nTela: 120Hz ProMotion\nCâmera Frontal: 24MP",
+            "xiaomi": "Marca: Xiaomi\nModelo: Redmi Note 13\nProcessador: Snapdragon\nMemória: 8GB/256GB\nTela: AMOLED 120Hz",
+            "samsung": "Marca: Samsung\nModelo: Galaxy S24\nProcessador: Snapdragon Galaxy\nTela: Dynamic AMOLED 2X",
+            "tv": "Marca: Samsung/LG\nResolução: 4K UHD\nSistema: Smart TV",
+            "air fryer": "Marca: Mondial\nCapacidade: 4L\nPotência: 1500W",
+            "fone": "Tipo: Bluetooth TWS\nBateria: 30h totais"
         };
 
         const reviewsDB = {
             "default": [
-                { text: "Produto excelente, chegou muito rápido aqui em SP!", reply: "Ficamos felizes que gostou! Aproveite." },
-                { text: "Qualidade me surpreendeu, vale cada centavo.", reply: "" },
-                { text: "Comprei de presente e a pessoa amou.", reply: "Ótima escolha para presente!" },
-                { text: "Bem embalado e conforme o anúncio.", reply: "" },
-                { text: "Tive dúvidas e o suporte me ajudou na hora. Recomendo.", reply: "Conte sempre conosco!" }
+                { text: "Produto excelente, chegou muito rápido!", reply: "Agradecemos a preferência!" },
+                { text: "Qualidade me surpreendeu.", reply: "" },
+                { text: "Ótimo custo benefício.", reply: "" },
+                { text: "Chegou bem embalado.", reply: "" },
+                { text: "Recomendo a todos.", reply: "Obrigado pela recomendação!" }
             ],
             "eletronico": [
-                { text: "O celular é lindo, bateria dura o dia todo tranquilo. Câmera absurda!", reply: "Essa câmera é incrível mesmo! 😉" },
-                { text: "Chegou lacrado, original. Podem comprar sem medo.", reply: "Prezamos muito pela originalidade. Obrigado!" },
-                { text: "Melhor preço que achei na internet. Entrega flash.", reply: "" },
-                { text: "A tela de 120Hz faz toda a diferença, muito fluido.", reply: "Depois do 120Hz não tem volta né? Haha" },
-                { text: "Veio com capa e película de brinde, adorei!", reply: "Mimo para nossos clientes VIPs!" }
+                { text: "Celular incrível, câmera top!", reply: "Que bom que gostou!" },
+                { text: "Bateria dura muito.", reply: "" },
+                { text: "Chegou lacrado, original.", reply: "Só trabalhamos com originais!" },
+                { text: "Melhor preço que achei.", reply: "" },
+                { text: "Muito rápido o sistema.", reply: "" }
             ],
             "cozinha": [
-                { text: "Gente, essa Air Fryer mudou minha vida. Batata fica crocante sem óleo.", reply: "Saúde e sabor em primeiro lugar!" },
-                { text: "As panelas são lindas e realmente não grudam nada. O ovo desliza.", reply: "Dica: use sempre espátulas de silicone para durar anos!" },
-                { text: "Chegou antes do prazo. Já testei fazendo bolo e deu super certo.", reply: "" },
-                { text: "Fácil de limpar, só passar um papel toalha e tá nova.", reply: "" },
-                { text: "Minha cozinha ficou muito mais chique com esse kit.", reply: "Sua cozinha merece!" }
+                { text: "Facilitou minha vida na cozinha.", reply: "Praticidade é tudo!" },
+                { text: "Muito fácil de limpar.", reply: "" },
+                { text: "Chegou antes do prazo.", reply: "" },
+                { text: "Funciona perfeitamente.", reply: "" },
+                { text: "Adorei o design.", reply: "" }
             ]
         };
 
@@ -431,7 +412,6 @@
             const lower = title.toLowerCase();
             let selectedSpec = "";
             
-            // Lógica Específica para iPhones Numéricos
             if (lower.includes("iphone")) {
                 if (lower.includes("11")) selectedSpec = specsDB.iphone11;
                 else if (lower.includes("12")) selectedSpec = specsDB.iphone12;
@@ -440,14 +420,13 @@
                 else if (lower.includes("15")) selectedSpec = specsDB.iphone15;
                 else if (lower.includes("16")) selectedSpec = specsDB.iphone16;
                 else if (lower.includes("17")) selectedSpec = specsDB.iphone17;
-                else selectedSpec = specsDB.iphone15; // Padrão
+                else selectedSpec = specsDB.iphone15;
             }
-            // Outras Categorias
-            else if (lower.includes("samsung") || lower.includes("galaxy")) selectedSpec = specsDB.samsung;
-            else if (lower.includes("xiaomi") || lower.includes("redmi") || lower.includes("poco")) selectedSpec = specsDB.xiaomi;
-            else if (lower.includes("tv") || lower.includes("smart")) selectedSpec = specsDB.tv;
-            else if (lower.includes("air") || lower.includes("fryer")) selectedSpec = specsDB["air fryer"];
-            else if (lower.includes("fone") || lower.includes("buds")) selectedSpec = specsDB.fone;
+            else if (lower.includes("samsung")) selectedSpec = specsDB.samsung;
+            else if (lower.includes("xiaomi")) selectedSpec = specsDB.xiaomi;
+            else if (lower.includes("tv")) selectedSpec = specsDB.tv;
+            else if (lower.includes("air")) selectedSpec = specsDB["air fryer"];
+            else if (lower.includes("fone")) selectedSpec = specsDB.fone;
             
             if (selectedSpec) {
                 document.getElementById('pSpecs').value = selectedSpec;
@@ -457,16 +436,14 @@
             }
         }
 
-        // --- CONFIGURAÇÃO DOS AVATARES LOCAIS (ATUALIZADO) ---
         const AVATAR_CONFIG = {
-            folder: 'avatar/',   // Pasta onde estão as imagens
-            total: 100,          // Total de imagens: (1).jpg até (100).jpg
-            ext: '.jpg'          // Extensão
+            folder: 'avatar/',
+            total: 100,
+            ext: '.jpg'
         };
 
         function getRandomAvatarUrl() {
             const num = Math.floor(Math.random() * AVATAR_CONFIG.total) + 1;
-            // Gera o formato (1).jpg, (2).jpg, etc.
             return `${AVATAR_CONFIG.folder}(${num})${AVATAR_CONFIG.ext}`; 
         }
 
@@ -477,7 +454,6 @@
         
         function randomizeAllAvatars() { 
             for(let i=1; i<=5; i++) {
-                // Só troca se o campo estiver vazio, for link externo ou antigo
                 const currentVal = document.getElementById(`rImg${i}`).value;
                 if(!currentVal || currentVal.includes('http') || currentVal.includes('randomuser')) {
                     document.getElementById(`rImg${i}`).value = getRandomAvatarUrl();
@@ -507,15 +483,12 @@
                     const sobrenomes = ["Silva", "Santos", "Oliveira", "Souza", "Lima", "Pereira", "Ferreira", "Costa", "Almeida"];
                     
                     document.getElementById(`rName${i}`).value = `${nomes[Math.floor(Math.random()*nomes.length)]} ${sobrenomes[Math.floor(Math.random()*sobrenomes.length)]}`;
-                    
-                    // Força o uso do avatar local novo
                     document.getElementById(`rImg${i}`).value = getRandomAvatarUrl();
                 }
             }
             updatePreview();
         }
 
-        // GERAÇÃO DOS INPUTS DE REVIEW
         const rc = document.getElementById('reviewsContainer');
         rc.innerHTML = ''; 
         for(let i=1; i<=5; i++) {
@@ -540,7 +513,6 @@
             </div>`;
         }
 
-        // --- TEMPLATE BASE (O QUE VAI SER BAIXADO) - SEM TOP HEADER ---
         const templateBase = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>{{PAGE_TITLE}}</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style> 
             :root { --bg-dark: #121212; --bg-card: #1e1e1e; --text-main: #fff; --text-muted: #aaa; --primary: #fe2c55; --cyan: #25f4ee; }
             body{background-color:var(--bg-dark)!important;color:var(--text-main)!important;margin:0;font-family:'Inter', sans-serif; padding-bottom: 90px; padding-top: 0px;} 
@@ -587,11 +559,9 @@
             .store-name { font-weight: 700; font-size: 14px; display:flex; align-items:center; gap:4px; }
             .follow-button { background: transparent; border: 1px solid #fe2c55; color: #fe2c55; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
             .follow-button.following { background: #fe2c55; color: white; border-color: #fe2c55; }
-            /* EFEITO DE SHINE (BRILHO) */
             .follow-button::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transition: none; }
             .follow-button.animate-shine::after { animation: shine 0.5s; }
             @keyframes shine { 100% { left: 100%; } }
-
             .specs-section { padding: 15px; background: #1e1e1e; margin-bottom: 10px; border-top: 1px solid #333; }
             .specs-section h3 { font-size: 15px; margin-bottom: 10px; font-weight: 700; color: #fff; }
             .specs-list { list-style: none; padding: 0; margin: 0; font-size: 12px; color: #ccc; }
@@ -628,21 +598,7 @@
             #modalImg, #modalVideo { max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
             .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 35px; cursor: pointer; z-index: 10000; background: rgba(0,0,0,0.5); width: 40px; height: 40px; text-align: center; line-height: 40px; border-radius: 50%; }
         </style></head><body><div class="gallery-wrapper"><div class="gallery-container" id="gallery">{{GALLERY_CONTENT}}</div><div class="counter" id="counter">1/{{IMG_COUNT}}</div></div><div class="oferta-container-ativa"><div class="oferta-preco-info-ativa"><div class="preco-atual-wrapper-ativa"><span class="preco-atual-ativa">{{PRICE_NEW}}</span></div><div class="preco-antigo-e-desconto-ativa"><span class="preco-antigo-ativa">{{PRICE_OLD}}</span><span class="desconto-tag-ativa">Economize {{DISCOUNT}}</span></div></div><div class="oferta-status-info-ativa"><span class="oferta-relampago-texto-ativa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>OFERTA RELÂMPAGO</span><div class="contador-tempo-ativo" id="timer">TERMINA EM 00:04:19</div></div></div><div class="product-info-container"><div class="tag-row"><span class="discount-tag">Preço Promocional</span><span class="discount-tag">Economize {{DISCOUNT}}</span></div><h1 class="product-title">{{PRODUCT_TITLE}}</h1><div class="rating-row">★★★★★ <span>4.9 (100+ vendidos)</span></div></div><div class="section-container"><div class="service-item"><svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg><div class="service-text"><span class="delivery-tag">Frete grátis</span><span>Receba em até 7 dias</span><span class="shipping-cost-old">Taxa: R$ 15,00</span></div></div><div class="service-item"><svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path><polyline points="12 6 16 10 8 14 12 18"></polyline></svg><div class="service-text"><span style="color:#fff; font-weight:600;">Devoluções em 30 dias</span><span>Cancelamento fácil</span></div></div></div><div class="section-container" style="padding-top:0;"><div class="servicos-tiktok-dark"><div class="servicos-tiktok-titulo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#25f4ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Proteção do Cliente</div><div class="servicos-tiktok-lista"><div class="servicos-tiktok-item">Proteção ao comprador</div><div class="servicos-tiktok-item">Pagamento seguro</div><div class="servicos-tiktok-item">Reembolso rápido</div><div class="servicos-tiktok-item">Suporte 24h</div></div></div></div><div class="review-section"><h3 class="review-heading">Avaliações dos clientes</h3>{{REVIEWS_CONTENT}}</div><div class="seller-info-container"><div class="seller-details"><img src="images/kk.png" class="seller-avatar" onerror="this.src='https://placehold.co/40?text=S'"><div><div class="store-name">TikTok Shop <svg width="12" height="12" viewBox="0 0 24 24" fill="#25f4ee"><circle cx="12" cy="12" r="10"></circle><path d="M9 12l2 2 4-4" stroke="#000" stroke-width="2"/></svg></div><div style="font-size:11px; color:#888;">+10k vendas</div></div></div><button class="follow-button">Seguir</button></div><div class="specs-section"><h3>Especificações do Produto</h3><ul class="specs-list">{{SPECS_CONTENT}}</ul></div><div class="suggestions-section"><h3 style="color:white; margin-bottom:15px;">Você também pode gostar</h3><div class="masonry-grid">{{SUGGESTED_PRODUCTS}}</div></div><div class="footer-menu"><div class="footer-links"><span>Política de Privacidade</span> • <span>Termos de Uso</span> • <span>Ajuda</span></div><p style="margin-top:10px;">© 2025 TikTok Shop. Todos os direitos reservados.</p></div><div class="fixed-bottom-bar"><div class="left-group"><a href="index.html" class="bar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Loja</span></a><a href="#" class="bar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span>Chat</span></a></div><div class="cart-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div><a href="{{CHECKOUT_LINK}}" class="buy-button"><div class="buy-price">{{PRICE_NEW}}</div><div class="buy-text"><strong>Compre agora</strong></div></a></div><div id="imageModal"><span class="close-modal">&times;</span><div id="modalContent"><img id="modalImg" style="display:none;"><video id="modalVideo" style="display:none;" controls></video></div></div><script>const gallery=document.getElementById("gallery");const counter=document.getElementById("counter");const total={{IMG_COUNT}};if(total>1){gallery.addEventListener("scroll",()=>{const width=gallery.clientWidth;const index=Math.round(gallery.scrollLeft/width)+1;counter.textContent=index+"/"+total;});}let time=259;setInterval(()=>{if(time>0)time--;let m=Math.floor(time/60).toString().padStart(2,'0');let s=(time%60).toString().padStart(2,'0');document.getElementById('timer').innerText="TERMINA EM 00:"+m+":"+s;},1000);const modal=document.getElementById('imageModal');const modalImg=document.getElementById('modalImg');const modalVideo=document.getElementById('modalVideo');const closeBtn=document.querySelector('.close-modal');function openMedia(src,type){if(type==='video'){modalImg.style.display='none';modalVideo.style.display='block';modalVideo.src=src;modalVideo.play();}else{modalVideo.style.display='none';modalVideo.pause();modalImg.style.display='block';modalImg.src=src;}modal.style.display='flex';}document.querySelectorAll('.review-media-item').forEach(media=>{media.addEventListener('click',function(e){e.stopPropagation();const isVideo=this.tagName==='VIDEO'||this.src.endsWith('.mp4');openMedia(this.src,isVideo?'video':'image');});});closeBtn.addEventListener('click',()=>{modal.style.display='none';modalVideo.pause();});modal.addEventListener('click',(e)=>{if(e.target===modal){modal.style.display='none';modalVideo.pause();}});
-            
-            // LÓGICA DO BOTÃO SEGUIR
-            const followBtn = document.querySelector('.follow-button');
-            if(followBtn){
-                followBtn.addEventListener('click', function() {
-                    this.classList.toggle('following');
-                    if(this.classList.contains('following')) {
-                        this.innerText = "Seguindo";
-                        this.classList.add('animate-shine');
-                        setTimeout(() => this.classList.remove('animate-shine'), 500); // Remove classe após animação
-                    } else {
-                        this.innerText = "Seguir";
-                    }
-                });
-            }
+            const followBtn = document.querySelector('.follow-button'); if(followBtn){ followBtn.addEventListener('click', function() { this.classList.toggle('following'); if(this.classList.contains('following')) { this.innerText = "Seguindo"; this.classList.add('animate-shine'); setTimeout(() => this.classList.remove('animate-shine'), 500); } else { this.innerText = "Seguir"; } }); }
             <\/script></body></html>`;
 
         function getStarsSVG(count) {
@@ -694,7 +650,6 @@
                         if(mediaUrls.length > 0) {
                             mediaGridHtml = '<div class="review-media-grid">';
                             mediaUrls.forEach(url => {
-                                // --- AQUI ESTÁ A MUDANÇA PARA O VÍDEO RODAR SOZINHO ---
                                 mediaGridHtml += isVideoFile(url) ? `<video src="${url}" class="review-media-item" autoplay muted loop playsinline preload="auto" style="background:#222; object-fit:cover;"></video>` : `<img src="${url}" class="review-media-item">`;
                             });
                             mediaGridHtml += '</div>';
@@ -704,66 +659,6 @@
                     if(reply && reply.trim() !== "") {
                         replyHtml = `<div class="seller-reply-box"><div class="seller-reply-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Resposta da Loja:</div>${reply}</div>`;
                     }
-                    reviewsHtml += `<div class="review-card"><div class="reviewer-info"><img src="${img}" onerror="this.src='avatar/(1).jpg'" class="reviewer-avatar"><div class="reviewer-name">${name}</div></div><div class="review-stars">${starsHtml}</div><div class="review-text">${text}</div>${mediaGridHtml}${replyHtml}</div>`;
-                }
-            }
-
-            // --- GERAÇÃO DAS SUGESTÕES (DINÂMICO) ---
-            const productsList = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-            let suggestedHtml = "";
-
-            if (productsList.length > 0) {
-                productsList.forEach(p => {
-                    const pImg = p.img && p.img.trim() !== "" ? p.img : 'https://placehold.co/400?text=Sem+Img';
-                    suggestedHtml += `
-                    <div class="product-card" onclick="window.location.href='${p.link}'">
-                        <img src="${pImg}" class="card-img" style="aspect-ratio: 1/1; background:white;">
-                        <div class="card-info">
-                            <div class="card-title">${p.title}</div>
-                            <div class="card-price">${p.price}</div>
-                            <div class="badge-row"><span class="badge-sm">Oferta</span></div>
-                        </div>
-                    </div>`;
-                });
-            } else {
-                suggestedHtml = `<div style="grid-column: 1 / -1; text-align:center; color:#666; padding:20px; font-size:11px;">Salve produtos na vitrine para vê-los aqui.</div>`;
-            }
-
-            let content = templateBase;
-            content = content.replace(/{{PAGE_TITLE}}/g, pageTitle).replace(/{{PRODUCT_TITLE}}/g, title).replace(/{{PRICE_NEW}}/g, price).replace(/{{PRICE_OLD}}/g, oldPrice).replace(/{{DISCOUNT}}/g, discount).replace(/{{GALLERY_CONTENT}}/g, galleryHtml).replace(/{{IMG_COUNT}}/g, imgs.length).replace(/{{REVIEWS_CONTENT}}/g, reviewsHtml).replace(/{{CHECKOUT_LINK}}/g, checkoutLink).replace(/{{SUGGESTED_PRODUCTS}}/g, suggestedHtml).replace(/{{SPECS_CONTENT}}/g, specsHtml);
-
-            const iframe = document.getElementById('previewFrame');
-            const doc = iframe.contentDocument || iframe.contentWindow.document;
-            doc.open(); doc.write(content); doc.close();
-        }
-
-            let reviewsHtml = "";
-            for(let i=1; i<=5; i++) {
-                const name = document.getElementById(`rName${i}`).value;
-                const img = document.getElementById(`rImg${i}`).value;
-                const text = document.getElementById(`rText${i}`).value;
-                const picInput = document.getElementById(`rPic${i}`).value;
-                const starsCount = document.getElementById(`rStars${i}`).value;
-                const reply = document.getElementById(`rReply${i}`).value;
-                
-                if(name && text) {
-                    const starsHtml = getStarsSVG(starsCount);
-                    let mediaGridHtml = "";
-                    if(picInput.trim()) {
-                        const mediaUrls = picInput.split(',').map(u=>u.trim()).filter(u=>u!=="");
-                        if(mediaUrls.length > 0) {
-                            mediaGridHtml = '<div class="review-media-grid">';
-                            mediaUrls.forEach(url => {
-                                mediaGridHtml += isVideoFile(url) ? `<video src="${url}" class="review-media-item" autoplay muted loop playsinline preload="auto" style="background:#222;"></video>` : `<img src="${url}" class="review-media-item">`;
-                            });
-                            mediaGridHtml += '</div>';
-                        }
-                    }
-                    let replyHtml = "";
-                    if(reply && reply.trim() !== "") {
-                        replyHtml = `<div class="seller-reply-box"><div class="seller-reply-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Resposta da Loja:</div>${reply}</div>`;
-                    }
-                    // AQUI ESTÁ A ALTERAÇÃO PARA CARREGAR IMAGEM LOCAL NO ERRO
                     reviewsHtml += `<div class="review-card"><div class="reviewer-info"><img src="${img}" onerror="this.src='avatar/(1).jpg'" class="reviewer-avatar"><div class="reviewer-name">${name}</div></div><div class="review-stars">${starsHtml}</div><div class="review-text">${text}</div>${mediaGridHtml}${replyHtml}</div>`;
                 }
             }
