@@ -175,13 +175,14 @@
     </script>
 
     <script type="module">
+        // 1. IMPORTS NO TOPO (Fora do IF para não dar erro)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+        import { getDatabase, ref, set, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // 2. VERIFICA SE ESTÁ LOGADO
         if (sessionStorage.getItem('isLoggedIn') === 'true') {
             
-            // IMPORTANDO AS BIBLIOTECAS DO FIREBASE VIA CDN (WEB)
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-            import { getDatabase, ref, set, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
             // --- SUAS CONFIGURAÇÕES ---
             const firebaseConfig = {
                 apiKey: "AIzaSyCvXcgBkLNFBX8G0c6bUYxGd_6St_l7H4s",
@@ -196,7 +197,7 @@
 
             // INICIALIZAÇÃO
             const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app); // Seu analytics ativado
+            const analytics = getAnalytics(app);
             const db = getDatabase(app);
             
             let products = [];
@@ -209,8 +210,9 @@
             const btnCancel = document.getElementById('btnCancel');
             const formHeader = document.getElementById('formHeader');
 
-            // LER DADOS DO BANCO
+            // LER DADOS DO BANCO (Com Tratamento de Erro)
             const productsRef = ref(db, 'products');
+            
             onValue(productsRef, (snapshot) => {
                 loading.style.display = 'none';
                 const data = snapshot.val();
@@ -223,6 +225,19 @@
                 }
                 products.reverse();
                 renderList();
+            }, (error) => {
+                // SE DER ERRO DE PERMISSÃO, AVISA AQUI
+                console.error(error);
+                loading.style.background = "rgba(0,0,0,0.95)";
+                loading.innerHTML = `
+                    <div style="text-align:center; color:#ff3e3e;">
+                        <h3>ERRO DE CONEXÃO!</h3>
+                        <p>${error.message}</p>
+                        <br>
+                        <p style="color:white; font-size:12px">Dica: Vá no Console do Firebase > Realtime Database > Regras<br>e mude ".read" e ".write" para <strong>true</strong>.</p>
+                        <button onclick="location.reload()" style="padding:10px; margin-top:15px; cursor:pointer;">Tentar Novamente</button>
+                    </div>
+                `;
             });
 
             function renderList() {
