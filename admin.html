@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Alves 7 - Admin (Seguro)</title>
+    <title>Painel Alves 7 - Admin (Conectado)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
-        /* CSS MANTIDO IGUAL AO ORIGINAL */
+        /* CSS PADRÃO DO PAINEL */
         :root { --primary-pink: #fe2c55; --primary-cyan: #25f4ee; --primary-amber: #f4a225; --dark-bg: #121212; --card-bg: #1e1e1e; --sidebar-bg: #181818; --text-muted: #8a8b91; --border-color: #333; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--dark-bg); color: white; font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
@@ -49,10 +49,7 @@
         .btn-delete-icon { background: rgba(254, 44, 85, 0.1); color: var(--primary-pink); }
         .btn-edit-icon { background: rgba(244, 162, 37, 0.1); color: var(--primary-amber); }
         
-        /* Loading Overlay */
-        #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; }
-
-        /* --- ESTILOS DO LOGIN --- */
+        /* TELA DE LOGIN */
         #loginScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #0d0d0d; z-index: 10000;
@@ -69,6 +66,8 @@
         .login-btn { width: 100%; padding: 12px; background: var(--primary-pink); border: none; border-radius: 8px; color: white; font-weight: 700; cursor: pointer; font-size: 16px; margin-top: 10px; }
         .login-btn:hover { background: #d92346; }
         .error-msg { color: #ff3e3e; font-size: 12px; margin-top: 10px; display: none; }
+        
+        #loadingOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; }
 
         @media (max-width: 900px) { body { flex-direction: column; height: auto; overflow: auto; } .sidebar { width: 100%; padding: 20px; flex-direction: row; align-items: center; flex-wrap: wrap; } .content-grid { grid-template-columns: 1fr; } }
     </style>
@@ -99,7 +98,6 @@
         </div>
         <div class="sidebar-footer">
             <a onclick="logout()" class="menu-item" style="color: #ff3e3e; justify-content: center; border: 1px solid #333;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                 Sair do Painel
             </a>
         </div>
@@ -144,15 +142,13 @@
     </main>
 
     <script>
-        // --- 1. LÓGICA DE LOGIN (SEM FIREBASE) ---
         const USER_DATA = { u: "Alves7", p: "911686" };
         const loginScreen = document.getElementById('loginScreen');
         const loadingOverlay = document.getElementById('loadingOverlay');
 
-        // Verifica se já está logado ao abrir
         if (sessionStorage.getItem('isLoggedIn') === 'true') {
             loginScreen.style.display = 'none';
-            loadingOverlay.style.display = 'flex'; // Mostra loading do banco
+            loadingOverlay.style.display = 'flex';
         }
 
         function checkLogin() {
@@ -162,16 +158,9 @@
 
             if (u === USER_DATA.u && p === USER_DATA.p) {
                 sessionStorage.setItem('isLoggedIn', 'true');
-                location.reload(); // Recarrega para iniciar o Firebase
+                location.reload(); 
             } else {
                 err.style.display = 'block';
-                // Tremidinha no erro
-                document.querySelector('.login-box').animate([
-                    { transform: 'translateX(0)' },
-                    { transform: 'translateX(-10px)' },
-                    { transform: 'translateX(10px)' },
-                    { transform: 'translateX(0)' }
-                ], { duration: 300 });
             }
         }
 
@@ -180,33 +169,34 @@
             location.reload();
         }
 
-        // Permite dar Enter para entrar
         document.getElementById('password').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') checkLogin();
         });
     </script>
 
     <script type="module">
-        // --- 2. SÓ CARREGA O FIREBASE SE ESTIVER LOGADO ---
         if (sessionStorage.getItem('isLoggedIn') === 'true') {
             
+            // IMPORTANDO AS BIBLIOTECAS DO FIREBASE VIA CDN (WEB)
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
             import { getDatabase, ref, set, onValue, push, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-            // 🔴 COLE SUAS CREDENCIAIS DO FIREBASE AQUI EMBAIXO
+            // --- SUAS CONFIGURAÇÕES ---
             const firebaseConfig = {
-					  apiKey: "AIzaSyCvXcgBkLNFBX8G0c6bUYxGd_6St_l7H4s",
-					  authDomain: "lojatiktok-9db54.firebaseapp.com",
-					  databaseURL: "https://lojatiktok-9db54-default-rtdb.firebaseio.com",
-					  projectId: "lojatiktok-9db54",
-					  storageBucket: "lojatiktok-9db54.firebasestorage.app",
-					  messagingSenderId: "569412749516",
-					  appId: "1:569412749516:web:e7ca0fc5c6dbe6b3985a69",
-					  measurementId: "G-7ZQ2NFR3QV"
-					};
-            // ----------------------------------------------------
+                apiKey: "AIzaSyCvXcgBkLNFBX8G0c6bUYxGd_6St_l7H4s",
+                authDomain: "lojatiktok-9db54.firebaseapp.com",
+                databaseURL: "https://lojatiktok-9db54-default-rtdb.firebaseio.com",
+                projectId: "lojatiktok-9db54",
+                storageBucket: "lojatiktok-9db54.firebasestorage.app",
+                messagingSenderId: "569412749516",
+                appId: "1:569412749516:web:e7ca0fc5c6dbe6b3985a69",
+                measurementId: "G-7ZQ2NFR3QV"
+            };
 
+            // INICIALIZAÇÃO
             const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app); // Seu analytics ativado
             const db = getDatabase(app);
             
             let products = [];
@@ -219,7 +209,7 @@
             const btnCancel = document.getElementById('btnCancel');
             const formHeader = document.getElementById('formHeader');
 
-            // LER DADOS
+            // LER DADOS DO BANCO
             const productsRef = ref(db, 'products');
             onValue(productsRef, (snapshot) => {
                 loading.style.display = 'none';
