@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Gerador de Vitrine 2.0 - TikTok Shop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    /* --- ESTILOS ORIGINAIS DO SEU SITE (Para o Preview) --- */
+    :root { --bg-dark: #121212; --bg-card: #1e1e1e; --text-main: #fff; --primary: #fe2c55; --cyan: #25f4ee; }
+    body { background-color: #f0f2f5; font-family: 'Inter', sans-serif; margin: 0; display: flex; height: 100vh; color: #333; }
+    
+    /* Layout da Ferramenta */
+    .editor-container { width: 380px; background: white; padding: 20px; border-right: 1px solid #ddd; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+    .preview-container { flex: 1; background: var(--bg-dark); padding: 40px; overflow-y: auto; display: flex; justify-content: center; }
+    .mobile-frame { width: 375px; min-height: 600px; background: var(--bg-dark); border: 8px solid #333; border-radius: 20px; padding: 15px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+    
+    /* Área de Importação */
+    .import-section { background: #eef; padding: 15px; border-radius: 8px; border: 1px dashed #99c; margin-bottom: 10px; }
+    .import-section h3 { margin: 0 0 10px 0; font-size: 14px; color: #33a; }
+    
+    /* Inputs do Editor */
+    h2 { margin-top: 0; font-size: 18px; color: #333; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 12px; font-weight: 600; color: #555; }
+    input, select { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; }
+    
+    /* Botões */
+    button.add-btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.2s; }
+    button.add-btn:hover { opacity: 0.9; }
+    
+    .action-row { display: flex; gap: 10px; margin-top: 10px; }
+    .secondary-btn { flex: 1; background: transparent; border: 1px solid #ccc; padding: 8px; cursor: pointer; color: #555; border-radius: 4px; font-size: 12px; }
+    .secondary-btn:hover { background: #f5f5f5; }
+
+    .code-area { margin-top: auto; padding-top: 20px; border-top: 1px solid #eee; }
+    textarea { width: 100%; height: 100px; font-family: monospace; font-size: 11px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; resize: vertical; }
+    .copy-btn { background: #333; color: white; width: 100%; padding: 8px; border: none; border-radius: 4px; cursor: pointer; margin-top: 5px; }
+
+    /* --- ESTILOS DOS CARDS (IDÊNTICO AO ORIGINAL) --- */
+    .masonry-grid { column-count: 2; column-gap: 10px; }
+    .product-card { break-inside: avoid; margin-bottom: 10px; background: #1e1e1e; border-radius: 8px; overflow: hidden; position: relative; border: 1px solid #333; cursor: pointer; text-decoration: none; display: block; }
+    .card-img { width: 100%; display: block; object-fit: cover; aspect-ratio: 1/1; background: #000; }
+    .card-info { padding: 8px; }
+    .card-title { font-size: 12px; margin-bottom: 4px; color: #fff; line-height: 1.3; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
+    .card-price { font-weight: 700; color: #fe2c55; font-size: 13px; }
+    .badge-row { display:flex; gap:4px; margin-top:4px; flex-wrap:wrap; }
+    .badge-sm { font-size: 9px; padding: 2px 4px; border-radius: 3px; background: rgba(37, 244, 238, 0.15); color: #25f4ee; }
+    
+    .delete-item { position: absolute; top: 5px; right: 5px; background: red; color: white; width: 24px; height: 24px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 10; font-size: 14px; }
+    .edit-item { position: absolute; top: 5px; right: 35px; background: #25f4ee; color: #000; width: 24px; height: 24px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 10; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="editor-container">
+    
+    <div class="import-section">
+        <h3>📂 Carregar Arquivo Existente</h3>
+        <input type="file" id="fileInput" accept=".html" style="width: 100%; box-sizing: border-box;">
+        <button onclick="loadFile()" class="secondary-btn" style="width:100%; margin-top:5px; background:#fff;">Importar Produtos do HTML</button>
+    </div>
+
+    <h2>Adicionar / Editar</h2>
+    
+    <div class="form-group">
+        <label>Nome do Produto</label>
+        <input type="text" id="pName" placeholder="Ex: Capinha Transparente">
+    </div>
+
+    <div class="form-group">
+        <label>Preço (R$)</label>
+        <input type="text" id="pPrice" placeholder="Ex: R$ 29,90">
+    </div>
+
+    <div class="form-group">
+        <label>URL da Imagem</label>
+        <input type="text" id="pImg" placeholder="https://...">
+    </div>
+
+    <div class="form-group">
+        <label>Link de Destino</label>
+        <input type="text" id="pLink" placeholder="Link para compra">
+    </div>
+
+    <div class="form-group">
+        <label>Etiqueta (Badge)</label>
+        <select id="pBadge">
+            <option value="">Nenhuma</option>
+            <option value="Frete Grátis">Frete Grátis</option>
+            <option value="Mais Vendido">Mais Vendido</option>
+            <option value="-50% OFF">-50% OFF</option>
+            <option value="-20% OFF">-20% OFF</option>
+            <option value="Novidade">Novidade</option>
+            <option value="Promoção">Promoção</option>
+        </select>
+    </div>
+
+    <button class="add-btn" onclick="addProduct()">+ Adicionar / Atualizar</button>
+    
+    <div class="action-row">
+        <button class="secondary-btn" onclick="clearList()">Limpar Lista</button>
+    </div>
+
+    <div class="code-area">
+        <label>Código Final (Copie e cole na section 'masonry-grid')</label>
+        <textarea id="finalCode" readonly></textarea>
+        <button class="copy-btn" onclick="copyCode()">Copiar Código</button>
+    </div>
+</div>
+
+<div class="preview-container">
+    <div class="mobile-frame">
+        <h3 style="color:white; font-size:15px; margin-bottom:15px;">Você também pode gostar</h3>
+        <div class="masonry-grid" id="gridPreview">
+            <div style="text-align:center; color:#666; font-size:11px; padding:20px; grid-column: 1 / -1;">
+                Carregue um arquivo ou adicione produtos.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let products = [];
+    let editingIndex = -1; // Controle se estamos editando um existente
+
+    // --- FUNÇÃO DE IMPORTAÇÃO ---
+    function loadFile() {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert("Por favor, selecione um arquivo HTML primeiro.");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const content = e.target.result;
+            parseHTML(content);
+        };
+        reader.readAsText(file);
+    }
+
+    function parseHTML(htmlContent) {
+        // Cria um DOM temporário para ler o arquivo
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlContent, 'text/html');
+        
+        // Busca todos os cards de produto
+        const cards = doc.querySelectorAll('.product-card');
+        
+        if (cards.length === 0) {
+            alert("Nenhum produto encontrado neste arquivo HTML.");
+            return;
+        }
+
+        if(confirm(`Encontrados ${cards.length} produtos. Deseja substituir a lista atual?`)){
+            products = [];
+            
+            cards.forEach(card => {
+                // Tenta pegar o LINK (pode ser o próprio card ou o pai)
+                let link = '#';
+                if (card.tagName === 'A') {
+                    link = card.getAttribute('href');
+                } else if (card.parentElement.tagName === 'A') {
+                    link = card.parentElement.getAttribute('href');
+                }
+
+                // Tenta pegar os outros elementos
+                const img = card.querySelector('.card-img')?.src || '';
+                const name = card.querySelector('.card-title')?.innerText || 'Produto sem nome';
+                const price = card.querySelector('.card-price')?.innerText || 'R$ 0,00';
+                const badge = card.querySelector('.badge-sm')?.innerText || '';
+
+                products.push({ name, price, img, link, badge });
+            });
+
+            render();
+            alert("Produtos carregados com sucesso!");
+        }
+    }
+
+    // --- CRUD DE PRODUTOS ---
+
+    function addProduct() {
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+        const img = document.getElementById('pImg').value;
+        const link = document.getElementById('pLink').value;
+        const badge = document.getElementById('pBadge').value;
+
+        if(!name || !price) {
+            alert("Preencha pelo menos Nome e Preço!");
+            return;
+        }
+
+        if (editingIndex > -1) {
+            // Atualizar existente
+            products[editingIndex] = { name, price, img, link, badge };
+            editingIndex = -1;
+            document.querySelector('.add-btn').innerText = "+ Adicionar / Atualizar";
+        } else {
+            // Criar novo
+            products.push({ name, price, img, link, badge });
+        }
+
+        render();
+        clearInputs();
+    }
+
+    function editProduct(index) {
+        const p = products[index];
+        document.getElementById('pName').value = p.name;
+        document.getElementById('pPrice').value = p.price;
+        document.getElementById('pImg').value = p.img;
+        document.getElementById('pLink').value = p.link;
+        // Ajusta o select do badge (tenta encontrar o valor, senao deixa vazio)
+        const select = document.getElementById('pBadge');
+        select.value = ""; 
+        for(let i=0; i<select.options.length; i++){
+            if(select.options[i].text === p.badge || select.options[i].value === p.badge) {
+                select.selectedIndex = i;
+                break;
+            }
+        }
+
+        editingIndex = index;
+        document.querySelector('.add-btn').innerText = "💾 Salvar Alteração";
+    }
+
+    function removeProduct(index) {
+        if(confirm("Remover este produto?")) {
+            products.splice(index, 1);
+            render();
+        }
+    }
+    
+    function clearList() {
+        if(confirm("Isso apagará todos os produtos da lista. Tem certeza?")){
+            products = [];
+            render();
+        }
+    }
+
+    function clearInputs() {
+        document.getElementById('pName').value = '';
+        document.getElementById('pPrice').value = '';
+        document.getElementById('pImg').value = '';
+        document.getElementById('pLink').value = '';
+        document.getElementById('pBadge').value = '';
+        editingIndex = -1;
+        document.querySelector('.add-btn').innerText = "+ Adicionar / Atualizar";
+    }
+
+    // --- RENDERIZAÇÃO ---
+
+    function render() {
+        const grid = document.getElementById('gridPreview');
+        const textarea = document.getElementById('finalCode');
+        
+        if (products.length === 0) {
+            grid.innerHTML = '<div style="text-align:center; color:#666; font-size:11px; padding:20px; grid-column: 1 / -1;">Carregue um arquivo ou adicione produtos.</div>';
+            textarea.value = '';
+            return;
+        }
+
+        let htmlString = '';
+
+        products.forEach((p) => {
+            const badgeHtml = p.badge ? `<div class="badge-row"><span class="badge-sm">${p.badge}</span></div>` : '';
+            const imgUrl = p.img ? p.img : 'https://placehold.co/150x150?text=Sem+Foto';
+
+            // Gera o código HTML limpo para exportação
+            htmlString += `
+<a href="${p.link || '#'}" style="text-decoration:none;">
+    <div class="product-card">
+        <img src="${imgUrl}" class="card-img" alt="${p.name}">
+        <div class="card-info">
+            <div class="card-title">${p.name}</div>
+            <div class="card-price">${p.price}</div>
+            ${badgeHtml}
+        </div>
+    </div>
+</a>`;
+        });
+
+        // Atualiza o visual (preview) com botões de edição
+        grid.innerHTML = products.map((p, index) => {
+            const badgeHtml = p.badge ? `<div class="badge-row"><span class="badge-sm">${p.badge}</span></div>` : '';
+            const imgUrl = p.img ? p.img : 'https://placehold.co/150x150?text=Sem+Foto';
+            
+            return `
+            <div style="position:relative;">
+                <button class="delete-item" title="Excluir" onclick="removeProduct(${index})">×</button>
+                <button class="edit-item" title="Editar" onclick="editProduct(${index})">✎</button>
+                <div class="product-card">
+                    <img src="${imgUrl}" class="card-img">
+                    <div class="card-info">
+                        <div class="card-title">${p.name}</div>
+                        <div class="card-price">${p.price}</div>
+                        ${badgeHtml}
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+
+        textarea.value = htmlString;
+    }
+
+    function copyCode() {
+        const copyText = document.getElementById("finalCode");
+        copyText.select();
+        document.execCommand("copy");
+        alert("Código copiado! Cole no lugar dos produtos existentes no seu arquivo.");
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Corretor de Vitrine Inteligente</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+    body { font-family: 'Inter', sans-serif; background: #eef2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: #333; }
+    .container { background: white; width: 100%; max-width: 600px; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    h2 { margin-top: 0; color: #111; text-align: center; border-bottom: 2px solid #fe2c55; padding-bottom: 15px; margin-bottom: 20px;}
+    
+    .step { margin-bottom: 25px; background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+    .step-label { font-weight: 800; font-size: 14px; color: #fe2c55; margin-bottom: 8px; display: block; text-transform: uppercase; }
+    .instruction { font-size: 12px; color: #666; margin-bottom: 10px; display: block; }
+    
+    input[type="file"] { display: block; width: 100%; padding: 10px; border: 1px dashed #ccc; border-radius: 6px; cursor: pointer; background: #fff; box-sizing: border-box; }
+    
+    textarea { width: 100%; height: 120px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: monospace; font-size: 11px; resize: vertical; box-sizing: border-box;}
+    
+    .btn-save { background: #fe2c55; color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .btn-save:hover { background: #e02448; }
+
+    #logArea { margin-top: 15px; padding: 10px; background: #eee; border-radius: 6px; font-size: 12px; color: #333; display: none; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🛠️ Corretor e Fusor de Vitrine</h2>
+
+    <div class="step">
+        <span class="step-label">Passo 1: Arquivo do iPhone</span>
+        <span class="instruction">Selecione o arquivo <b>-apple-iphone-11...html</b> que você quer consertar.</span>
+        <input type="file" id="originalFile" accept=".html">
+    </div>
+
+    <div class="step">
+        <span class="step-label">Passo 2: Código dos Novos Produtos</span>
+        <span class="instruction">Cole aqui o código dos produtos. <b>(Não se preocupe se colar errado, eu filtro para você).</b></span>
+        <textarea id="newCode" placeholder="Cole o código aqui..."></textarea>
+    </div>
+
+    <button class="btn-save" onclick="processAndDownload()">
+        💾 Gerar Arquivo Corrigido
+    </button>
+    
+    <div id="logArea"></div>
+</div>
+
+<script>
+    function processAndDownload() {
+        const fileInput = document.getElementById('originalFile');
+        const rawInputCode = document.getElementById('newCode').value;
+        const logArea = document.getElementById('logArea');
+
+        // Validações básicas
+        if (!fileInput.files[0]) {
+            alert("⚠️ Selecione o arquivo HTML original no Passo 1.");
+            return;
+        }
+        if (!rawInputCode.trim()) {
+            alert("⚠️ Cole o código dos produtos no Passo 2.");
+            return;
+        }
+
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const originalHTML = e.target.result;
+            const parser = new DOMParser();
+            
+            // 1. Analisa o arquivo original (iPhone)
+            const docOriginal = parser.parseFromString(originalHTML, 'text/html');
+            const vitrine = docOriginal.querySelector('.masonry-grid');
+
+            if (!vitrine) {
+                alert("❌ Erro: Não achei a vitrine no arquivo original. Verifique se é o arquivo certo.");
+                return;
+            }
+
+            // 2. Analisa o código colado (Passo 2) para "limpar" a sujeira
+            // Criamos um documento temporário para ver o que o usuário colou
+            const docInput = parser.parseFromString(rawInputCode, 'text/html');
+            
+            // Procura por links que tenham dentro um .product-card
+            // Isso pega tanto se o usuário colou só o trecho, quanto se colou uma página inteira
+            const foundCards = docInput.querySelectorAll('a .product-card');
+            
+            let cleanCode = "";
+            let count = 0;
+
+            if (foundCards.length > 0) {
+                // Se achou cards usando o seletor, reconstrói o HTML limpo
+                foundCards.forEach(card => {
+                    // Pega o elemento <a> pai para manter o link
+                    const linkParent = card.parentElement;
+                    cleanCode += linkParent.outerHTML + "\n";
+                    count++;
+                });
+            } else {
+                // Tenta ver se colou divs soltas sem link (caso raro, mas possível)
+                const divCards = docInput.querySelectorAll('.product-card');
+                if (divCards.length > 0) {
+                     divCards.forEach(card => {
+                        // Se não tem link pai, a gente só coloca o card (embora o ideal seja ter link)
+                        if(card.parentElement.tagName !== 'A') {
+                            cleanCode += card.outerHTML + "\n";
+                            count++;
+                        }
+                    });
+                }
+            }
+
+            // Se ainda assim não achou nada estruturado, assume que o usuário colou texto puro correto
+            if (cleanCode === "") {
+                // Verifica se parece código HTML válido de card
+                if (rawInputCode.includes('product-card')) {
+                    cleanCode = rawInputCode; 
+                    count = "alguns";
+                } else {
+                    alert("⚠️ Não encontrei nenhum produto no código colado. Verifique o Passo 2.");
+                    return;
+                }
+            }
+
+            // 3. Substituição Segura
+            vitrine.innerHTML = cleanCode;
+
+            // 4. Download
+            const newHTML = docOriginal.documentElement.outerHTML;
+            const blob = new Blob([newHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = file.name.replace('.html', '-corrigido.html');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            logArea.style.display = 'block';
+            logArea.innerHTML = `✅ Sucesso! Encontrei <b>${count}</b> produtos novos. O arquivo corrigido foi baixado.`;
+        };
+
+        reader.readAsText(file);
+    }
+</script>
+
+</body>
+</html>
