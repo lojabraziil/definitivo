@@ -619,12 +619,6 @@
                 productsList.forEach(p => {
                     const pImg = p.img && p.img.trim() !== "" ? p.img : 'https://placehold.co/400?text=Sem+Img';
                     suggestedHtml += `
-                    <div class="product-card" onclick="window.location.href='${p.link}'">
-                        <img src="${pImg}" class="card-img" style="aspect-ratio: 1/1; background:white;">
-                        <div class="card-info">
-                            <div class="card-title">${p.title}</div>
-                            <div class="card-price">${p.price}</div>
-                            <div class="badge-row"><span class="badge-sm">Oferta</span></div>
                         </div>
                     </div>`;
                 });
