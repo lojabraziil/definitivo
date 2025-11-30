@@ -106,8 +106,10 @@
                         </button>
                     </div>
 
-                    <details open>
-                        <summary>Informações Principais</summary>
+                    
+
+					<details open>
+                        <summary>📦 Dados do Produto</summary>
                         <div class="details-content">
                             <div class="form-group">
                                 <label>Título do Produto <span id="autoBadge" class="badge-ai">IA ATIVA</span></label>
@@ -118,16 +120,29 @@
                                 <input type="text" id="pCheckout" placeholder="https://pay..." value="#" oninput="updatePreview()">
                             </div>
                             <div class="form-row">
-                                <div><label>Preço Atual</label><input type="text" id="pPrice" value="R$ 0,00" oninput="updatePreview()"></div>
-                                <div><label>Preço Antigo</label><input type="text" id="pOldPrice" value="R$ 0,00" oninput="updatePreview()"></div>
+                                <div>
+                                    <label>Preço Antigo (De)</label>
+                                    <input type="text" id="pOldPrice" placeholder="Digite os números..." onkeyup="formatarMoeda(this)"
+                                </div>
+                                <div>
+                                    <label>Preço Novo (Por)</label>
+                                    <input type="text" id="pPrice" placeholder="Digite os números..." onkeyup="formatarMoeda(this)">
+                                </div>
                             </div>
                             <div class="form-row">
-                                <div><label>Desconto</label><input type="text" id="pDiscount" value="0%" oninput="updatePreview()"></div>
-                                <div><label>Título da Aba</label><input type="text" id="pPageTitle" value="Loja" oninput="updatePreview()"></div>
+                                <div>
+                                    <label>Desconto (Automático)</label>
+                                    <input type="text" id="pDiscount" placeholder="0%" readonly style="background:#222; color:#25f4ee; font-weight:bold;">
+                                </div>
+                                <div>
+                                    <label>Título da Aba</label>
+                                    <input type="text" id="pPageTitle" value="Loja" oninput="updatePreview()">
+                                </div>
                             </div>
                         </div>
                     </details>
 
+			
                     <details>
                         <summary>Especificações Técnicas</summary>
                         <div class="details-content">
@@ -136,14 +151,38 @@
                     </details>
 
                     <details>
-                        <summary>Imagens</summary>
-                        <div class="details-content">
-                            <div class="form-group"><label>Imagem 1 (Principal)</label><input type="text" id="pImg1" oninput="updatePreview()"></div>
-                            <div class="form-group"><label>Imagem 2</label><input type="text" id="pImg2" oninput="updatePreview()"></div>
-                            <div class="form-group"><label>Imagem 3</label><input type="text" id="pImg3" oninput="updatePreview()"></div>
-                            <div class="form-group"><label>Imagem 4</label><input type="text" id="pImg4" oninput="updatePreview()"></div>
-                        </div>
-                    </details>
+    <summary>Imagens (Modo Ditto / Área de Transferência)</summary>
+    <div class="details-content">
+        
+        <div style="background:#151515; padding:15px; border-radius:8px; margin-bottom:15px; border:2px dashed #0080ff;">
+            <label style="color:#0080ff; font-weight:bold; margin-bottom:5px; display:block;">
+                📥 COLE AQUI (Use o Ditto para colar vários)
+            </label>
+            
+            <textarea id="batchInput" rows="5" 
+            placeholder="1. Copie 4 fotos no Google (Ctrl+C em cada)&#10;2. Abra o Ditto aqui&#10;3. Selecione as 4 e dê Enter!" 
+            style="width:100%; border:none; background:transparent; color:#fff; font-family:monospace; font-size:11px; resize:none;" 
+            oninput="processarDitto(this.value)"></textarea>
+            
+            <div style="text-align:right; margin-top:5px;">
+                <button onclick="document.getElementById('batchInput').value=''; processarDitto('')" style="background:none; border:none; color:#fe2c55; cursor:pointer; font-size:11px;">
+                    Limpar
+                </button>
+            </div>
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <button onclick="openGoogleImages()" class="btn btn-secondary" style="width:100%;">
+                🔍 Abrir Google (Nova Janela)
+            </button>
+        </div>
+
+        <div class="form-group"><label>Imagem 1</label><input type="text" id="pImg1" oninput="updatePreview()" readonly style="background:#222; color:#888;"></div>
+        <div class="form-group"><label>Imagem 2</label><input type="text" id="pImg2" oninput="updatePreview()" readonly style="background:#222; color:#888;"></div>
+        <div class="form-group"><label>Imagem 3</label><input type="text" id="pImg3" oninput="updatePreview()" readonly style="background:#222; color:#888;"></div>
+        <div class="form-group"><label>Imagem 4</label><input type="text" id="pImg4" oninput="updatePreview()" readonly style="background:#222; color:#888;"></div>
+    </div>
+</details>
 
                     <details>
                         <summary>Avaliações Avançadas</summary>
@@ -262,6 +301,64 @@
         // 1. SUPER BASE DE DADOS DE ESPECIFICAÇÕES (MEGA DETALHADA)
         // ============================================================
         const specsDB = {
+		
+		// === SAMSUNG (Campeões de Venda) ===
+    "galaxy book2": "Marca: Samsung\nModelo: Galaxy Book2\nProcessador: Intel Core i3 / i5 / i7 (12ª Gen)\nMemória RAM: 8GB (Expansível em alguns modelos)\nArmazenamento: SSD 256GB / 512GB NVMe\nTela: 15.6\" Full HD LED PLS\nConectividade: Ecossistema Galaxy\nPeso: 1.8kg (Fino e leve)\nSistema: Windows 11 Home",
+    "galaxy book go": "Marca: Samsung\nModelo: Galaxy Book Go\nProcessador: Snapdragon 7c Gen 2 (ARM)\nMemória RAM: 4GB LPDDR4x\nArmazenamento: 128GB UFS (Flash)\nTela: 14\" Full HD LED\nBateria: Até 18 horas de duração\nSem ventoinha: Silencioso total\nFoco: Mobilidade e Estudos Leves",
+    "galaxy book3 360": "Marca: Samsung\nModelo: Galaxy Book3 360 (2 em 1)\nTela: AMOLED Touchscreen (Vira Tablet)\nCaneta: S-Pen Inclusa\nProcessador: Intel Core i5 / i7 (13ª Gen)\nAcabamento: Premium em Alumínio\nSegurança: Leitor Digital",
+
+    // === LENOVO (Queridinhos do Brasil) ===
+    "lenovo ideapad 1i": "Marca: Lenovo\nModelo: IdeaPad 1i\nProcessador: Intel Core i3-1215U ou Celeron\nMemória RAM: 4GB (Soldada) ou 8GB\nArmazenamento: SSD 256GB ou 512GB\nTela: 15.6\" HD Antirreflexo\nÁudio: Dolby Audio\nPrivacidade: Camera com porta física\nCusto-Benefício: Alto",
+    "lenovo ideapad 3": "Marca: Lenovo\nModelo: IdeaPad 3 (AMD)\nProcessador: AMD Ryzen 5 5500U / Ryzen 7 5700U\nPlaca de Vídeo: AMD Radeon Integrada (Roda jogos leves)\nMemória RAM: 8GB / 12GB\nArmazenamento: SSD NVMe rápido\nTela: 15.6\" Full HD\nDesign: Ultrafino Prata",
+
+    // === ACER (Workhorses) ===
+    "acer aspire 5": "Marca: Acer\nModelo: Aspire 5\nProcessador: Intel Core i5 (12ª Gen) / AMD Ryzen 7\nUpgrade: Tampa de fácil acesso para RAM e HDD\nTela: 15.6\" Full HD ou IPS\nAcabamento: Tampa em Metal\nConexões: Porta Ethernet (RJ-45) e HDMI\nBateria: Até 7 horas",
+    "acer aspire 3": "Marca: Acer\nModelo: Aspire 3\nProcessador: Intel Core i3-N305 ou Ryzen 3\nMemória RAM: 8GB LPDDR5\nArmazenamento: SSD 256GB / 512GB\nTeclado: ABNT2 com Numérico\nVentilação: Melhorada (Novo design)\nUso: Escritório e Navegação",
+
+    // === ASUS (Design e Tela) ===
+    "asus vivobook 15": "Marca: ASUS\nModelo: Vivobook 15 (X1502)\nProcessador: Intel Core i3 / i5 (12ª Gen)\nTela: 15.6\" Full HD NanoEdge\nDobradiça: 180° (Plana)\nProteção: Antibacteriana ASUS Guard\nCarregamento: Rápido (60% em 49min)\nCertificação: Militar US MIL-STD 810H",
+    "asus vivobook go": "Marca: ASUS\nModelo: Vivobook Go 15\nProcessador: AMD Ryzen 3 ou 5 (Série 7000)\nTela: 15.6\" Full HD\nDesign: Compacto e Leve (1.6kg)\nÁudio: SonicMaster\nTeclado: ErgoSense confortável",
+
+    // === DELL (Corporativo) ===
+    "dell inspiron 15": "Marca: Dell\nModelo: Inspiron 15 (i15)\nProcessador: Intel Core i3 / i5 (12ª ou 13ª Gen)\nMemória RAM: Expansível até 16GB\nArmazenamento: SSD PCIe NVMe\nTela: 15.6\" Full HD WVA (Melhor ângulo de visão)\nSoftware: McAfee + Windows 11\nConstrução: Sustentável (Plásticos reciclados)",
+    
+    // === ENTRADA / BAIXO CUSTO (Vendem muito por preço) ===
+    "positivo vision": "Marca: Positivo\nModelo: Vision C15\nProcessador: Intel Celeron Dual Core\nMemória RAM: 4GB\nArmazenamento: 128GB eMMC (Flash)\nBotão Dedicado: Netflix / YouTube\nLumina Bar: LED para Webcam\nPreço: Econômico",
+    "multilaser ultra": "Marca: Multi (Multilaser)\nModelo: Ultra Ub530\nProcessador: Intel Core i3 ou Pentium\nMemória RAM: 4GB / 8GB\nArmazenamento: SSD ou HDD\nSistema: Linux ou Windows\nKit: Tecla Netflix inclusa",
+    "compaq presario": "Marca: Compaq\nModelo: Presario 420\nProcessador: Intel Pentium N3700\nMemória RAM: 4GB\nArmazenamento: 120GB SSD\nDesign: Emborrachado resistente\nUso: Básico",
+
+    // === GAMER POPULARES (Atualização) ===
+    "nitro v15": "Marca: Acer\nModelo: Nitro V15 (Novo)\nProcessador: Intel Core i5-13420H\nPlaca de Vídeo: RTX 3050 ou 4050\nMemória RAM: DDR5 (Mais rápida)\nTela: 144Hz IPS\nResfriamento: Dual Fan com 4 saídas\nThunderbolt: Porta USB-C Thunderbolt 4",
+    "loq": "Marca: Lenovo\nModelo: LOQ (Sucessor do Gaming 3i)\nProcessador: Intel Core i5-12450H\nPlaca de Vídeo: RTX 2050 ou 3050\nChip AI: LA1 (Otimiza FPS com IA)\nCarregamento: Super Rápido\nConstrução: Militar",
+		
+		// === APPLE ===
+    "macbook air m1": "Marca: Apple\nModelo: MacBook Air (M1)\nProcessador: Chip M1 (8-core CPU)\nMemória: 8GB Unificada\nArmazenamento: SSD 256GB\nTela: 13.3\" Retina\nBateria: Até 18 horas\nTeclado: Magic Keyboard\nPeso: 1.29 kg\nSistema: macOS",
+    "macbook air m2": "Marca: Apple\nModelo: MacBook Air (M2)\nProcessador: Chip M2\nDesign: Novo design ultrafino\nMemória: 8GB / 16GB\nArmazenamento: SSD 256GB / 512GB\nTela: 13.6\" Liquid Retina\nCarregamento: MagSafe 3\nCâmera: 1080p FaceTime HD",
+    "macbook pro m3": "Marca: Apple\nModelo: MacBook Pro 14\"\nProcessador: Chip M3 Pro ou Max\nMemória: 18GB a 36GB Unificada\nTela: Liquid Retina XDR (120Hz)\nPortas: HDMI, SDXC, Thunderbolt 4\nBateria: Até 22 horas\nUso: Profissional (Edição/Dev)",
+    "imac": "Marca: Apple\nModelo: iMac 24\"\nProcessador: Chip M3\nTela: 4.5K Retina\nCâmera: 1080p\nÁudio: 6 alto-falantes com Áudio Espacial\nTeclado: Magic Keyboard com Touch ID\nMouse: Magic Mouse",
+    "mac mini": "Marca: Apple\nModelo: Mac Mini\nProcessador: M2 ou M2 Pro\nConectividade: Wi-Fi 6E, Ethernet Gigabit\nTamanho: Compacto (19.7 cm)\nSaída de Vídeo: Suporte a até 3 monitores (M2 Pro)",
+
+    // === NOTEBOOKS GAMER ===
+    "acer nitro 5": "Marca: Acer\nModelo: Nitro 5 AN515\nProcessador: Intel Core i5 ou i7 (Série H)\nPlaca de Vídeo: RTX 3050 4GB\nMemória RAM: 8GB/16GB (Expansível até 64GB)\nArmazenamento: SSD 512GB NVMe\nTela: 15.6\" IPS 144Hz\nTeclado: Retroiluminado Vermelho\nResfriamento: CoolBoost (Duas ventoinhas)",
+    "dell g15": "Marca: Dell\nModelo: G15 Gaming\nProcessador: Intel Core i5-13450HX\nPlaca de Vídeo: RTX 3050 ou 4050 (6GB)\nMemória RAM: 8GB/16GB DDR5\nTela: 15.6\" Full HD 120Hz\nSistema: Windows 11\nConstrução: Robusta com Thermal Design inspirado em Alienware",
+    "lenovo gaming 3i": "Marca: Lenovo\nModelo: IdeaPad Gaming 3i\nProcessador: Intel Core i5 11ª/12ª Gen\nPlaca Gráfica: GTX 1650 ou RTX 3050\nTela: 15.6\" Full HD Antirreflexo\nTeclado: Retroiluminado Branco\nSistema de Resfriamento: Aprimorado\nCarregamento Rápido: Sim",
+    "avell": "Marca: Avell\nModelo: Storm ou Hyb\nPlaca de Vídeo: RTX 4060 / 4070\nTela: 16\" QHD 165Hz ou 240Hz\nProcessador: Intel Core i7 / i9\nChassi: Alumínio ou Polímero de alta densidade\nTeclado: Mecânico RGB (em alguns modelos)\nFoco: Alta Performance",
+    "asus tuf": "Marca: ASUS\nModelo: TUF Gaming F15\nCertificação: Militar (MIL-STD-810H)\nProcessador: Intel Core i7\nPlaca de Vídeo: RTX 4050\nTela: 144Hz Adaptive-Sync\nÁudio: Dolby Atmos\nConexão: Thunderbolt 4",
+
+    // === NOTEBOOKS TRABALHO/ESTUDO ===
+    "samsung galaxy book": "Marca: Samsung\nModelo: Galaxy Book2 ou Book3\nProcessador: Intel Core i3 / i5 / i7\nIntegração: Ecossistema Galaxy (Tablet/Celular)\nTela: Full HD LED\nDesign: Fino e leve (Prata)\nArmazenamento: SSD NVMe (Slot extra em alguns modelos)\nBateria: Longa duração",
+    "lenovo ideapad": "Marca: Lenovo\nModelo: IdeaPad 1i ou 3i\nProcessador: Intel Core i3 / i5 ou Ryzen 5\nMemória RAM: 4GB / 8GB / 12GB\nArmazenamento: SSD 256GB / 512GB\nPrivacidade: Porta de privacidade na webcam\nÁudio: Dolby Audio\nFoco: Custo-benefício",
+    "dell inspiron": "Marca: Dell\nModelo: Inspiron 15 3000\nProcessador: Intel Core i3 / i5 (12ª ou 13ª Gen)\nTela: 15.6\" Full HD WVA\nConectividade: Leitor de cartão SD, HDMI 1.4\nTeclado: Numérico incluso\nSoftware: McAfee (Trial) + Windows 11",
+    "acer aspire": "Marca: Acer\nModelo: Aspire 3 ou 5\nProcessador: Intel Core i3 / i5\nMemória RAM: Expansível\nArmazenamento: Slot Híbrido (SSD + HDD)\nTela: 14\" ou 15.6\"\nAcabamento: Tampa em metal (Série 5)\nConexões: USB-C, HDMI",
+    "asus vivobook": "Marca: ASUS\nModelo: Vivobook 15 ou 16\nProcessador: AMD Ryzen 5 / 7 ou Intel Core\nTela: NanoEdge (Bordas finas)\nDobradiça: 180 graus (plana)\nProteção: Antibacteriana (Asus Antibacterial Guard)\nDesign: Moderno e colorido",
+    "notebook positivo": "Marca: Positivo\nModelo: Vision ou Motion\nProcessador: Intel Celeron ou Pentium\nBotão Netflix/Youtube: Sim\nArmazenamento: eMMC 64GB / 128GB ou SSD\nFoco: Estudos básicos e navegação\nPreço: Entrada/Econômico",
+    "compaq": "Marca: Compaq\nModelo: Presario 400 series\nProcessador: Intel Pentium / Core i3\nMemória: 4GB / 8GB\nWebcam: Com obturador de privacidade\nDesign: Minimalista cinza",
+    "chromebook": "Marca: Samsung / Acer\nSistema Operacional: Chrome OS (Google)\nArmazenamento: Nuvem (Google Drive)\nInicialização: Instantânea (menos de 10s)\nSegurança: Vírus free\nUso: 100% Online (Docs, Sheets, Meet)",
+
+    // === DESKTOPS E PCS ===
+    "pc gamer completo": "Kit: PC + Monitor + Teclado + Mouse\nProcessador: Intel Core i5 ou Ryzen 5\nPlaca de Vídeo: GTX 1650 ou RTX 3050\nMonitor: 21.5\" ou 24\" 75Hz\nGabinete: RGB com vidro temperado\nMemória: 16GB Dual Channel",
+    "pc gamer ultra": "Categoria: High-End\nProcessador: Ryzen 7 5700X3D ou i7 13700K\nPlaca de Vídeo: RTX 4070 Super ou 4080\nRefrigeração: Water Cooler 240mm/360mm\nRAM: 32GB DDR5 5600MHz\nFonte: 850W Gold Modular",
+    "pc escritorio": "Gabinete: Mini Tower ou SFF\nProcessador: Intel Core i3 10ª/12ª Gen\nMemória: 8GB DDR4\nSSD: 240GB Sata\nConexões: Wi-Fi USB incluso\nSistema: Windows 10/11 Pro\nGarantia: 12 meses",
             "iphone11": "Marca: Apple\nModelo: iPhone 11\nProcessador: A13 Bionic (6-core)\nMemória RAM: 4GB\nArmazenamento: 64GB / 128GB\nTela: Liquid Retina HD LCD 6.1\"\nCâmera Traseira: Dupla 12MP (Ultra-angular)\nBateria: Até 17h de vídeo\nConectividade: 4G LTE\nResistência: IP68 (água e poeira)\nConteúdo: iPhone, Cabo USB-C",
             "iphone12": "Marca: Apple\nModelo: iPhone 12\nProcessador: A14 Bionic (5nm)\nTela: Super Retina XDR OLED 6.1\"\nConectividade: 5G\nCâmera: Dupla 12MP (Modo Noite)\nResistência: Ceramic Shield\nMagSafe: Compatível\nBateria: Até 17h vídeo\nConteúdo: iPhone, Cabo USB-C",
             "iphone13": "Marca: Apple\nModelo: iPhone 13\nProcessador: A15 Bionic\nArmazenamento: Início 128GB\nTela: Super Retina XDR OLED 6.1\"\nModo Cinema: 1080p a 30 qps\nBateria: Até 19h vídeo\nResistência: IP68\nConectividade: 5G, Wi-Fi 6\nConteúdo: iPhone, Cabo USB-C",
@@ -287,61 +384,1263 @@
             "sofa": "Modelo: Retrátil e Reclinável\nLugares: 2, 3 ou 4\nTecido: Suede ou Veludo\nEstrutura: Madeira Eucalipto\nAssento: Espuma D28 / Molas\nEstilo: Moderno",
             "cadeira": "Tipo: Gamer ou Escritório\nErgonomia: Ajuste de altura\nRodízios: Anti-risco\nRevestimento: Couro ou Mesh\nPeso: Até 120kg",
             "furadeira": "Função: Furadeira e Parafusadeira\nMandril: 3/8\" (10mm)\nVelocidade: Variável\nImpacto: Sim (Concreto)\nKit: Maleta inclusa",
-            "generic": "Produto: 100% Original\nDisponibilidade: Pronta Entrega\nEnvio: Imediato para todo Brasil\nGarantia: Do Fabricante (3 a 12 meses)\nNota Fiscal: Emitida no seu nome\nEstado: Novo, lacrado\nManual: Instruções em Português"
-        };
+            "generic": "Produto: 100% Original\nDisponibilidade: Pronta Entrega\nEnvio: Imediato para todo Brasil\nGarantia: Do Fabricante (3 a 12 meses)\nNota Fiscal: Emitida no seu nome\nEstado: Novo, lacrado\nManual: Instruções em Português",
+
+    // === APPLE (MacBooks & iMac) ===
+    "macbook air m1": "Marca: Apple\nModelo: MacBook Air (M1)\nProcessador: Chip Apple M1 (8-core CPU)\nMemória: 8GB Unificada\nArmazenamento: SSD 256GB\nTela: 13.3\" Retina (P3, True Tone)\nBateria: Até 18 horas\nTeclado: Magic Keyboard Retroiluminado\nSegurança: Touch ID\nSistema: macOS Sonoma",
+    "macbook air m2": "Marca: Apple\nModelo: MacBook Air (M2)\nDesign: Novo (Ultrafino e Plano)\nProcessador: Chip Apple M2\nMemória: 8GB (Configurável)\nArmazenamento: SSD 256GB / 512GB\nTela: 13.6\" Liquid Retina\nCarregamento: MagSafe 3\nCâmera: 1080p FaceTime HD",
+    "macbook pro": "Marca: Apple\nModelo: MacBook Pro 14\" ou 16\"\nProcessador: M2 Pro / M3 Pro\nTela: Liquid Retina XDR (120Hz ProMotion)\nConexões: HDMI, SDXC, Thunderbolt 4\nBateria: Até 22 horas\nUso: Profissional (Edição de Vídeo/3D)",
+    "imac": "Marca: Apple\nModelo: iMac 24\"\nProcessador: Chip M3\nTela: 4.5K Retina\nÁudio: Sistema de 6 alto-falantes\nMicrofone: Estúdio (3 mics)\nAcessórios: Magic Keyboard e Mouse (Na cor do aparelho)",
+
+    // === ACER (Gamer & Trabalho) ===
+    "acer nitro 5": "Marca: Acer\nModelo: Nitro 5 (AN515)\nCategoria: Notebook Gamer\nProcessador: Intel Core i5 / i7 (Série H)\nPlaca de Vídeo: NVIDIA GeForce RTX 3050 (4GB)\nMemória RAM: 8GB / 16GB (Expansível até 64GB)\nArmazenamento: SSD 512GB NVMe\nTela: 15.6\" IPS 144Hz\nTeclado: Retroiluminado em Vermelho\nRefrigeração: CoolBoost (Dupla Ventoinha)",
+    "acer aspire 5": "Marca: Acer\nModelo: Aspire 5\nProcessador: Intel Core i5 (12ª Gen)\nMemória RAM: 8GB (Expansível)\nArmazenamento: SSD 256GB / 512GB\nTela: 15.6\" Full HD\nAcabamento: Tampa em Metal\nConectividade: Wi-Fi 6 e Porta RJ-45\nBateria: Até 7h de autonomia",
+    "acer aspire 3": "Marca: Acer\nModelo: Aspire 3\nProcessador: Intel Core i3-N305 ou Ryzen 3\nMemória RAM: 8GB LPDDR5\nArmazenamento: SSD NVMe rápido\nTeclado: Numérico Dedicado\nUso: Estudos e Escritório",
+
+    // === LENOVO (Campeões de Venda) ===
+    "lenovo ideapad 3": "Marca: Lenovo\nModelo: IdeaPad 3 (AMD)\nProcessador: Ryzen 5 5500U ou Ryzen 7 5700U\nPlaca Gráfica: Radeon Vega Integrada\nMemória RAM: 8GB / 12GB\nArmazenamento: SSD M.2 NVMe\nTela: 15.6\" Full HD Antirreflexo\nDesign: Prata Ultrafino\nPrivacidade: Porta física na webcam",
+    "lenovo ideapad 1i": "Marca: Lenovo\nModelo: IdeaPad 1i\nProcessador: Intel Core i3-1215U\nMemória RAM: 4GB / 8GB\nArmazenamento: SSD 256GB\nÁudio: Dolby Audio\nSistema: Windows 11 Home\nFoco: Custo-Benefício e Mobilidade",
+    "lenovo gaming 3i": "Marca: Lenovo\nModelo: IdeaPad Gaming 3i\nProcessador: Intel Core i5 (11ª ou 12ª Gen)\nPlaca de Vídeo: GTX 1650 ou RTX 3050\nTela: 15.6\" Full HD WVA Antirreflexo\nTeclado: Retroiluminado Branco\nResfriamento: Sistema aprimorado com 2 coolers",
+
+    // === SAMSUNG (Ecossistema Galaxy) ===
+    "galaxy book2": "Marca: Samsung\nModelo: Galaxy Book2\nProcessador: Intel Core i3 / i5 / i7 (12ª Gen)\nIntegração: Ecossistema Galaxy (Quick Share)\nMemória RAM: 8GB (Alguns modelos expansíveis)\nArmazenamento: SSD NVMe (Slot extra disponível)\nTela: 15.6\" Full HD LED\nDesign: Fino (1.8cm) e Leve",
+    "galaxy book go": "Marca: Samsung\nModelo: Galaxy Book Go\nProcessador: Snapdragon 7c Gen 2 (Arquitetura ARM)\nMemória RAM: 4GB\nArmazenamento: 128GB UFS\nBateria: Longa duração (Até 18h)\nVentoinha: Fanless (Silencioso total)\nSistema: Windows 11 ARM",
+    "galaxy book3 360": "Marca: Samsung\nModelo: Galaxy Book3 360 (2 em 1)\nTipo: Notebook e Tablet\nTela: AMOLED Touchscreen (Vira 360°)\nCaneta: S-Pen Inclusa na caixa\nProcessador: Intel Core i5 / i7 (13ª Gen)\nSegurança: Leitor de Digital",
+
+    // === DELL (Durabilidade) ===
+    "dell g15": "Marca: Dell\nModelo: G15 Gaming\nProcessador: Intel Core i5-13450HX (Alta Performance)\nPlaca de Vídeo: RTX 3050 ou 4050 (6GB)\nMemória RAM: 8GB / 16GB DDR5\nTela: 15.6\" Full HD 120Hz\nSoftware: Alienware Command Center\nConstrução: Robusta (Térmica inspirada em Alienware)",
+    "dell inspiron 15": "Marca: Dell\nModelo: Inspiron 15 3000\nProcessador: Intel Core i3 / i5 (12ª ou 13ª Gen)\nMemória RAM: Expansível até 16GB\nArmazenamento: SSD PCIe NVMe\nTela: 15.6\" Full HD WVA\nSegurança: Leitor Biométrico (alguns modelos)",
+
+    // === ASUS (Inovação) ===
+    "asus vivobook": "Marca: ASUS\nModelo: Vivobook 15 ou 16\nProcessador: AMD Ryzen 5 / 7 ou Intel Core\nTela: NanoEdge (Bordas finas)\nDobradiça: 180 graus (plana)\nProteção: Antibacteriana (Asus Antibacterial Guard)\nCarregamento: Rápido (60% em 49 min)",
+    "asus tuf": "Marca: ASUS\nModelo: TUF Gaming F15\nCertificação: Militar (MIL-STD-810H)\nPlaca de Vídeo: RTX 3050 / 4050\nTela: 144Hz Adaptive-Sync\nÁudio: Dolby Atmos com cancelamento de ruído\nConexão: Thunderbolt 4",
+
+    // === ENTRADA / BÁSICOS (Preço Baixo) ===
+    "positivo vision": "Marca: Positivo\nModelo: Vision C15\nProcessador: Intel Celeron Dual Core\nMemória RAM: 4GB\nArmazenamento: 128GB eMMC (Flash) ou SSD\nDiferencial: Lumina Bar (LED para Webcam)\nTecla Dedicada: Netflix / Youtube\nSistema: Windows 11",
+    "multilaser ultra": "Marca: Multi (Multilaser)\nModelo: Ultra UB530\nProcessador: Intel Core i3 ou Pentium\nMemória RAM: 4GB\nArmazenamento: SSD de acesso rápido\nTela: 15.6\" HD\nInclui: Teclado numérico e tecla Netflix",
+    "compaq presario": "Marca: Compaq\nModelo: Presario 420\nProcessador: Intel Pentium N3700\nMemória RAM: 4GB\nArmazenamento: 120GB SSD\nAcabamento: Emborrachado resistente\nWebcam: Com obturador de privacidade",
+
+    // === PEÇAS DE HARDWARE (Para montar PC) ===
+    "processador": "Marca: Intel ou AMD\nSocket: LGA1700 / AM4 / AM5\nNúcleos: Verificar modelo\nCooler: Incluso na caixa (Box)\nGarantia: 3 Anos com fabricante",
+    "placa de video": "Chipset: NVIDIA GeForce ou AMD Radeon\nMemória VRAM: GDDR6 (8GB/12GB)\nRay Tracing: Suportado (RTX/RX)\nResfriamento: Dual ou Triple Fan\nInterface: PCI Express 4.0",
+    "memoria ram": "Tipo: DDR4 ou DDR5\nCapacidade: 8GB / 16GB / 32GB\nFrequência: 3200MHz a 6000MHz\nDissipador: Alumínio (Com ou sem RGB)\nPerfil XMP/EXPO: Pronto para overclock",
+    "ssd": "Formato: M.2 NVMe 2280\nInterface: PCIe Gen3 ou Gen4\nVelocidade Leitura: 3500MB/s a 7400MB/s\nCapacidade: 500GB / 1TB / 2TB\nDurabilidade: 3D NAND",
+    
+    // === PRODUTOS GERAIS (Fallback) ===
+    "iphone": "Marca: Apple\nTela: Super Retina XDR\nProcessador: A15/A16/A17 Bionic\nSistema: iOS\nFace ID: Sim\nResistência: IP68 (Água e Poeira)",
+    "celular": "Sistema: Android ou iOS\nConectividade: 5G\nCâmeras: Múltiplas lentes\nBateria: Longa duração\nCarregamento: Rápido",
+    "geladeira": "Tipo: Frost Free\nTecnologia: Inverter (Econômica)\nPrateleiras: Vidro Temperado\nIluminação: LED\nGarantia Motor: 10 anos (Alguns modelos)",
+    "generic": "Produto: Original\nEnvio: Imediato\nGarantia: Fabricante\nNota Fiscal: Sim\nEstado: Novo e Lacrado",
+	// === HP (Essenciais / Trabalho) ===
+    "hp 256 g9": "Marca: HP\nModelo: 256 G9\nProcessador: Intel Core i3 ou i5 (12ª/13ª Gen)\nMemória RAM: 8GB ou 16GB DDR4\nArmazenamento: SSD 256GB / 512GB NVMe\nTela: 15.6\" HD ou Full HD (Antirreflexo)\nConectividade: Wi-Fi 6 + Bluetooth 5.2\nPortas: USB-C SuperSpeed, HDMI, RJ-45\nDesign: Mais leve e fino que a geração anterior",
+    
+    "hp g8": "Marca: HP\nModelo: 250/256 G8\nProcessador: Intel Core i3 / i5 (10ª ou 11ª Gen)\nMemória RAM: 4GB / 8GB\nArmazenamento: SSD PCIe NVMe\nTela: 15.6\" LCD com bordas finas\nTeclado: Numérico integrado\nCâmera: HP TrueVision HD\nBateria: HP Long Life",
+
+    // === HP (Gamer) ===
+    "hp victus": "Marca: HP\nModelo: Victus 15 Gaming\nCategoria: Gamer\nProcessador: Intel Core i5-13420H ou i7\nPlaca de Vídeo: NVIDIA RTX 3050 ou 4050\nTela: 15.6\" Full HD 144Hz (9ms)\nÁudio: B&O (Bang & Olufsen)\nResfriamento: Fluxo de ar aprimorado (Traseira aberta)\nHub: OMEN Gaming Hub integrado",
+
+    // === HP (Intermediário / Premium) ===
+    "hp pavilion": "Marca: HP\nModelo: Pavilion 15\nProcessador: Intel Core i5 / i7 ou AMD Ryzen 7\nAcabamento: Tampa em alumínio (alguns modelos)\nÁudio: Duplo alto-falante B&O\nTela: IPS Full HD Micro-borda\nCarregamento: HP Fast Charge (50% em 45min)\nUso: Edição leve e Multitarefa",
+    
+    "hp dragonfly": "Marca: HP\nModelo: Dragonfly ou EliteBook\nCategoria: Corporativo Premium\nPeso: Ultraleve (menos de 1kg)\nProcessador: Intel vPro (Segurança empresarial)\nTela: 13.5\" WUXGA+ Sure View (Privacidade)\nConexão: 5G ou 4G LTE (Opcional)\nSegurança: HP Wolf Security"
+};
 
         // ============================================================
         // 2. DATABASE DE REVIEWS (SEPARADA E HUMANIZADA)
         // ============================================================
-        const reviewsDB = {
-            "tech_mobile": [ 
-                { text: "Celular top dms! 😍 A camera de noite fica perfeita. Bateria ta durando o dia todo cmg mexendo direto.", reply: "Arrase nas fotos! 📸" },
-                { text: "Chegou hj, bem antes do prazo. Aparelho lacrado, td certinho. Transferi meus dados e ta rodando liso.", reply: "Segurança é com a gente! 😉" },
-                { text: "Melhor custo beneficio. Carrega mto rapido, em 40 min ja ta 100%.", reply: "" },
-                { text: "Tava com medo de comprar online mas a loja é confiavel. Produto original msm, conferi o imei.", reply: "Obrigado pela confiança!" },
-                { text: "Design mt chique, pessoalmente é mais bonito q na foto. Veio bem embalado.", reply: "" } 
-            ],
-            
-            "fogao_cooktop": [ 
-                { text: "O fogão é lindo! A chama é muito forte 🔥, a agua ferve rapidinho. O forno assa o bolo por igual.", reply: "Sua cozinha ficou mais moderna! 🍰" },
-                { text: "Cooktop top, facil de limpar o vidro, só passar um pano. Instalação foi tranquila.", reply: "" },
-                { text: "As grades de ferro sao pesadas, a panela nao escorrega. Passa mta segurança.", reply: "Segurança na cozinha é tudo!" },
-                { text: "Chegou sem nenhum arranhão, embalagem reforçada. O design dele é mto moderno.", reply: "" },
-                { text: "Amei os botões removiveis, facilita mto a limpeza dps de fazer fritura.", reply: "" }
-            ],
+        // ============================================================
+    // 2. DATABASE DE REVIEWS (ULTIMATE EDITION - 80+ POR CATEGORIA)
+    // ============================================================
+// ============================================================
+    // COPIE DAQUI ATÉ O FINAL DO BLOCO E SUBSTITUA O SEU 'reviewsDB'
+    // ============================================================
+    const reviewsDB = {
+        // === NOTEBOOK GAMER (80+ variações) ===
+        "notebook_gamer": [
+            { text: "MEU DEUS!! 😱 Roda Warzone no ultra lisinho! O resfriamento é absurdo. 🎮🔥", reply: "Setup monstro! 🚀" },
+            { text: "Simplesmente BRUTAL. 🦖 Tela de 144Hz muda a vida. Teclado RGB lindo!", reply: "Vantagem competitiva! 😎" },
+            { text: "Chegou voando! 🚀 Instalei GTA V e Cyberpunk, rodou liso. Construção parruda!", reply: "Máquina pra durar! 💪" },
+            { text: "Galera, podem comprar! Desempenho surreal. Faço live e jogo ao mesmo tempo. ⭐⭐⭐⭐⭐", reply: "Sucesso nas lives! 🎥" },
+            { text: "Custo-benefício imbatível. Áudio alto e imagem de cinema. Apaixonado! 😍", reply: "" },
+            { text: "Rodou Baldur's Gate 3 no talo! Não esquenta a mão. Recomendo demais.", reply: "RPG pede máquina top!" },
+            { text: "O NitroSense/Alienware Command é útil pra controlar ventoinhas. Barulhento no máx, mas gela.", reply: "" },
+            { text: "Saí de um console pra esse note e não me arrependo. Liberdade total.", reply: "Bem-vindo à PC Master Race! 🖥️" },
+            { text: "Placa de vídeo monstra. Renderizo vídeos em metade do tempo.", reply: "" },
+            { text: "Design agressivo, muito gamer. Na mesa fica imponente.", reply: "" },
+            { text: "Veio bem embalado, caixa dentro de caixa. Chegou intacto.", reply: "Logística braba! 📦" },
+            { text: "Upgrade fácil! Já botei mais 16GB de RAM e agora voa.", reply: "" },
+            { text: "Tela IPS com cores vivas, pra ver filme também é show.", reply: "" },
+            { text: "Peguei numa promo relâmpago e valeu cada centavo. Melhor compra!", reply: "Fique de olho nas promos! 😉" },
+            { text: "Roda tudo da atualidade. Elden Ring ficou lindo.", reply: "" },
+            { text: "Teclado macio, boa resposta. Pra digitar trabalho da faculdade serve kkk", reply: "" },
+            { text: "O bichão é pesado, mas entrega desempenho de desktop.", reply: "" },
+            { text: "Zero arrependimentos. O suporte tirou minhas dúvidas.", reply: "" },
+            { text: "Fps cravado no Valorant. Subi de elo por causa dos 144hz! Kkkk", reply: "Hardware faz a diferença! 🏆" },
+            { text: "Acabamento resistente. Dobradiça firme.", reply: "" },
+            { text: "Pra arquiteto que usa Lumion, aguenta o tranco.", reply: "Workstation portátil! 🏗️" },
+            { text: "Chegou em 2 dias. Entrega mais rápida que já vi.", reply: "" },
+            { text: "Instalei Windows 11 e tá voando. SSD muito rápido.", reply: "" },
+            { text: "Webcam ok, quebra galho pro Discord.", reply: "" },
+            { text: "Não trava NADA. 50 abas do Chrome e jogando lolzinho.", reply: "" },
+            { text: "Esquenta embaixo, recomendo base cooler.", reply: "Dica de ouro! ❄️" },
+            { text: "Rodando emulador de tudo nele. Perfeito.", reply: "" },
+            { text: "Touchpad preciso, mas uso mouse gamer.", reply: "" },
+            { text: "Carcaça marca dedo, mas pano resolve.", reply: "" },
+            { text: "Som estéreo decente, ouço passos no jogo.", reply: "" },
+            { text: "Bios fácil de configurar. XMP ativado.", reply: "" },
+            { text: "Paguei boleto segunda, quarta chegou. Loja confiável.", reply: "Agilidade é nosso lema! ⚡" },
+            { text: "Design futurista. Saídas de ar parecem carro esportivo.", reply: "" },
+            { text: "Notebook pra durar 5 anos rodando tudo.", reply: "" },
+            { text: "Tela com brilho forte, jogo em sala iluminada.", reply: "" },
+            { text: "Wifi 6 estável, ping baixo.", reply: "" },
+            { text: "Virei cliente fiel. Pós-venda ajudou com drivers.", reply: "Conte sempre com a gente! 🤝" },
+            { text: "Melhor que meu PC antigo. Tecnologia evoluiu.", reply: "" },
+            { text: "Presente pro filho, ele não sai do quarto kkkk", reply: "Aí sim! 😂" },
+            { text: "Simplesmente SENSACIONAL. Comprem de olhos fechados.", reply: "" },
+            { text: "Rodou Fortnite no Épico a 100fps. Top.", reply: "" },
+            { text: "Construção térmica inteligente, dissipa bem.", reply: "" },
+            { text: "Teclas WASD destacadas, detalhe legal.", reply: "" },
+            { text: "Bateria dura pouco jogando, mas na tomada dobra a força.", reply: "Potência máxima na tomada! ⚡" },
+            { text: "Pra engenharia e jogos nas horas vagas. Perfeito.", reply: "" },
+            { text: "Tela com tempo de resposta baixo, sem ghosting.", reply: "" },
+            { text: "Veio com Linux, mudei pro Windows fácil.", reply: "" },
+            { text: "Áudio DTS X imersivo.", reply: "" },
+            { text: "Touchpad suporta gestos.", reply: "" },
+            { text: "Fonte de energia grande, mas carrega rápido.", reply: "" },
+            { text: "Sem leitor de CD, ficou mais fino e moderno.", reply: "" },
+            { text: "Portas USB 3.2 transferem rápido.", reply: "" },
+            { text: "HDMI 2.1 liga em TV 4K 120Hz. Aprovei.", reply: "" },
+            { text: "Abre com uma mão só, boa construção.", reply: "" },
+            { text: "Microfone cancela ruído, amigos me ouvem bem.", reply: "" },
+            { text: "Instalei mais um SSD M.2, tem slot sobrando.", reply: "" },
+            { text: "Acabamento fosco evita reflexos.", reply: "" },
+            { text: "Melhor notebook que já tive.", reply: "" },
+            { text: "Roda Minecraft com shaders pesados sem lag.", reply: "Quadrados em HD! 🟩" },
+            { text: "Programo em Python e C++, compila na hora.", reply: "" },
+            { text: "Iluminação do teclado tem níveis, bom pro escuro.", reply: "" },
+            { text: "Achei que esquentaria mais, mas coolers são eficientes.", reply: "" },
+            { text: "Design discreto se desligar os LEDs, levo pro trabalho.", reply: "" },
+            { text: "Botão turbo dedicado ajuda quando pesa.", reply: "" },
+            { text: "Cheiro de notebook novo é a melhor coisa kkkk", reply: "Sensação única! 📦" },
+            { text: "Loja enviou brindes, achei fofo.", reply: "" },
+            { text: "Roda Red Dead Redemption 2 lindo.", reply: "" },
+            { text: "Não me arrependo de pagar mais pela RTX.", reply: "RTX on! ✨" },
+            { text: "Notebook parrudo, aguenta render 3D.", reply: "" },
+            { text: "Entrega no sábado salvou o fim de semana.", reply: "" },
+            { text: "Veio com Game Pass. Já baixei tudo.", reply: "" },
+            { text: "Placa de rede prioriza jogo, ping estável.", reply: "" },
+            { text: "Dobradiça parece durável.", reply: "" },
+            { text: "Tela quase sem bordas, imersão total.", reply: "" },
+            { text: "Recomendo pra quem quer performance sem desktop.", reply: "" },
+            { text: "Superou expectativas. Nota 10.", reply: "" },
+            { text: "Jogando Hogwarts Legacy no alto. Mágico!", reply: "Avada Kedavra no lag! 🪄" },
+            { text: "Som surpreendeu, graves presentes.", reply: "" },
+            { text: "Top dms, comprem sem medo.", reply: "" }
+        ],
 
-            "geladeira": [ 
-                { text: "Geladeira giganteeee! Cabe a compra do mês de boa. Gela muito rapido, cerveja fica trincando 🍺", reply: "Espaço não vai faltar! ❄️" },
-                { text: "Muito silenciosa, nem parece q ta ligada. O motor inverter economiza mto luz.", reply: "Eficiência e silêncio!" },
-                { text: "O freezer é enorme, cabe pote de sorvete e carne pra semana toda. Adorei.", reply: "" },
-                { text: "Design moderno, deixou minha cozinha com cara de rica kkk Chegou no prazo.", reply: "" },
-                { text: "Prateleiras de vidro sao resistentes. O painel touch na porta é mto chique.", reply: "" }
-            ],
+        // === NOTEBOOK OFFICE/TRABALHO (80+ variações) ===
+        "notebook_office": [
+            { text: "Liga em 3 SEGUNDOS! ⚡ SSD NVMe é vida. Produtividade mil. 💼", reply: "Velocidade é nossa meta! 🚀" },
+            { text: "Levinho, levo na mochila e nem sinto. Bateria dura o dia todo.", reply: "Mobilidade total! 🎒" },
+            { text: "Tela Full HD nítida, ótimo pra ler e ver vídeos. Não cansa.", reply: "" },
+            { text: "Teclado macio e silencioso. Digito o dia todo sem dor.", reply: "" },
+            { text: "Design elegante, bordas finas. Parece muito mais caro.", reply: "" },
+            { text: "Ótimo pra Home Office e EAD. Câmera e mic bons.", reply: "Trabalhe melhor! 🏠" },
+            { text: "Não trava com várias abas e Excel abertos. RAM suficiente.", reply: "" },
+            { text: "Chegou super rápido e bem embalado. Loja de parabéns.", reply: "" },
+            { text: "Instalação do Windows foi automática e fácil.", reply: "" },
+            { text: "Acabamento prateado/cinza é lindo e não suja.", reply: "" },
+            { text: "Wi-Fi pega bem longe do roteador. Estável.", reply: "" },
+            { text: "Bluetooth conecta fone e mouse na hora.", reply: "" },
+            { text: "Preço justo pelo que oferece. Custo benefício.", reply: "" },
+            { text: "Carregador compacto, parece de celular.", reply: "" },
+            { text: "Som decente pra reuniões e filmes.", reply: "" },
+            { text: "Touchpad grande e responsivo.", reply: "" },
+            { text: "Não esquenta no colo. Ventilação boa.", reply: "" },
+            { text: "Tampa abre suave. Construção boa.", reply: "" },
+            { text: "Ideal para estudantes e escritório.", reply: "" },
+            { text: "Roda Photoshop leve e Canva tranquilo.", reply: "" },
+            { text: "Tem HDMI e USB suficientes.", reply: "" },
+            { text: "Garantia funcionou quando precisei (dúvida de software).", reply: "" },
+            { text: "Veio com antivírus grátis. Bônus.", reply: "" },
+            { text: "Memória expansível é um diferencial.", reply: "" },
+            { text: "Tela antirreflexo ajuda muito.", reply: "" },
+            { text: "Comprei pra minha mãe e ela adorou a facilidade.", reply: "" },
+            { text: "Melhor que meu PC antigo de torre.", reply: "" },
+            { text: "Entrega no fim de semana salvou.", reply: "" },
+            { text: "Teclado numérico ajuda nas contas.", reply: "" },
+            { text: "Privacidade na webcam é essencial.", reply: "" },
+            { text: "Muito bonito pessoalmente.", reply: "" },
+            { text: "Nota 10.", reply: "" },
+            { text: "Recomendo.", reply: "" },
+            { text: "Excelente.", reply: "" },
+            { text: "Muito bom.", reply: "" },
+            { text: "Adorei.", reply: "" },
+            { text: "Perfeito.", reply: "" },
+            { text: "Satisfeito.", reply: "" },
+            { text: "Show.", reply: "" },
+            { text: "Top.", reply: "" },
+            { text: "A cor é linda.", reply: "" },
+            { text: "Não faz barulho.", reply: "" },
+            { text: "Tela brilhante.", reply: "" },
+            { text: "Mousepad preciso.", reply: "" },
+            { text: "Teclas confortáveis.", reply: "" },
+            { text: "Bateria surpreendeu.", reply: "" },
+            { text: "Carrega rápido.", reply: "" },
+            { text: "Leve e fino.", reply: "" },
+            { text: "Cabe na bolsa.", reply: "" },
+            { text: "Roda tudo que preciso.", reply: "" },
+            { text: "Não engasga.", reply: "" },
+            { text: "Áudio limpo.", reply: "" },
+            { text: "Microfone capta bem.", reply: "" },
+            { text: "Webcam clara.", reply: "" },
+            { text: "Conexões firmes.", reply: "" },
+            { text: "Acabamento premium.", reply: "" },
+            { text: "Ótima compra.", reply: "" },
+            { text: "Vendedor atencioso.", reply: "" },
+            { text: "Nota fiscal OK.", reply: "" },
+            { text: "Garantia OK.", reply: "" },
+            { text: "Windows original.", reply: "" },
+            { text: "Sem defeitos.", reply: "" },
+            { text: "Amei o design.", reply: "" },
+            { text: "Super rápido.", reply: "" },
+            { text: "Não esquenta.", reply: "" },
+            { text: "Valeu o preço.", reply: "" },
+            { text: "Chegou antes.", reply: "" },
+            { text: "Bem embalado.", reply: "" },
+            { text: "Fácil de usar.", reply: "" },
+            { text: "Robusto.", reply: "" },
+            { text: "Durável.", reply: "" },
+            { text: "Silencioso.", reply: "" },
+            { text: "Tela grande.", reply: "" },
+            { text: "Cores vivas.", reply: "" },
+            { text: "Resolução boa.", reply: "" },
+            { text: "Espaço bom.", reply: "" },
+            { text: "RAM boa.", reply: "" },
+            { text: "Processador bom.", reply: "" },
+            { text: "Marca confiável.", reply: "" },
+            { text: "Suporte bom.", reply: "" }
+        ],
 
-            "cozinha_eletro": [ 
-                { text: "Gente, essa Air Fryer é vida! Faço tudo sem oleo e fica crocante. Nao vivo mais sem 🍟", reply: "Saúde e sabor! 🥰" },
-                { text: "Muito potente, tritura até gelo. O copo é resistente, caiu no chão e nao quebrou.", reply: "" },
-                { text: "Chegou certinho, voltagem correta. Linda na bancada, todo mundo elogia.", reply: "" },
-                { text: "Batedeira top, bate clara em neve em segundos. Bowl grande.", reply: "" },
-                { text: "Café sai quentinho. Entrega a jato, comprei num dia chegou no outro.", reply: "" }
-            ],
+        // === APPLE ECOSYSTEM (80+ variações) ===
+        "apple_ecosystem": [
+            { text: "SURREAL!! Bateria dura 2 DIAS! 🤯 Chip M1/M2 é bruxaria. ❤️🍎", reply: "Magia Apple! ✨" },
+            { text: "Investimento pra vida. Acabamento impecável. Integração perfeita! 📱💻", reply: "Ecossistema único! 🍏" },
+            { text: "Edito 4K em silêncio. Caro, mas se paga trabalhando. 🎬💰", reply: "Ferramenta Pro! 🛠️" },
+            { text: "Tela Retina absurda. Lacrado, original. Loja de confiança! 🔒✅", reply: "" },
+            { text: "Sonho realizado! ✨ Leve e forte. Não volto pro Windows! 😂", reply: "" },
+            { text: "Trackpad sem concorrente. Nem uso mouse.", reply: "" },
+            { text: "Som estéreo parece caixa bluetooth. Qualidade absurda.", reply: "" },
+            { text: "macOS é fluido, não trava nunca.", reply: "" },
+            { text: "Abro a tampa e já tá ligado. Instantâneo.", reply: "" },
+            { text: "Lindo demais. Onde chego todos olham. Status puro.", reply: "Design icônico! 💎" },
+            { text: "Touch ID facilita desbloquear e pagar.", reply: "" },
+            { text: "Magic Keyboard confortável, digitar é um prazer.", reply: "" },
+            { text: "Câmera FaceTime ótima, fico nítida nas calls.", reply: "" },
+            { text: "iPad como segunda tela (Sidecar) sem fios. Mágico.", reply: "" },
+            { text: "MagSafe salvou meu note de cair.", reply: "" },
+            { text: "Valor de revenda alto, é investimento.", reply: "Pensamento inteligente! 💡" },
+            { text: "Roda liso programas de arquitetura.", reply: "" },
+            { text: "Cor Estelar é maravilhosa pessoalmente.", reply: "" },
+            { text: "AirDrop é a melhor coisa. Passo arquivos na hora.", reply: "" },
+            { text: "Bateria infinita. Esqueço o carregador.", reply: "" },
+            { text: "Para programadores é a melhor máquina.", reply: "" },
+            { text: "Tela True Tone descansa os olhos.", reply: "" },
+            { text: "Chegou lacradinho na caixa original.", reply: "" },
+            { text: "Fiquei com medo, mas chegou super rápido.", reply: "" },
+            { text: "O chip é ainda mais rápido. Renderizo em segundos.", reply: "" },
+            { text: "Som espacial Dolby Atmos incrível.", reply: "" },
+            { text: "Construção em alumínio monstra.", reply: "" },
+            { text: "Não esquenta nada. Uso na cama tranquilo.", reply: "" },
+            { text: "GarageBand/Logic Pro roda liso pra músicos.", reply: "" },
+            { text: "Ecossistema vicia. Agora quero o Watch kkkk", reply: "Caminho sem volta! 😂" },
+            { text: "Melhor unboxing da vida.", reply: "" },
+            { text: "Suporte da Apple é o melhor.", reply: "" },
+            { text: "Pesa menos de 1.3kg. Coluna agradece.", reply: "" },
+            { text: "Abre com um dedo. Balanceamento perfeito.", reply: "" },
+            { text: "Microfones de estúdio, nem preciso de mic externo.", reply: "" },
+            { text: "Espetacular. Sem palavras.", reply: "" },
+            { text: "Modelo de entrada já sobra desempenho.", reply: "" },
+            { text: "Apple é Apple né pai. Esquece.", reply: "🍎🚀" },
+            { text: "Melhor laptop do mundo.", reply: "" },
+            { text: "Apaixonada pelo meu Mac novo! 😍", reply: "" },
+            { text: "Spotlight acha qualquer arquivo em milésimos.", reply: "" },
+            { text: "Não precisa de antivírus, sistema seguro.", reply: "" },
+            { text: "Gestos no trackpad agilizam meu trabalho em 50%.", reply: "" },
+            { text: "Tela brilha muito, uso no parque de boa.", reply: "" },
+            { text: "Carregador compacto e cabo trançado resistente.", reply: "" },
+            { text: "Migrei do Windows e foi fácil me adaptar.", reply: "" },
+            { text: "Roda pacote Adobe liso liso.", reply: "" },
+            { text: "Valeu a pena juntar dinheiro pra comprar.", reply: "Conquista merecida! 👏" },
+            { text: "A caixa veio protegida com muito plástico bolha.", reply: "" },
+            { text: "Nota fiscal emitida corretamente.", reply: "" },
+            { text: "O som tem graves que tremem a mesa. Impressionante.", reply: "" },
+            { text: "Não escuto barulho nenhum, paz total.", reply: "" },
+            { text: "Design atemporal, daqui 5 anos ainda vai ser lindo.", reply: "" },
+            { text: "Para estudantes de medicina é o padrão.", reply: "" },
+            { text: "Consigo atender ligações do iPhone no Mac. Prático.", reply: "" },
+            { text: "Copio no celular e colo no Mac. Universal Clipboard.", reply: "Funcionalidade top! 📋" },
+            { text: "Duração da bateria é o maior diferencial.", reply: "" },
+            { text: "Simplesmente funciona. Sem dor de cabeça.", reply: "" },
+            { text: "Comprei pra durar 10 anos.", reply: "" },
+            { text: "Recomendo a loja, enviaram rápido.", reply: "" },
+            { text: "Produto premium de verdade.", reply: "" },
+            { text: "Minha produtividade aumentou muito.", reply: "" },
+            { text: "O notch na tela não atrapalha em nada.", reply: "" },
+            { text: "Top de linha. Sem defeitos.", reply: "" },
+            { text: "Amei, amei, amei! ❤️", reply: "" },
+            { text: "Vale cada centavo.", reply: "" },
+            { text: "Recomendo muito.", reply: "" },
+            { text: "Entrega top.", reply: "" },
+            { text: "Loja segura.", reply: "" },
+            { text: "Produto original.", reply: "" },
+            { text: "Lacrado.", reply: "" },
+            { text: "Perfeito.", reply: "" },
+            { text: "Maravilhoso.", reply: "" },
+            { text: "Incrível.", reply: "" },
+            { text: "Rápido.", reply: "" },
+            { text: "Lindo.", reply: "" },
+            { text: "Leve.", reply: "" },
+            { text: "Potente.", reply: "" },
+            { text: "Silencioso.", reply: "" },
+            { text: "Tela top.", reply: "" }
+        ],
 
-            "moveis": [
-                { text: "Sofá nuvem de tao confortavel! O tecido é macio. Chegou antes do prazo.", reply: "Conforto total! 🛋️" },
-                { text: "Cadeira salvou minhas costas, passo o dia sentado e nao sinto dor.", reply: "Ergonomia é saúde!" },
-                { text: "Facil de montar, veio com a chavinha. Cor igual da foto.", reply: "" },
-                { text: "Mesa firme, nao balança. Custo beneficio excelente.", reply: "" },
-                { text: "Guarda roupa espaçoso, gavetas correm bem. Lindo dms.", reply: "" }
-            ],
+        // === SMART TVS (80+ variações) ===
+        "tv_smart": [
+            { text: "Imagem de CINEMA! 🎬 4K absurdo. Som alto. Amei! 😍", reply: "Sua sala virou um cinema VIP! 🍿" },
+            { text: "Sistema muito rápido, abre Netflix num piscar. Não trava! 🚀", reply: "" },
+            { text: "Bordas infinitas deixaram a sala chique. Instalação fácil. ✅", reply: "" },
+            { text: "Controle por voz funciona mesmo! Alexa responde rápido.", reply: "Tecnologia de ponta! 🗣️" },
+            { text: "Chegou antes do prazo, caixa super protegida. Sucesso. ⭐⭐⭐⭐⭐", reply: "" },
+            { text: "Cores vivas demais! Futebol nela é outra experiência.", reply: "Gol de placa! ⚽" },
+            { text: "Melhor custo benefício. TV gigante, preço pequeno.", reply: "" },
+            { text: "PS5 rodou liso em 60fps/120hz. Modo jogo top. 🎮", reply: "Setup Gamer na TV!" },
+            { text: "O preto é preto de verdade. Contraste infinito.", reply: "" },
+            { text: "Som estéreo envolvente, parece soundbar.", reply: "" },
+            { text: "Tamanho perfeito pra sala. Nem grande, nem pequena.", reply: "" },
+            { text: "Wi-Fi conecta rápido, não cai streaming 4K.", reply: "" },
+            { text: "Controle remoto solar é genial.", reply: "" },
+            { text: "Espelhamento do celular instantâneo.", reply: "" },
+            { text: "Design slim, rente na parede. Parece quadro.", reply: "" },
+            { text: "Paguei preço ótimo na promo. Loja confiável.", reply: "Preço justo é aqui! 💲" },
+            { text: "Veio com apps instalados (Disney, Prime).", reply: "" },
+            { text: "Resolução cristalina. Reassistindo filmes.", reply: "" },
+            { text: "Suporte de mesa firme.", reply: "" },
+            { text: "Processador melhora até TV aberta.", reply: "" },
+            { text: "Projetor com brilho forte, dá pra usar luz acesa.", reply: "" },
+            { text: "Fácil configurar, passo a passo na tela.", reply: "" },
+            { text: "Entrega subiu escada. Nota 10.", reply: "" },
+            { text: "Garantia estendida valeu a pena.", reply: "" },
+            { text: "Cores naturais, nada artificial.", reply: "" },
+            { text: "Bluetooth conecta fone pra assistir de madrugada.", reply: "Dica de ouro! 🎧" },
+            { text: "Menu intuitivo, mãe aprendeu rápido.", reply: "" },
+            { text: "Vale o investimento. TV pra anos.", reply: "" },
+            { text: "Caixa gigante kkkk mas produto leve.", reply: "" },
+            { text: "Muito satisfeito. Imagem 4K real.", reply: "" },
+            { text: "Pixel queimado? Nenhum! Perfeita.", reply: "" },
+            { text: "HDR nas cenas escuras é ótimo.", reply: "" },
+            { text: "Comprei pro quarto, não saio da cama.", reply: "Cuidado com a maratona! 😂" },
+            { text: "Ângulo de visão bom.", reply: "" },
+            { text: "Acabamento premium.", reply: "" },
+            { text: "Sistema fluido.", reply: "" },
+            { text: "Canais gratuitos via internet bônus legal.", reply: "" },
+            { text: "Manual bem explicado.", reply: "" },
+            { text: "Cabo força tamanho bom.", reply: "" },
+            { text: "Nota fiscal chegou no email.", reply: "" },
+            { text: "Sensacional. Recomendo.", reply: "" },
+            { text: "Brilho automático conforto visual.", reply: "" },
+            { text: "Modo Filmmaker top.", reply: "" },
+            { text: "Borda invisível chique.", reply: "" },
+            { text: "Top das galáxias.", reply: "🚀" },
+            { text: "Comprei suporte articulado, ficou show.", reply: "" },
+            { text: "Acessibilidade ajudou meu avô.", reply: "Inclusão importa! 💙" },
+            { text: "Melhor que cinema.", reply: "" },
+            { text: "Melhor escolha.", reply: "" },
+            { text: "HDMI suficientes.", reply: "" },
+            { text: "USB roda filmes direto.", reply: "" },
+            { text: "Show de bola.", reply: "" },
+            { text: "TV incrível.", reply: "" },
+            { text: "Imagem linda.", reply: "" },
+            { text: "Som potente.", reply: "" },
+            { text: "Controle bom.", reply: "" },
+            { text: "Sistema bom.", reply: "" },
+            { text: "Apps rápidos.", reply: "" },
+            { text: "Sem travamentos.", reply: "" },
+            { text: "Entrega rápida.", reply: "" },
+            { text: "Bem embalado.", reply: "" },
+            { text: "Fácil montar.", reply: "" },
+            { text: "Pés firmes.", reply: "" },
+            { text: "Tela fina.", reply: "" },
+            { text: "Cores reais.", reply: "" },
+            { text: "Preto profundo.", reply: "" },
+            { text: "Brilho alto.", reply: "" },
+            { text: "Contraste bom.", reply: "" },
+            { text: "Nitidez total.", reply: "" },
+            { text: "Sem reflexo.", reply: "" },
+            { text: "Recomendo loja.", reply: "" },
+            { text: "Vendedor top.", reply: "" },
+            { text: "Compra segura.", reply: "" },
+            { text: "Nota 1000.", reply: "" },
+            { text: "Adorei.", reply: "" },
+            { text: "Amei.", reply: "" },
+            { text: "Maravilha.", reply: "" },
+            { text: "Espetáculo.", reply: "" },
+            { text: "Top.", reply: "" },
+            { text: "Show.", reply: "" }
+        ],
 
-            "generico": [
-                { text: "Chegou super rapido aqui no RJ. Produto de qualidade, igual no anuncio. 👍", reply: "Logística vapt-vupt! 🚀" },
-                { text: "Gostei bastante! Tive duvida no rastreio e o suporte atendeu super bem.", reply: "Estamos à disposição!" },
-                { text: "Pelo preço vale mto a pena. Acabamento bom. Veio bem embalado.", reply: "" },
-                { text: "Fiquei com medo mas me surpreendi. Podem comprar sem medo, é confiavel.", reply: "Obrigado pela preferência! ❤️" },
-                { text: "Produto top, chegou tudo certinho. Recomendo.", reply: "" }
-            ]
-        };
+        // === GAMES & CONSOLES (80+ variações) ===
+        "games_console": [
+            { text: "Gráficos de outro mundo! 🌍 SSD carrega em 2s. Adeus loading! 🚀", reply: "Bem-vindo à nova geração! 🎮" },
+            { text: "Chegou lacrado. Controle com vibração imersiva. Adorei!", reply: "" },
+            { text: "Melhor presente. Biblioteca gigante. Diversão garantida.", reply: "" },
+            { text: "Silencioso, não esquenta. Roda 4K liso. Monstro!", reply: "Performance brutal! 💪" },
+            { text: "Entrega relâmpago, comprei terça, chegou quinta.", reply: "" },
+            { text: "Game Pass é vida! Jogos infinitos. Custo benefício.", reply: "" },
+            { text: "Portátil incrível. Jogo em qualquer lugar. Tela OLED linda.", reply: "Jogue em qualquer lugar! ✈️" },
+            { text: "Retrocompatibilidade rodou jogos antigos melhorados.", reply: "" },
+            { text: "Design futurista, lindo na estante.", reply: "" },
+            { text: "Controle ergonômico, não cansa mão.", reply: "" },
+            { text: "Ray Tracing iluminação realista demais.", reply: "RTX On! ✨" },
+            { text: "Bundle com jogo valeu a pena.", reply: "" },
+            { text: "Suporte 120Hz fluido na TV.", reply: "" },
+            { text: "Interface rápida, loja fácil.", reply: "" },
+            { text: "Não faz barulho de avião kkkk", reply: "" },
+            { text: "Exclusivos são os melhores.", reply: "" },
+            { text: "Armazenamento expansível fácil.", reply: "" },
+            { text: "Jogar em 4K HDR experiência religiosa.", reply: "" },
+            { text: "Bateria controle dura bastante.", reply: "" },
+            { text: "Cabo HDMI 2.1 na caixa. Ponto positivo.", reply: "" },
+            { text: "Embalagem discreta, ninguém viu.", reply: "Segurança na entrega! 📦" },
+            { text: "Online estável, sem lag.", reply: "" },
+            { text: "Dock funciona bem na TV.", reply: "" },
+            { text: "Joy-cons sensíveis e precisos.", reply: "" },
+            { text: "Melhor pra jogar em família.", reply: "Diversão pra todos! 👨‍👩‍👧‍👦" },
+            { text: "Gatilhos adaptáveis surreais.", reply: "" },
+            { text: "Quick Resume é bruxaria.", reply: "" },
+            { text: "Compacto, cabe em qualquer lugar.", reply: "" },
+            { text: "Preço caiu, aproveitei.", reply: "" },
+            { text: "Nota fiscal rápido.", reply: "" },
+            { text: "Produto nacional garantia oficial.", reply: "" },
+            { text: "Cor branca linda.", reply: "" },
+            { text: "Atualização rápida.", reply: "" },
+            { text: "Chat voz claro.", reply: "" },
+            { text: "Headset junto imersão triplicou.", reply: "" },
+            { text: "Indies rodam bem.", reply: "" },
+            { text: "Não esquenta jogando horas.", reply: "" },
+            { text: "Carregamento muito rápido kkk", reply: "" },
+            { text: "Loja confiável, serial batendo.", reply: "" },
+            { text: "Muito satisfeito.", reply: "" },
+            { text: "Amei.", reply: "" },
+            { text: "Top.", reply: "" },
+            { text: "Recomendo.", reply: "" },
+            { text: "Console top.", reply: "" },
+            { text: "Jogos lindos.", reply: "" },
+            { text: "Sem travamento.", reply: "" },
+            { text: "Download rápido.", reply: "" },
+            { text: "Wifi bom.", reply: "" },
+            { text: "Controle bom.", reply: "" },
+            { text: "Vibração boa.", reply: "" },
+            { text: "Botões firmes.", reply: "" },
+            { text: "Analógicos bons.", reply: "" },
+            { text: "Resolução top.", reply: "" },
+            { text: "FPS alto.", reply: "" },
+            { text: "Sem aquecimento.", reply: "" },
+            { text: "Ventoinha quieta.", reply: "" },
+            { text: "Luzes bonitas.", reply: "" },
+            { text: "Acabamento 10.", reply: "" },
+            { text: "Cabo longo.", reply: "" },
+            { text: "Fácil ligar.", reply: "" },
+            { text: "Conta fácil.", reply: "" },
+            { text: "Login rápido.", reply: "" },
+            { text: "App celular bom.", reply: "" },
+            { text: "Share play legal.", reply: "" },
+            { text: "Captura tela fácil.", reply: "" },
+            { text: "Streamar fácil.", reply: "" },
+            { text: "Vale o preço.", reply: "" },
+            { text: "Barato.", reply: "" },
+            { text: "Promoção.", reply: "" },
+            { text: "Chegou hoje.", reply: "" },
+            { text: "Bem protegido.", reply: "" },
+            { text: "Vendedor 10.", reply: "" },
+            { text: "Suporte 10.", reply: "" },
+            { text: "Garantia 10.", reply: "" },
+            { text: "Feliz demais.", reply: "" },
+            { text: "Sonho.", reply: "" },
+            { text: "Realização.", reply: "" },
+            { text: "Obrigado.", reply: "" },
+            { text: "Parabéns.", reply: "" },
+            { text: "Indico.", reply: "" }
+        ],
+
+        // === GENÉRICO (Fallback Massivo 80+) ===
+        "generico": [
+            { text: "Chegou rapidinho! 👍 Igual anúncio. Recomendo.", reply: "Entrega expressa! 🚀" },
+            { text: "Fiquei com medo mas surpreendi. Loja confiável! ❤️", reply: "Obrigado pela confiança! 🤝" },
+            { text: "Produto top, acabamento primeira. Valeu cada centavo. 👏", reply: "" },
+            { text: "Tudo certo! Lacrado e com nota. Podem comprar. ⭐⭐⭐⭐⭐", reply: "" },
+            { text: "Amei! 😍 Exatamente o que precisava. Vou comprar mais.", reply: "" },
+            { text: "Vendedor atencioso, respondeu dúvidas.", reply: "" },
+            { text: "Postaram no mesmo dia. Eficiência pura.", reply: "" },
+            { text: "Qualidade acima da média. Custo benefício bom.", reply: "" },
+            { text: "Comprem sem medo. Experiência 10/10.", reply: "" },
+            { text: "Veio muito bem protegido. Plástico bolha caprichado.", reply: "" },
+            { text: "Funciona perfeitamente. Zero defeitos.", reply: "" },
+            { text: "Dei de presente e a pessoa adorou. 🎁", reply: "Presentão! 🎉" },
+            { text: "Preço justo e original. Pesquisei bastante.", reply: "" },
+            { text: "Superou minhas expectativas. Muito bom.", reply: "" },
+            { text: "Site fácil de comprar e rastreio funcionou.", reply: "" },
+            { text: "Produto honesto. Faz o que promete.", reply: "" },
+            { text: "Chegou antes do prazo. Felicidade!", reply: "" },
+            { text: "Embalagem discreta e segura.", reply: "" },
+            { text: "Já indiquei pra dois amigos.", reply: "Agradecemos a indicação! 🤩" },
+            { text: "Top top top! Nada a reclamar.", reply: "" },
+            { text: "Primeira compra de muitas. Virei cliente fiel.", reply: "" },
+            { text: "Ótimo atendimento pós-venda.", reply: "" },
+            { text: "Produto conforme a descrição técnica.", reply: "" },
+            { text: "Muito bonito pessoalmente, mais que na foto.", reply: "" },
+            { text: "Simples e eficiente. Gostei.", reply: "" },
+            { text: "Paguei no boleto e aprovou rápido.", reply: "" },
+            { text: "Material resistente. Parece durável.", reply: "" },
+            { text: "Nota 1000. Parabéns à equipe.", reply: "" },
+            { text: "Melhor preço da internet.", reply: "Menor preço garantido! 📉" },
+            { text: "Tudo ok. Sem surpresas negativas.", reply: "" },
+            { text: "Gostei da cor, bem viva.", reply: "" },
+            { text: "Tamanho perfeito pro meu uso.", reply: "" },
+            { text: "Manual em português ajudou muito.", reply: "" },
+            { text: "Marca de confiança, nunca decepciona.", reply: "" },
+            { text: "Resolveu meu problema. Útil demais.", reply: "" },
+            { text: "Entrega no sábado ajudou muito.", reply: "" },
+            { text: "Muito satisfeito com a aquisição.", reply: "" },
+            { text: "Show de bola! 😎", reply: "" },
+            { text: "Podem confiar, chegou tudo certinho.", reply: "" },
+            { text: "Maravilhoso! 🥰", reply: "" },
+            { text: "Excelente.", reply: "" },
+            { text: "Bom demais.", reply: "" },
+            { text: "Legal.", reply: "" },
+            { text: "Curti.", reply: "" },
+            { text: "Aprovado.", reply: "" },
+            { text: "Chegou.", reply: "" },
+            { text: "Rápido.", reply: "" },
+            { text: "Seguro.", reply: "" },
+            { text: "Barato.", reply: "" },
+            { text: "Original.", reply: "" },
+            { text: "Novo.", reply: "" },
+            { text: "Lacrado.", reply: "" },
+            { text: "Nota 10.", reply: "" },
+            { text: "Recomendo.", reply: "" },
+            { text: "Valeu.", reply: "" },
+            { text: "Obrigado.", reply: "" },
+            { text: "Parabéns.", reply: "" },
+            { text: "Show.", reply: "" },
+            { text: "Top.", reply: "" },
+            { text: "Massa.", reply: "" },
+            { text: "Gostei.", reply: "" },
+            { text: "Adorei.", reply: "" },
+            { text: "Amei.", reply: "" },
+            { text: "Perfeito.", reply: "" },
+            { text: "Ótimo.", reply: "" },
+            { text: "Bom.", reply: "" },
+            { text: "Lindo.", reply: "" },
+            { text: "Forte.", reply: "" },
+            { text: "Durável.", reply: "" },
+            { text: "Resistente.", reply: "" },
+            { text: "Bonito.", reply: "" },
+            { text: "Prático.", reply: "" },
+            { text: "Útil.", reply: "" },
+            { text: "Fácil.", reply: "" },
+            { text: "Simples.", reply: "" },
+            { text: "Eficiente.", reply: "" },
+            { text: "Eficaz.", reply: "" },
+            { text: "Qualidade.", reply: "" },
+            { text: "Preço bom.", reply: "" },
+            { text: "Custo x Benefício.", reply: "" }
+			],
+        // === NOTEBOOK GAMER (Foco: FPS, Tela, Refrigeração, Jogos) ===
+        "notebook_gamer": [
+            { text: "MEU DEUS!! 😱 Roda Warzone no ultra lisinho! O resfriamento é absurdo. 🎮🔥", reply: "Setup monstro! 🚀" },
+            { text: "Simplesmente BRUTAL. 🦖 A tela de 144Hz muda a vida, parece hack de tão fluido. O teclado RGB é lindo!", reply: "Vantagem competitiva! 😎" },
+            { text: "Chegou voando! 🚀 Instalei GTA V e Cyberpunk, rodou tudo sem engasgar. Construção parruda!", reply: "Máquina pra durar! 💪" },
+            { text: "Galera, podem comprar! Desempenho surreal. Faço live e jogo ao mesmo tempo. Nota 1000! ⭐⭐⭐⭐⭐", reply: "Sucesso nas lives! 🎥" },
+            { text: "Custo-benefício imbatível. O áudio é alto e a imagem é cinema. Apaixonado! 😍", reply: "" },
+            { text: "Rodou Baldur's Gate 3 no talo! Não esquenta a mão no WASD. Recomendo demais.", reply: "RPG pede máquina top!" },
+            { text: "O NitroSense é muito útil pra controlar as ventoinhas. Barulhento no máximo, mas gela.", reply: "" },
+            { text: "Saí de um console pra esse note e não me arrependo. Liberdade total.", reply: "Bem-vindo à PC Master Race! 🖥️" },
+            { text: "A placa de vídeo é monstra. Renderizo meus vídeos pro YouTube na metade do tempo.", reply: "" },
+            { text: "Design agressivo, muito gamer. Na mesa fica imponente.", reply: "" },
+            { text: "Veio muito bem embalado, caixa dentro de caixa. Chegou intacto.", reply: "Logística braba! 📦" },
+            { text: "Upgrade fácil! Já botei mais 16GB de RAM e agora ninguém me segura.", reply: "" },
+            { text: "Tela IPS com cores vivas, pra ver filme também é show.", reply: "" },
+            { text: "Peguei numa promo relâmpago e valeu cada centavo. Melhor compra do ano!", reply: "Fique de olho nas promos! 😉" },
+            { text: "Roda tudo da atualidade. Elden Ring ficou lindo nessa tela.", reply: "" },
+            { text: "Teclado macio, bom resposta tátil. Pra digitar trabalho da faculdade também serve kkk", reply: "" },
+            { text: "O bichão é pesado, mas entrega desempenho de desktop.", reply: "" },
+            { text: "Zero arrependimentos. O suporte foi atencioso pra tirar dúvida.", reply: "" },
+            { text: "Fps cravado no Valorant. Subi de elo só por causa dos 144hz! Kkkk", reply: "O hardware faz a diferença! 🏆" },
+            { text: "Acabamento de plástico mas parece resistente. Dobradiça firme.", reply: "" },
+            { text: "Pra quem é arquiteto e usa Lumion, esse note aguenta o tranco.", reply: "Workstation portátil! 🏗️" },
+            { text: "Chegou em 2 dias. Entrega mais rápida que já vi.", reply: "" },
+            { text: "Instalei o Windows 11 e tá voando. O SSD é muito rápido.", reply: "" },
+            { text: "A webcam é ok, quebra um galho pro Discord.", reply: "" },
+            { text: "Não trava NADA. Pode abrir 50 abas do Chrome e jogar lolzinho.", reply: "" },
+            { text: "Esquenta um pouco embaixo, recomendo usar uma base cooler.", reply: "Dica de ouro! ❄️" },
+            { text: "Tô rodando emulador de tudo nele. Perfeito.", reply: "" },
+            { text: "Touchpad preciso, mas uso mouse gamer.", reply: "" },
+            { text: "A carcaça marca um pouco de dedo, mas nada que um paninho não resolva.", reply: "" },
+            { text: "Som estéreo decente, dá pra ouvir os passos no jogo.", reply: "" },
+            { text: "Bios fácil de configurar. Ativei o XMP e a memória voou.", reply: "" },
+            { text: "Paguei o boleto na segunda, quarta tava na mão. Loja confiável.", reply: "Agilidade é nosso lema! ⚡" },
+            { text: "Design futurista. As saídas de ar parecem de carro esportivo.", reply: "" },
+            { text: "Notebook pra durar uns 5 anos fácil rodando tudo.", reply: "" },
+            { text: "Tela com brilho forte, dá pra jogar em sala iluminada.", reply: "" },
+            { text: "Wifi 6 dele é muito estável, ping baixo nos jogos online.", reply: "" },
+            { text: "Virei cliente fiel. O pós-venda me ajudou a instalar os drivers.", reply: "Conte sempre com a gente! 🤝" },
+            { text: "Melhor que meu PC antigo de torre. Tecnologia evoluiu demais.", reply: "" },
+            { text: "Presente pro meu filho, ele não sai mais do quarto kkkk", reply: "Aí sim! 😂" },
+            { text: "Simplesmente SENSACIONAL. Podem comprar de olhos fechados.", reply: "" },
+            { text: "Rodou Fortnite no Epico a 100fps. Top demais.", reply: "" },
+            { text: "A construção térmica dele é inteligente, dissipa bem o calor.", reply: "" },
+            { text: "Teclas WASD destacadas, detalhe legal.", reply: "" },
+            { text: "Bateria dura umas 2h jogando, mas na tomada o desempenho dobra.", reply: "Na tomada é potência máxima! ⚡" },
+            { text: "Comprei pra trabalho pesado de engenharia e nas horas vagas jogo. Perfeito.", reply: "" },
+            { text: "A tela tem um tempo de resposta baixíssimo, sem ghosting.", reply: "" },
+            { text: "Veio com Linux mas mudei pro Windows fácil.", reply: "" },
+            { text: "O áudio DTS X é muito imersivo.", reply: "" },
+            { text: "Touchpad suporta gestos multi-toque.", reply: "" },
+            { text: "A fonte de energia é grande, mas carrega rápido.", reply: "" },
+            { text: "Não tem leitor de CD (quem usa isso hj em dia? kkk), ficou mais fino.", reply: "" },
+            { text: "Portas USB 3.2 transferem arquivos na velocidade da luz.", reply: "" },
+            { text: "HDMI 2.1 permite ligar em TV 4K 120Hz. Testei e aprovei.", reply: "" },
+            { text: "A tampa abre com uma mão só, sinal de boa construção.", reply: "" },
+            { text: "Microfone com cancelamento de ruído, meus amigos me ouvem bem no jogo.", reply: "" },
+            { text: "Instalei mais um SSD M.2, tem slot sobrando. Espaço infinito.", reply: "" },
+            { text: "O acabamento fosco evita reflexos na tela.", reply: "" },
+            { text: "Melhor notebook que já tive. A marca caprichou.", reply: "" },
+            { text: "Roda Minecraft com shaders pesados sem lag.", reply: "Quadrados em alta definição! 🟩" },
+            { text: "Programo em Python e C++ nele, compila instantaneamente.", reply: "" },
+            { text: "A iluminação do teclado tem vários níveis, bom pra jogar no escuro.", reply: "" },
+            { text: "Achei que ia esquentar mais, mas o sistema de coolers é eficiente.", reply: "" },
+            { text: "Design discreto o suficiente pra levar pro escritório, se desligar os LEDs.", reply: "" },
+            { text: "Botão turbo dedicado ajuda quando o jogo pesa.", reply: "" },
+            { text: "Cheiro de notebook novo é a melhor coisa do mundo kkkk", reply: "Sensação única! 📦" },
+            { text: "Loja enviou brindes (mousepad), achei fofo.", reply: "" },
+            { text: "Roda Red Dead Redemption 2 com gráficos lindos.", reply: "" },
+            { text: "Não me arrependo de ter pago um pouco mais pela versão com RTX.", reply: "RTX on! ✨" },
+            { text: "Notebook parrudo, aguenta o tranco de render 3D.", reply: "" },
+            { text: "A entrega foi feita no sábado, salvou meu fim de semana.", reply: "" },
+            { text: "Veio com 1 mês de Game Pass. Já baixei tudo.", reply: "" },
+            { text: "Placa de rede Killer prioriza o jogo, ping fica estável.", reply: "" },
+            { text: "A dobradiça parece ser muito durável.", reply: "" },
+            { text: "Tela quase sem bordas, imersão total.", reply: "" },
+            { text: "Recomendo pra quem quer performance sem montar um desktop.", reply: "" },
+            { text: "Superou minhas expectativas. Nota 10.", reply: "" },
+            { text: "Tô jogando Hogwarts Legacy no alto. Mágico!", reply: "Avada Kedavra no lag! 🪄" },
+            { text: "Sistema de som surpreendeu, graves presentes.", reply: "" },
+            { text: "Top dms, comprem sem medo.", reply: "" }
+        ],
+
+        // === NOTEBOOK OFFICE (Foco: Produtividade, Bateria, Tela, Leveza) ===
+        "notebook_office": [
+            { text: "Liga em 3 SEGUNDOS! ⚡ Nunca mais passo raiva. SSD faz milagre. 💼", reply: "Produtividade turbo! 🚀" },
+            { text: "Salvou minha faculdade! 😍 Leve, cabe na bolsa e bateria dura a aula toda. 📚✨", reply: "Sucesso nos estudos! 🎓" },
+            { text: "Tela nítida, não cansa a vista. Design elegante, todos elogiaram. 💸✅", reply: "" },
+            { text: "Chegou bem embalado! 🎁 Configurei rápido. Câmera ótima pro Zoom.", reply: "Cuidado total no envio! 📦" },
+            { text: "Upgrade de vida! Rápido, bonito e silencioso. Feliz demais! ❤️", reply: "" },
+            { text: "A cor prata é muito chique. Parece notebook de rico kkkk", reply: "" },
+            { text: "Uso pra programar e aguenta bem. 16GB faz diferença.", reply: "Dev approve! 👨‍💻" },
+            { text: "Touchpad enorme e responsivo. Nem uso mouse.", reply: "" },
+            { text: "Bateria durou 7 horas com Word e Spotify. Excelente.", reply: "Autonomia top! 🔋" },
+            { text: "Não faz barulho nenhum. Ventoinha silenciosa.", reply: "" },
+            { text: "Tela antirreflexo ajuda perto de janela.", reply: "" },
+            { text: "Comprei pra minha mãe, ela amou a rapidez.", reply: "Presentão! 🎁" },
+            { text: "Material de qualidade, não parece plástico barato.", reply: "" },
+            { text: "Tem HDMI pra ligar no projetor. Ótimo pra reuniões.", reply: "" },
+            { text: "Som alto e claro pra ver filmes.", reply: "" },
+            { text: "Teclado numérico ajuda muito no Excel. Nota 10.", reply: "Contadores piram! 🔢" },
+            { text: "Leveza impressionante. Minha coluna agradece.", reply: "" },
+            { text: "Sistema já veio instalado, só loguei e pronto.", reply: "" },
+            { text: "Roda Photoshop leve tranquilo.", reply: "" },
+            { text: "Leitor de digital muito rápido. Segurança top.", reply: "" },
+            { text: "Entrega muito mais que os concorrentes pelo preço.", reply: "" },
+            { text: "Comprei dois pra empresa, funcionários voando agora.", reply: "Investimento certo! 📈" },
+            { text: "Webcam com tampa de privacidade, genial.", reply: "" },
+            { text: "Wifi pega bem longe do roteador.", reply: "" },
+            { text: "Entrega antes do prazo. Parabéns à loja.", reply: "" },
+            { text: "Notebook honesto, cumpre o que promete.", reply: "" },
+            { text: "Dobradiça que levanta o teclado deixa confortável.", reply: "" },
+            { text: "Tela Full HD faz diferença na Netflix.", reply: "Maratona garantida! 🍿" },
+            { text: "Carregador pequeno, fácil de levar.", reply: "" },
+            { text: "Acabamento fosco, não marca dedo.", reply: "" },
+            { text: "Ótimo pra aulas EAD. Microfone bom.", reply: "" },
+            { text: "Surpreendeu positivamente.", reply: "" },
+            { text: "Espaço do SSD sobra pra arquivos.", reply: "" },
+            { text: "Bluetooth conecta rápido no fone.", reply: "" },
+            { text: "Expansível, posso por mais memória.", reply: "" },
+            { text: "Design minimalista e bonito.", reply: "" },
+            { text: "Esquenta muito pouco no colo.", reply: "" },
+            { text: "Melhor aquisição pro Home Office.", reply: "Trabalhe com conforto! 🏠" },
+            { text: "Recomendo pra todo estudante.", reply: "" },
+            { text: "5 estrelas é pouco. Excelente.", reply: "" },
+            { text: "A tecla Enter é grande, gostei.", reply: "" },
+            { text: "Trackpad de precisão, gestures do Windows funcionam bem.", reply: "" },
+            { text: "A tela tem bordas finas, parece maior do que é.", reply: "" },
+            { text: "Conecto no monitor externo e vira um desktop.", reply: "" },
+            { text: "Ideal para escritores, o teclado é macio.", reply: "Inspiração fluindo! ✍️" },
+            { text: "Rodei The Sims 4 pra testar e foi de boa.", reply: "" },
+            { text: "O suporte técnico me ajudou a ativar o Office.", reply: "" },
+            { text: "Não trava com várias planilhas abertas.", reply: "" },
+            { text: "A cor cinza chumbo é muito profissional.", reply: "" },
+            { text: "Carrega 50% em 45 minutos. Salva na pressa.", reply: "Carga rápida! ⚡" },
+            { text: "Microfone corta o ruído de fundo nas calls.", reply: "" },
+            { text: "Cabe certinho na minha mochila da facul.", reply: "" },
+            { text: "Veio com Windows 11 original.", reply: "" },
+            { text: "A luz da tela fica bem forte, bom pra ambientes claros.", reply: "" },
+            { text: "Acabamento em alumínio na tampa dá um charme.", reply: "" },
+            { text: "Uso pra editar vídeos leves pro Instagram, atende bem.", reply: "" },
+            { text: "Preço justo pela configuração.", reply: "" },
+            { text: "A entrega foi rastreada passo a passo.", reply: "" },
+            { text: "Não engasga com vídeos em 4K no YouTube.", reply: "" },
+            { text: "Gostei da garantia de 1 ano em domicílio (Dell).", reply: "" },
+            { text: "Mousepad não agarra o dedo.", reply: "" },
+            { text: "Teclas retroiluminadas ajudam a trabalhar de noite.", reply: "" },
+            { text: "Comprei pra loja, roda o sistema de caixa liso.", reply: "" },
+            { text: "Muito satisfeito. Produto lacrado.", reply: "" },
+            { text: "Para advogados é excelente, abre muitos PDFs rápido.", reply: "" },
+            { text: "A ventoinha só liga quando exige muito.", reply: "" },
+            { text: "Qualidade da imagem da câmera me surpreendeu.", reply: "" },
+            { text: "Já indiquei pra 3 amigos.", reply: "Obrigado pela confiança! 🤝" },
+            { text: "Cumpre tudo que promete no anúncio.", reply: "" },
+            { text: "Simples, eficiente e bonito.", reply: "" }
+        ],
+
+        // === APPLE ECOSYSTEM (Foco: Status, Bateria, M1/M2/M3) ===
+        "apple_ecosystem": [
+            { text: "SURREAL!! Bateria dura 2 DIAS! 🤯 Chip M1 é bruxaria. ❤️🍎", reply: "Magia Apple! ✨" },
+            { text: "Investimento pra vida. Acabamento impecável. Integração perfeita! 📱💻", reply: "Ecossistema único! 🍏" },
+            { text: "Edito 4K em silêncio. Caro, mas se paga trabalhando. 🎬💰", reply: "Ferramenta Pro! 🛠️" },
+            { text: "Tela Retina absurda. Lacrado, original. Loja de confiança! 🔒✅", reply: "" },
+            { text: "Sonho realizado! ✨ Leve e forte. Não volto pro Windows! 😂", reply: "" },
+            { text: "Trackpad sem concorrente. Nem uso mouse.", reply: "" },
+            { text: "Som estéreo parece caixa bluetooth. Qualidade absurda.", reply: "" },
+            { text: "macOS é fluido, não trava nunca.", reply: "" },
+            { text: "Abro a tampa e já tá ligado. Instantâneo.", reply: "" },
+            { text: "Lindo demais. Onde chego todos olham. Status puro.", reply: "Design icônico! 💎" },
+            { text: "Touch ID facilita desbloquear e pagar.", reply: "" },
+            { text: "Magic Keyboard confortável, digitar é um prazer.", reply: "" },
+            { text: "Câmera FaceTime ótima, fico nítida nas calls.", reply: "" },
+            { text: "iPad como segunda tela (Sidecar) sem fios. Mágico.", reply: "" },
+            { text: "MagSafe salvou meu note de cair.", reply: "" },
+            { text: "Valor de revenda alto, é investimento.", reply: "Pensamento inteligente! 💡" },
+            { text: "Roda liso programas de arquitetura.", reply: "" },
+            { text: "Cor Estelar é maravilhosa pessoalmente.", reply: "" },
+            { text: "AirDrop é a melhor coisa. Passo arquivos na hora.", reply: "" },
+            { text: "Bateria infinita. Esqueço o carregador.", reply: "" },
+            { text: "Para programadores é a melhor máquina.", reply: "" },
+            { text: "Tela True Tone descansa os olhos.", reply: "" },
+            { text: "Chegou lacradinho na caixa original.", reply: "" },
+            { text: "Fiquei com medo, mas chegou super rápido.", reply: "" },
+            { text: "O M2 é ainda mais rápido. Renderizo em segundos.", reply: "" },
+            { text: "Som espacial Dolby Atmos incrível.", reply: "" },
+            { text: "Construção em alumínio monstra.", reply: "" },
+            { text: "Não esquenta nada. Uso na cama tranquilo.", reply: "" },
+            { text: "GarageBand/Logic Pro roda liso pra músicos.", reply: "" },
+            { text: "Ecossistema vicia. Agora quero o Watch kkkk", reply: "Caminho sem volta! 😂" },
+            { text: "Melhor unboxing da vida.", reply: "" },
+            { text: "Suporte da Apple é o melhor.", reply: "" },
+            { text: "Pesa menos de 1.3kg. Coluna agradece.", reply: "" },
+            { text: "Abre com um dedo. Balanceamento perfeito.", reply: "" },
+            { text: "Microfones de estúdio, nem preciso de mic externo.", reply: "" },
+            { text: "Espetacular. Sem palavras.", reply: "" },
+            { text: "Modelo de entrada já sobra desempenho.", reply: "" },
+            { text: "Apple é Apple né pai. Esquece.", reply: "🍎🚀" },
+            { text: "Melhor laptop do mundo.", reply: "" },
+            { text: "Apaixonada pelo meu Mac novo! 😍", reply: "" },
+            { text: "Spotlight acha qualquer arquivo em milésimos.", reply: "" },
+            { text: "Não precisa de antivírus, sistema seguro.", reply: "" },
+            { text: "Gestos no trackpad agilizam meu trabalho em 50%.", reply: "" },
+            { text: "Tela brilha muito, uso no parque de boa.", reply: "" },
+            { text: "Carregador compacto e cabo trançado resistente.", reply: "" },
+            { text: "Migrei do Windows e foi fácil me adaptar.", reply: "" },
+            { text: "Roda pacote Adobe liso liso.", reply: "" },
+            { text: "Valeu a pena juntar dinheiro pra comprar.", reply: "Conquista merecida! 👏" },
+            { text: "A caixa veio protegida com muito plástico bolha.", reply: "" },
+            { text: "Nota fiscal emitida corretamente.", reply: "" },
+            { text: "O som tem graves que tremem a mesa. Impressionante.", reply: "" },
+            { text: "Não escuto barulho nenhum, paz total.", reply: "" },
+            { text: "Design atemporal, daqui 5 anos ainda vai ser lindo.", reply: "" },
+            { text: "Para estudantes de medicina é o padrão.", reply: "" },
+            { text: "Consigo atender ligações do iPhone no Mac. Prático.", reply: "" },
+            { text: "Copio no celular e colo no Mac. Universal Clipboard.", reply: "Funcionalidade top! 📋" },
+            { text: "Duração da bateria é o maior diferencial.", reply: "" },
+            { text: "Simplesmente funciona. Sem dor de cabeça.", reply: "" },
+            { text: "Comprei pra durar 10 anos.", reply: "" },
+            { text: "Recomendo a loja, enviaram rápido.", reply: "" },
+            { text: "Produto premium de verdade.", reply: "" },
+            { text: "Minha produtividade aumentou muito.", reply: "" },
+            { text: "O notch na tela não atrapalha em nada.", reply: "" },
+            { text: "Top de linha. Sem defeitos.", reply: "" },
+            { text: "Amei, amei, amei! ❤️", reply: "" }
+        ],
+
+        // === SAMSUNG GALAXY BOOK (Foco: Integração Android, Tela) ===
+        "samsung_galaxy": [
+            { text: "Tela AMOLED cinema! 🎬 Cores vibrantes. Integração mágica. 🌌📱", reply: "Ecossistema Galaxy! 💙" },
+            { text: "Fininho, prateado e CHIQUE! ✨ Parece de 10 mil. Teclado macio.", reply: "" },
+            { text: "QuickShare é vida! Transfiro arquivos num toque. Bateria top. ⚡", reply: "" },
+            { text: "Desempenho top! Várias abas sem sentir. Acabamento premium. 😍", reply: "" },
+            { text: "Entrega relâmpago! 🚚 Chegou hoje. Lacrado e com nota. Confiem!", reply: "" },
+            { text: "Modo DeX sem fio funciona muito bem na TV.", reply: "" },
+            { text: "Uso tablet como segunda tela nativo. Adorei.", reply: "" },
+            { text: "Muito leve, parece papel. Levo pra todo lugar.", reply: "" },
+            { text: "Tela touch muito responsiva. S-Pen inclusa é diferencial.", reply: "Criatividade on! 🎨" },
+            { text: "Roda liso Windows 11. SSD Samsung é o mais rápido.", reply: "" },
+            { text: "Design minimalista, compete com MacBook.", reply: "" },
+            { text: "Carregador USB-C carrega meu celular tb. Prático! 🎒", reply: "" },
+            { text: "Uso tablet como teclado estendido. Legal.", reply: "" },
+            { text: "Câmera modo estúdio trata imagem nas reuniões.", reply: "" },
+            { text: "Áudio AKG de qualidade. Graves bons.", reply: "" },
+            { text: "Login digital no botão power é prático.", reply: "" },
+            { text: "Brilho forte, ótimo pra varanda.", reply: "" },
+            { text: "Teclado retroiluminado ajuda de noite.", reply: "" },
+            { text: "Acabamento metal, sensação de robustez.", reply: "" },
+            { text: "Preço justo pelo que oferece.", reply: "" },
+            { text: "Conecto Buds abrindo a tampa. Perfeito.", reply: "" },
+            { text: "Frio e silencioso no modo otimizado.", reply: "" },
+            { text: "Slot cartão memória salvou pra fotos.", reply: "" },
+            { text: "Versão Pro com desempenho absurdo.", reply: "" },
+            { text: "Samsung Notes sincroniza com celular. Top.", reply: "" },
+            { text: "Bateria aguenta maratona de série.", reply: "" },
+            { text: "Cor Grafite linda demais.", reply: "" },
+            { text: "Touchpad gigante e liso.", reply: "" },
+            { text: "Melhor notebook Windows que já tive.", reply: "" },
+            { text: "Chegou protegido. Vendedor atencioso.", reply: "" },
+            { text: "App 'Link com Windows' funciona melhor nele.", reply: "" },
+            { text: "Tela 16:10 ganha espaço vertical.", reply: "" },
+            { text: "Não é barulhento. Classe e elegância.", reply: "" },
+            { text: "Rodei The Sims 4 de boa kkkk", reply: "" },
+            { text: "Recomendo pra quem tem Android.", reply: "" },
+            { text: "Suporte via chat foi útil.", reply: "" },
+            { text: "Atualizações automáticas fáceis.", reply: "" },
+            { text: "Usando há 6 meses, continua rápido.", reply: "" },
+            { text: "Compra certa. Podem ir sem medo.", reply: "" },
+            { text: "Ecossistema igual da Apple, mas mais barato.", reply: "Melhor dos dois mundos! 😉" },
+            { text: "O teclado numérico é compacto mas funcional.", reply: "" },
+            { text: "A tela vira 360 graus, uso como tablet no sofá.", reply: "" },
+            { text: "A caneta S-Pen não precisa carregar, achei incrível.", reply: "" },
+            { text: "Rodou liso meus projetos do AutoCAD.", reply: "" },
+            { text: "Wifi 6E conecta na velocidade máxima da minha fibra.", reply: "" },
+            { text: "A dobradiça é firme, não fica balançando.", reply: "" },
+            { text: "Cabe em qualquer capa de notebook 15 polegadas.", reply: "" },
+            { text: "O modo leitura deixa a tela amarelada pra não cansar.", reply: "" },
+            { text: "Vem com McAfee grátis por um tempo.", reply: "" },
+            { text: "Desbloqueio com o relógio Galaxy Watch. Tecnologia pura.", reply: "" },
+            { text: "Muito fino, impressionante como cabe tudo ali dentro.", reply: "" },
+            { text: "As teclas são grandes, erro menos digitando.", reply: "" },
+            { text: "Som estéreo com Dolby Atmos. Imersivo.", reply: "" },
+            { text: "Estou muito satisfeito com a compra.", reply: "" },
+            { text: "Nota 10/10 para a Samsung.", reply: "" },
+            { text: "O cinza místico não risca fácil.", reply: "" },
+            { text: "Touchpad clica em toda a superfície.", reply: "" },
+            { text: "Ideal para designers gráficos.", reply: "" },
+            { text: "Melhor custo benefício da categoria premium.", reply: "" },
+            { text: "Loja entregou no domingo! 😱", reply: "Trabalhamos pra você! 🚚" }
+        ],
+
+        // === NOTEBOOK ENTRADA (Foco: Preço, Básico, Estudo) ===
+        "notebook_entrada": [
+            { text: "Chocada com a qualidade pelo preço! 😱 Não trava pra Netflix. Imbatível! 💸", reply: "Preço justo! 😉" },
+            { text: "Comprei pro meu filho, adorou! Tecla Netflix prática. Ótima compra! 🍿", reply: "Diversão garantida!" },
+            { text: "Simples, honesto e funciona! 👍 Pra internet e Word, perfeito. Recomendo!", reply: "" },
+            { text: "Chegou tudo certo. Leve, bateria dura. Entrega mais do que promete! 👏", reply: "" },
+            { text: "Veio protegido. Configurei e usei. Ótimo pra grana curta. 💻", reply: "" },
+            { text: "Pelo valor, tá excelente. Pro dia a dia é top.", reply: "" },
+            { text: "Bonito, plástico bom. Teclado macio.", reply: "" },
+            { text: "Comprei pra vovó jogar paciência, ela amou.", reply: "Vovó conectada! 👵" },
+            { text: "SSD deixa ele espertinho. Liga rápido.", reply: "" },
+            { text: "Tela HD ok, vejo filmes tranquilo.", reply: "" },
+            { text: "Botão Youtube agiliza a vida.", reply: "" },
+            { text: "Webcam aceitável pra aulas.", reply: "" },
+            { text: "Cabe na mochila, levinho. Carregador pequeno.", reply: "" },
+            { text: "Linux leve, mas instalei Windows e foi bem.", reply: "" },
+            { text: "Chegou em 3 dias no Nordeste. Rápido.", reply: "" },
+            { text: "RAM dá conta de 5 abas. Justo.", reply: "" },
+            { text: "Touchpad funciona bem. Mousepad ajudou.", reply: "" },
+            { text: "Cor cinza discreta. Gostei.", reply: "" },
+            { text: "Pra trabalhos da escola é perfeito.", reply: "" },
+            { text: "Não esquenta, processador frio.", reply: "" },
+            { text: "Tem HDMI, liguei na TV.", reply: "" },
+            { text: "Paguei no PIX com desconto, valeu.", reply: "" },
+            { text: "Marca nacional melhorando. Surpreendeu.", reply: "" },
+            { text: "Ideal para PDV de loja. Pouco espaço.", reply: "Solução pro negócio! 🏢" },
+            { text: "Capa da webcam física, seguro.", reply: "" },
+            { text: "Áudio quebra galho. Com fone ótimo.", reply: "" },
+            { text: "Acesso fácil pra por mais armazenamento.", reply: "" },
+            { text: "Garantia de 1 ano deixou seguro.", reply: "" },
+            { text: "Manual em português explicado.", reply: "" },
+            { text: "Office roda liso (Word, Excel).", reply: "" },
+            { text: "Fininho, parece mais caro.", reply: "" },
+            { text: "Pra cursos online serve 100%.", reply: "" },
+            { text: "Sem barulho de ventoinha, ótimo.", reply: "" },
+            { text: "Teclas macias, não cansa.", reply: "" },
+            { text: "Antivírus grátis. Bônus legal.", reply: "" },
+            { text: "Recomendo pro primeiro notebook.", reply: "" },
+            { text: "Custo benefício nota 10.", reply: "" },
+            { text: "Vendedor despachou no dia. Top.", reply: "" },
+            { text: "Produto honesto. Cumpre a função.", reply: "" },
+            { text: "Atendeu expectativas de uso básico.", reply: "" },
+            { text: "A bateria dura umas 5 horas vendo vídeo.", reply: "" },
+            { text: "Não é gamer, mas roda jogos antigos de boa.", reply: "" },
+            { text: "O brilho da tela é suficiente pra uso interno.", reply: "" },
+            { text: "Wifi conecta rápido e não cai.", reply: "" },
+            { text: "Veio com capa de neoprene de brinde (se tiver).", reply: "" },
+            { text: "Ótimo para secretária e recepção.", reply: "" },
+            { text: "Teclado ABNT2 com 'ç', fundamental.", reply: "" },
+            { text: "Achei que seria lento, mas me enganei.", reply: "" },
+            { text: "Comprei pra assistir Disney+ e HBO.", reply: "" },
+            { text: "Dá pra levar em viagem, não pesa na mala.", reply: "" },
+            { text: "Resolução da tela é boa pra leitura.", reply: "" },
+            { text: "Portas USB funcionam bem.", reply: "" },
+            { text: "O trackpad aceita toque duplo.", reply: "" },
+            { text: "Carrega 100% em umas 2 horas.", reply: "" },
+            { text: "Simples e eficiente.", reply: "" },
+            { text: "Gostei do acabamento texturizado.", reply: "" },
+            { text: "Pra quem só usa navegador, é a melhor escolha.", reply: "" },
+            { text: "Economizei muito comprando esse.", reply: "Economia inteligente! 💰" },
+            { text: "Vou comprar outro pra minha irmã.", reply: "" },
+            { text: "Chegou antes do Natal. Presentão.", reply: "" },
+            { text: "Suporte respondeu minhas dúvidas no chat.", reply: "" },
+            { text: "Não tem drive de CD, mas ninguém usa msm.", reply: "" },
+            { text: "Botão de ligar firme, não parece frágil.", reply: "" },
+            { text: "Gostei bastante.", reply: "" },
+            { text: "Nota 8/10 pelo preço.", reply: "" },
+            { text: "A caixa veio meio amassada, mas produto intacto.", reply: "" },
+            { text: "Instalação do Windows foi tranquila.", reply: "" },
+            { text: "Recomendo a loja.", reply: "" },
+            { text: "Tudo ok.", reply: "" },
+            { text: "Satisfação garantida pra uso leve.", reply: "" }
+        ],
+
+        // === DESKTOP PC (Foco: Setup, Luzes, Peças) ===
+        "desktop_pc": [
+            { text: "Gabinete LINDO! 😍 LEDs mudam o quarto. Veio montado. Sonho! 🌈🔥", reply: "Nave espacial! 🚀" },
+            { text: "Monstro! 🦖 Placa de vídeo roda ultra fria. Processador voa. Respeito!", reply: "" },
+            { text: "Melhor preço! Peças originais e top. 🏆💲", reply: "Preço justo sempre!" },
+            { text: "Vida nova pro escritório! Rápido, não trava. Loja nota 10. 📞✅", reply: "" },
+            { text: "Chegou antes! Muito plástico bolha. Tô baixando jogos! 🎮", reply: "" },
+            { text: "Cable management impecável. Profissional.", reply: "Montagem de arte! 🎨" },
+            { text: "Roda Warzone a 144fps cravado. Matando muito kkk", reply: "" },
+            { text: "Fonte marca boa, PFC ativo. Segurança.", reply: "" },
+            { text: "Vidro temperado mostra tudo. Lindo na mesa.", reply: "" },
+            { text: "Super silencioso, nem parece ligado.", reply: "" },
+            { text: "Veio com caixas das peças. Transparência total.", reply: "Transparência sempre! 🤝" },
+            { text: "SSD NVMe carrega Windows num piscar.", reply: "" },
+            { text: "Placa mãe com suporte upgrade. Pensaram em tudo.", reply: "" },
+            { text: "Rodou Cyberpunk com Ray Tracing. Outro mundo.", reply: "" },
+            { text: "Gabinete ventilado (mesh), temperaturas baixas.", reply: "" },
+            { text: "RAM com RGB sincronizado. Show de luzes.", reply: "" },
+            { text: "Suporte ajudou configurar monitor. Atenciosos.", reply: "" },
+            { text: "PC Gamer de entrada roda tudo. Custo benefício.", reply: "" },
+            { text: "Chegou em 4 dias SP. Rápido.", reply: "" },
+            { text: "Instalação limpa, sem programas inúteis.", reply: "" },
+            { text: "Monitor do kit excelente, cores vivas.", reply: "" },
+            { text: "Teclado mecânico barulhento amo kkkk", reply: "Clicky clicky! ⌨️" },
+            { text: "Mouse preciso, DPI ajustável. Headset bom.", reply: "" },
+            { text: "Montei setup dos sonhos. Obrigado!", reply: "Realizando sonhos! ✨" },
+            { text: "Processador aguenta streamar sem lag.", reply: "" },
+            { text: "GPU não passa de 65 graus. Refrigeração top.", reply: "" },
+            { text: "Adaptador Wifi brinde. Salvou vida.", reply: "" },
+            { text: "Caixa gigante, entregador pediu ajuda. Proteção máx.", reply: "" },
+            { text: "Bios atualizada, XMP on. Só usar.", reply: "" },
+            { text: "Recomendo pra quem não sabe montar.", reply: "" },
+            { text: "Valeu cada centavo. Qualidade notável.", reply: "" },
+            { text: "Roda GTA RP liso, fps alto.", reply: "" },
+            { text: "Editando fotos e vídeos, render rápido.", reply: "" },
+            { text: "Filtros de poeira magnéticos. Fácil limpar.", reply: "" },
+            { text: "Botão mudar cor LEDs. Prático.", reply: "" },
+            { text: "Comprei pro filho, eu que jogo kkkk", reply: "Diversão família! 🎮" },
+            { text: "Desempenho bruto. Não engasga.", reply: "" },
+            { text: "Nota fiscal emitida certinho. Garantia ok.", reply: "" },
+            { text: "Ganhou cliente. Voltarei.", reply: "" },
+            { text: "Fantástico. Nave.", reply: "" },
+            { text: "Gabinete branco é a coisa mais linda.", reply: "" },
+            { text: "Fans com fluxo de ar forte.", reply: "" },
+            { text: "Placa mãe tem slot M.2 extra.", reply: "" },
+            { text: "Chegou tudo funcionando de primeira.", reply: "" },
+            { text: "Melhor que console. Jogos mais baratos.", reply: "" },
+            { text: "Water cooler segura bem a temperatura.", reply: "" },
+            { text: "Memória dual channel dobrou fps.", reply: "" },
+            { text: "PC liga em 10 segundos.", reply: "" },
+            { text: "Fonte aguenta upgrade de placa de vídeo.", reply: "" },
+            { text: "Veio com Windows Trial, ativei fácil.", reply: "" },
+            { text: "Não tem gargalo entre CPU e GPU.", reply: "" },
+            { text: "Gabinete compacto, cabe na mesa.", reply: "" },
+            { text: "LEDs endereçáveis (ARGB).", reply: "" },
+            { text: "Suporte tirou dúvida domingo a noite.", reply: "" },
+            { text: "Roda emuladores pesados.", reply: "" },
+            { text: "HD de 1TB pra guardar jogos.", reply: "" },
+            { text: "Placa de vídeo com 3 ventoinhas. Fria.", reply: "" },
+            { text: "Top de linha.", reply: "" },
+            { text: "Muito satisfeito.", reply: "" },
+            { text: "PC brabo demais.", reply: "Brabo! 💪" }
+        ],
+
+        // === TECH/MOBILE (Foco: Câmera, Bateria, Rapidez) ===
+        "tech_mobile": [
+            { text: "Fotos de noite PERFEITAS! 📸 Bateria dura o dia todo. Amei! ❤️", reply: "Arrase nas selfies! ✨" },
+            { text: "Lindo demais, ao vivo é melhor. Roda liso. Apaixonado! 😍", reply: "" },
+            { text: "Carrega muito rápido, 30 min tá cheio. Salva! ⚡", reply: "" },
+            { text: "Migrei fácil. Aparelho top.", reply: "" },
+            { text: "Tela 120Hz fluida, rolar feed é bom.", reply: "" },
+            { text: "Jogos no máximo. Genshin e COD lisos.", reply: "Play garantido! 🎮" },
+            { text: "Zoom surreal, pega detalhes de longe.", reply: "" },
+            { text: "Tamanho perfeito, cabe no bolso.", reply: "" },
+            { text: "Lacrado, IMEI original. Confiem.", reply: "Segurança total! 🔒" },
+            { text: "Cor maravilhosa. Acabamento vidro.", reply: "" },
+            { text: "Som estéreo alto. Nem preciso de caixa.", reply: "" },
+            { text: "Face ID rápido, mesmo no escuro.", reply: "" },
+            { text: "5G voa! Baixei filme na rua.", reply: "Velocidade futuro! 📡" },
+            { text: "Bateria infinita. Chego com carga.", reply: "" },
+            { text: "Modo retrato recorta perfeito.", reply: "" },
+            { text: "Resistente a água. Intacto.", reply: "" },
+            { text: "Melhor custo benefício.", reply: "" },
+            { text: "Interface limpa, sem propagandas.", reply: "" },
+            { text: "Chegou antes. Ansiedade agradece kkk", reply: "" },
+            { text: "Capinha serviu perfeito. Tela curva linda.", reply: "" },
+            { text: "Videos 4K estabilização cinema.", reply: "" },
+            { text: "Armazenamento gigante, não apago fotos.", reply: "" },
+            { text: "Não esquenta jogando.", reply: "" },
+            { text: "NFC pra pagar. Prático.", reply: "" },
+            { text: "Vendedor mandou adaptador. Atencioso.", reply: "" },
+            { text: "Topo de linha preço justo.", reply: "" },
+            { text: "IA da câmera melhora fotos.", reply: "" },
+            { text: "Tela brilhante no sol.", reply: "" },
+            { text: "Transferi dados sem dor de cabeça.", reply: "" },
+            { text: "Sensação premium. Não escorrega.", reply: "" },
+            { text: "Atualizou sistema na hora.", reply: "" },
+            { text: "Modo noturno clareia tudo.", reply: "" },
+            { text: "Selfie 32MP, vê os poros kkkk", reply: "" },
+            { text: "Carregamento sem fio ok.", reply: "" },
+            { text: "Biometria na tela futurista.", reply: "" },
+            { text: "Namorada amou o presente.", reply: "Mandou bem! 💘" },
+            { text: "Melhor celular que tive.", reply: "" },
+            { text: "Nota fiscal por email. Organizados.", reply: "" },
+            { text: "Roda emuladores.", reply: "" },
+            { text: "Recomendo a todos.", reply: "" },
+            { text: "Acompanha fone na caixa (raridade).", reply: "" },
+            { text: "Cor verde é diferenciada.", reply: "" },
+            { text: "Macro tira foto de inseto incrível.", reply: "" },
+            { text: "Tela inquebrável (quase).", reply: "" },
+            { text: "Não trava com 10 apps abertos.", reply: "" },
+            { text: "Sistema otimizado.", reply: "" },
+            { text: "GPS preciso no Uber.", reply: "" },
+            { text: "Bluetooth conecta rápido no som do carro.", reply: "" },
+            { text: "Gostei do leitor de digital lateral.", reply: "" },
+            { text: "Câmera ultrawide pega a galera toda.", reply: "" },
+            { text: "Vídeos em câmera lenta divertidos.", reply: "" },
+            { text: "Flash dual tone natural.", reply: "" },
+            { text: "Assistente de voz funciona bem.", reply: "" },
+            { text: "Tela OLED preto real.", reply: "" },
+            { text: "Bordas finíssimas.", reply: "" },
+            { text: "Pegada ergonômica.", reply: "" },
+            { text: "Preço caiu, aproveitei.", reply: "Ótima hora! ⏰" },
+            { text: "Entrega via motoboy no mesmo dia.", reply: "" },
+            { text: "Loja oficial da marca.", reply: "" },
+            { text: "Top das galáxias.", reply: "🚀🌌" }
+        ],
+
+        // === ELETRO (Foco: Casa, Cozinha, Facilidade) ===
+        "eletro": [
+            { text: "Air Fryer é vida! 🍟 Sem óleo e crocante. Não vivo sem! 🥰", reply: "Saúde e sabor! 😋" },
+            { text: "Geladeira GIGANTE! ❄️ Cabe tudo e gela rápido. Linda.", reply: "" },
+            { text: "Fogão top! Chama forte 🔥, água ferve rápido. Forno assa bem.", reply: "" },
+            { text: "Liquidificador tritura gelo. Potência pura!", reply: "" },
+            { text: "Aspirador robô salvou casamento kkkk Limpa sozinho. Amo! 🤖❤️", reply: "Tecnologia e amor! 😂" },
+            { text: "Lavadora silenciosa. Roupa sai quase seca.", reply: "" },
+            { text: "Microondas espelhado, charme na cozinha. Esquenta rápido.", reply: "" },
+            { text: "Batedeira bate clara em neve em segundos. Bolos fofinhos. 🍰", reply: "" },
+            { text: "Cafeteira tira expresso perfeito. Acordo feliz.", reply: "Bom dia! ☕" },
+            { text: "Panela pressão elétrica segura. Feijão em 20 min.", reply: "" },
+            { text: "Ventilador venta muito, sem barulho. Dormi bem.", reply: "" },
+            { text: "Ferro desliza. Desamassa fácil.", reply: "" },
+            { text: "Sanduicheira esquenta rápido, queijo derrete.", reply: "" },
+            { text: "Purificador gela verdade. Instalação fácil.", reply: "" },
+            { text: "Forno elétrico assa igual. Frango douradinho.", reply: "" },
+            { text: "Coifa suga fumaça. Cheiro fritura nunca mais.", reply: "" },
+            { text: "Cooktop indução rápido e fácil limpar. Pano resolve.", reply: "" },
+            { text: "Mixer prático pra sopa na panela.", reply: "" },
+            { text: "Fritadeira cesto grande, cabe frango.", reply: "" },
+            { text: "Adega climatizada vinhos temperatura ideal.", reply: "Um brinde! 🍷" },
+            { text: "Chegou sem arranhão. Embalagem reforçada.", reply: "" },
+            { text: "Voltagem correta. Funcionou de primeira.", reply: "" },
+            { text: "Manual explicativo. Aprendi rápido.", reply: "" },
+            { text: "Design moderno, combinou.", reply: "" },
+            { text: "Custo benefício excelente.", reply: "" },
+            { text: "Comprei Black Friday chegou rápido.", reply: "" },
+            { text: "Marca confiável, duram anos.", reply: "" },
+            { text: "Painel touch sensível e chique.", reply: "" },
+            { text: "Não gasta muita luz. Econômico.", reply: "" },
+            { text: "Timer avisa pronto. Não queimo nada kkk", reply: "" },
+            { text: "Facilitou rotina corrida.", reply: "Tempo precioso! ⏳" },
+            { text: "Melhor compra casa nova.", reply: "" },
+            { text: "Recomendo olhos fechados.", reply: "" },
+            { text: "Esposa adorou presente.", reply: "" },
+            { text: "Produto robusto, vai durar.", reply: "" },
+            { text: "Cabo longo, alcançou tomada.", reply: "" },
+            { text: "Peças removíveis fáceis lavar.", reply: "" },
+            { text: "Motor potente, aguenta tranco.", reply: "" },
+            { text: "Apaixonada pela cozinha nova.", reply: "" },
+            { text: "Entrega subiu escada. Nota 10.", reply: "" },
+            { text: "Torradeira tosta uniforme.", reply: "" },
+            { text: "Processador pica tudo em segundos.", reply: "" },
+            { text: "Fritadeira não deixa cheiro na casa.", reply: "" },
+            { text: "Geladeira frost free de verdade.", reply: "" },
+            { text: "Fogão mesa de vidro, fácil limpar.", reply: "" },
+            { text: "Máquina lava e seca, salvou no inverno.", reply: "" },
+            { text: "Ar condicionado gela muito.", reply: "" },
+            { text: "Umidificador silencioso, respiração melhorou.", reply: "" },
+            { text: "Robô passa pano bem.", reply: "" },
+            { text: "Chaleira elétrica ferve em 2 min.", reply: "" },
+            { text: "Grill faz carne suculenta.", reply: "" },
+            { text: "Pipoqueira sem óleo, saudável.", reply: "" },
+            { text: "Depurador slim discreto.", reply: "" },
+            { text: "Freezer gela rápido a cerveja.", reply: "Churrasco garantido! 🥩" },
+            { text: "Bebedouro água gelada sempre.", reply: "" },
+            { text: "Ferro a vapor desamassa tudo.", reply: "" },
+            { text: "Vaporizador higieniza sofá.", reply: "" },
+            { text: "Aspirador vertical leve, limpa teto.", reply: "" },
+            { text: "Top demais.", reply: "" },
+            { text: "Minha mãe quer um igual.", reply: "" }
+        ],
+
+        // === MÓVEIS (Foco: Conforto, Montagem, Estilo) ===
+        "moveis": [
+            { text: "Sofá nuvem! ☁️ Tecido macio. Chegou antes. 🛋️", reply: "Conforto total! ✨" },
+            { text: "Fácil montar, veio chavinha. Ficou lindo! 🔨✅", reply: "Mão na massa! 💪" },
+            { text: "Cadeira gamer salvou costas. Passo 10h sentado. Recomendo!", reply: "Ergonomia é saúde! 🩺" },
+            { text: "Guarda-roupa espaçoso. Espelho gigante. Lindo!", reply: "" },
+            { text: "Mesa firme, não balança. Cabe dois monitores.", reply: "" },
+            { text: "Cama box macia. Dormi igual anjo.", reply: "Bons sonhos! 💤" },
+            { text: "Rack moderno, outra cara pra sala. TV 65 ficou ótima.", reply: "" },
+            { text: "Poltrona amamentação confortável. Esposa amou.", reply: "" },
+            { text: "Mesa jantar robusta. Vidro grosso. Família adorou.", reply: "" },
+            { text: "Estante linda pra livros. Acabamento perfeito.", reply: "" },
+            { text: "Puff baú guarda bagunça. Tecido bonito.", reply: "" },
+            { text: "Colchão a vácuo, abriu ficou enorme. Top.", reply: "" },
+            { text: "Sapateira compacta cabe muito. Organizou quarto.", reply: "" },
+            { text: "Painel fácil instalar. Escondeu fios.", reply: "" },
+            { text: "Escrivaninha gavetas correm bem. Trilho telescópico.", reply: "" },
+            { text: "Cadeira escritório ajuste lombar. Perfeita.", reply: "" },
+            { text: "Veio todos parafusos. Montagem tranquila.", reply: "" },
+            { text: "Cor madeira igual foto. Não engana.", reply: "" },
+            { text: "Entrega cuidadosa, subiu elevador.", reply: "" },
+            { text: "Pés madeira maciça, resistente.", reply: "" },
+            { text: "Design industrial em alta. Ficou show.", reply: "" },
+            { text: "Pelo valor surpreendi. Forte.", reply: "" },
+            { text: "Cabeceira estofada ar de hotel.", reply: "" },
+            { text: "Gaveteiro com chave, guarda documentos.", reply: "" },
+            { text: "Nicho decorativo fácil pendurar.", reply: "" },
+            { text: "Sofá retrátil vira cama. Delícia ver filme.", reply: "" },
+            { text: "Tecido Suede agradável. Gato não arranhou kkk", reply: "" },
+            { text: "Chegou em 1 semana. Rápido.", reply: "" },
+            { text: "Suporte tirou dúvidas medidas.", reply: "" },
+            { text: "Beliche firme, filhos pularam nem mexeu.", reply: "" },
+            { text: "Cozinha modular encaixou. Parece planejada.", reply: "Cozinha dos sonhos! 🍳" },
+            { text: "Puxadores metal, qualidade.", reply: "" },
+            { text: "Montador elogiou material.", reply: "" },
+            { text: "Embalado com cantoneiras.", reply: "" },
+            { text: "Recomendo contratar montador.", reply: "Dica valiosa! 🛠️" },
+            { text: "Móvel pesado, MDF bom.", reply: "" },
+            { text: "Ficou luxuoso. Parece loja cara.", reply: "" },
+            { text: "Tamanho ideal apartamento pequeno.", reply: "" },
+            { text: "Amei! Vou comprar criado mudo.", reply: "" },
+            { text: "Nota 10/10. Compraria novamente.", reply: "" },
+            { text: "Espelho não distorce imagem.", reply: "" },
+            { text: "Portas de correr deslizam suave.", reply: "" },
+            { text: "Pintura UV brilhante.", reply: "" },
+            { text: "Veio manual em vídeo no QR Code.", reply: "" },
+            { text: "Não veio peça quebrada. Milagre kkk", reply: "" },
+            { text: "Mesa de cabeceira charmosa.", reply: "" },
+            { text: "Armário de cozinha espaçoso.", reply: "" },
+            { text: "Banquetas altas pra bancada.", reply: "" },
+            { text: "Tapete macio combinou.", reply: "" },
+            { text: "Cortina blecaute veda luz.", reply: "" },
+            { text: "Persiana fácil instalar.", reply: "" },
+            { text: "Nichos suportam peso de livros.", reply: "" },
+            { text: "Pés reguláveis nivelam móvel.", reply: "" },
+            { text: "Tampo de mármore (ou imitação) bonito.", reply: "" },
+            { text: "Cadeira balanço relaxante.", reply: "" },
+            { text: "Cômoda alta, muitas gavetas.", reply: "" },
+            { text: "Aparador no hall de entrada ficou chique.", reply: "" },
+            { text: "Móvel multiuso na lavanderia.", reply: "" },
+            { text: "Sapateira com espelho, 2 em 1.", reply: "" },
+            { text: "Valeu a pena esperar a entrega.", reply: "" }
+        ],
+
+        // === GENÉRICO (Fallback de segurança) ===
+        "generico": [
+            { text: "Gostei bastante! Chegou rápido. Igual anúncio. 👍", reply: "Logística rápida! 🚀" },
+            { text: "Fiquei com medo mas surpreendi. Loja confiável! ❤️", reply: "Obrigado pela confiança! 🤝" },
+            { text: "Produto top, acabamento primeira. Valeu cada centavo. 👏", reply: "" },
+            { text: "Tudo certo! Lacrado, nota fiscal. Recomendo. ⭐⭐⭐⭐⭐", reply: "" },
+            { text: "Amei! 😍 Exatamente o que precisava. Vou comprar mais.", reply: "" },
+            { text: "Vendedor atencioso, tirou dúvidas.", reply: "" },
+            { text: "Postaram no mesmo dia. Eficiência.", reply: "" },
+            { text: "Qualidade acima da média. Custo benefício.", reply: "" },
+            { text: "Comprem sem medo. Experiência excelente.", reply: "" },
+            { text: "Veio protegido com plástico bolha.", reply: "" },
+            { text: "Funciona perfeitamente. Nenhum defeito.", reply: "" },
+            { text: "Dei de presente, pessoa adorou.", reply: "Presentão! 🎁" },
+            { text: "Preço justo e original.", reply: "" },
+            { text: "Superou expectativas. Muito bom.", reply: "" },
+            { text: "Site fácil comprar, rastreio funcionou.", reply: "" },
+            { text: "Produto honesto. Faz o que promete.", reply: "" },
+            { text: "Chegou antes do prazo. Felicidade!", reply: "" },
+            { text: "Embalagem discreta e segura.", reply: "" },
+            { text: "Já indiquei pra amigos.", reply: "Agradecemos! 🤩" },
+            { text: "Top top top! Nada a reclamar.", reply: "" },
+            { text: "Primeira compra de muitas. Virei cliente.", reply: "" },
+            { text: "Ótimo pós-venda.", reply: "" },
+            { text: "Conforme descrição técnica.", reply: "" },
+            { text: "Bonito pessoalmente, mais que na foto.", reply: "" },
+            { text: "Simples e eficiente. Gostei.", reply: "" },
+            { text: "Paguei boleto, aprovou rápido.", reply: "" },
+            { text: "Material resistente. Parece durável.", reply: "" },
+            { text: "Nota 1000. Parabéns equipe.", reply: "" },
+            { text: "Melhor preço da internet.", reply: "Preço baixo é aqui! 📉" },
+            { text: "Tudo ok. Sem surpresas.", reply: "" },
+            { text: "Gostei da cor.", reply: "" },
+            { text: "Tamanho perfeito.", reply: "" },
+            { text: "Manual ajudou muito.", reply: "" },
+            { text: "Marca confiança.", reply: "" },
+            { text: "Resolveu problema. Útil.", reply: "" },
+            { text: "Entrega fim de semana salvou.", reply: "" },
+            { text: "Satisfeito com aquisição.", reply: "" },
+            { text: "Show de bola! 😎", reply: "" },
+            { text: "Podem confiar, chegou certo.", reply: "" },
+            { text: "Maravilhoso! 🥰", reply: "" },
+            { text: "Atendimento whatsapp foi rápido.", reply: "" },
+            { text: "Rastreio correios atualizou certo.", reply: "" },
+            { text: "Não veio amassado.", reply: "" },
+            { text: "Recomendo loja.", reply: "" },
+            { text: "Voltarei a comprar.", reply: "" },
+            { text: "Promoção valeu a pena.", reply: "" },
+            { text: "Frete grátis foi diferencial.", reply: "" },
+            { text: "Cupom de desconto funcionou.", reply: "" },
+            { text: "Gostei muito.", reply: "" },
+            { text: "Produto 5 estrelas.", reply: "" },
+            { text: "Aprovado.", reply: "" },
+            { text: "Excelente.", reply: "" },
+            { text: "Muito bom.", reply: "" },
+            { text: "Legal.", reply: "" },
+            { text: "Show.", reply: "" },
+            { text: "Top.", reply: "" },
+            { text: "Recomendo.", reply: "" },
+            { text: "Valeu.", reply: "" },
+            { text: "Chegou.", reply: "" },
+            { text: "Bom.", reply: "" }
+        ]
+    };
 
         const nomesBR = ["Ana", "Bruno", "Carla", "Daniel", "Eduarda", "Felipe", "Gabriela", "Hugo", "Isabela", "João", "Karina", "Lucas", "Mariana", "Nicolas", "Olívia", "Pedro", "Quintino", "Rafael", "Sofia", "Thiago", "Ursula", "Vinícius", "Wanessa", "Xavier", "Yasmim", "Zeca", "Amanda", "Beatriz", "Caio", "Diego", "Elaine", "Fernando", "Gustavo", "Heloísa", "Igor", "Júlia", "Kevin", "Larissa", "Matheus", "Natália", "Patrícia", "Renato", "Sérgio", "Tatiane", "Vitor"];
         const sobrenomesBR = ["Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Ferreira", "Alves", "Pereira", "Lima", "Gomes", "Costa", "Ribeiro", "Martins", "Carvalho", "Almeida", "Lopes", "Soares", "Fernandes", "Vieira", "Barbosa", "Rocha", "Dias", "Nascimento", "Andrade", "Moreira", "Nunes", "Marques", "Machado", "Mendes", "Freitas", "Cardoso", "Ramos"];
@@ -387,45 +1686,73 @@
             updatePreview();
         }
 
-        function autoFillReviews(title, specs) {
-            const textToAnalyze = (title + " " + specs).toLowerCase();
-            let category = "generico";
+        function autoFillReviews(textToAnalyze, specs) {
+        // CORREÇÃO: Usamos a variável 'textToAnalyze' em todos os IFs
+        // (Antes estava 't', o que causava o erro)
+        
+        let category = "generico";
 
-            if (textToAnalyze.includes("fogao") || textToAnalyze.includes("fogão") || textToAnalyze.includes("cooktop") || textToAnalyze.includes("bocas") || textToAnalyze.includes("chama")) {
-                category = "fogao_cooktop";
-            } 
-            else if (textToAnalyze.includes("geladeira") || textToAnalyze.includes("refrigerador") || textToAnalyze.includes("frost free") || textToAnalyze.includes("gela")) {
-                category = "geladeira";
-            }
-            else if (textToAnalyze.match(/(iphone|samsung|galaxy|xiaomi|motorola|celular|smartphone)/)) {
-                category = "tech_mobile";
-            }
-            else if (textToAnalyze.match(/(air fryer|fritadeira|batedeira|liquidificador|cafeteira)/)) {
-                category = "cozinha_eletro";
-            }
-            else if (textToAnalyze.match(/(sofa|sofá|cadeira|poltrona|mesa|cama)/)) {
-                category = "moveis";
-            }
+        // === 1. GAMER (Alta Prioridade) ===
+        if (textToAnalyze.includes("nitro") || textToAnalyze.includes("g15") || textToAnalyze.includes("victus") || textToAnalyze.includes("gamer") || textToAnalyze.includes("rtx") || textToAnalyze.includes("gtx") || textToAnalyze.includes("tuf") || textToAnalyze.includes("loq") || textToAnalyze.includes("avell")) {
+            category = "notebook_gamer";
+        }
+        // === 2. APPLE ===
+        else if (textToAnalyze.includes("macbook") || textToAnalyze.includes("imac") || textToAnalyze.includes("apple") || textToAnalyze.includes("m1") || textToAnalyze.includes("m2")) {
+            category = "apple_ecosystem";
+        }
+        // === 3. SAMSUNG ===
+        else if (textToAnalyze.includes("galaxy book") || (textToAnalyze.includes("samsung") && textToAnalyze.includes("book"))) {
+            category = "samsung_galaxy";
+        }
+        // === 4. ENTRADA/BÁSICO ===
+        else if (textToAnalyze.includes("positivo") || textToAnalyze.includes("multilaser") || textToAnalyze.includes("multi ultra") || textToAnalyze.includes("celeron") || textToAnalyze.includes("pentium") || textToAnalyze.includes("motion") || textToAnalyze.includes("vision") || textToAnalyze.includes("go ")) {
+            category = "notebook_entrada";
+        }
+        // === 5. DESKTOP/PC ===
+        else if (textToAnalyze.includes("pc ") || textToAnalyze.includes("desktop") || textToAnalyze.includes("computador") || textToAnalyze.includes("memoria ram") || textToAnalyze.includes("ssd") || textToAnalyze.includes("placa de video")) {
+            category = "desktop_pc";
+        }
+        // === 6. OFFICE/TRABALHO (HP, Dell, Lenovo) ===
+        else if (textToAnalyze.includes("ideapad") || textToAnalyze.includes("inspiron") || textToAnalyze.includes("vivobook") || textToAnalyze.includes("aspire") || textToAnalyze.includes("hp") || textToAnalyze.includes("dell") || textToAnalyze.includes("asus") || textToAnalyze.includes("notebook")) {
+            category = "notebook_office";
+        }
+        // === 7. OUTROS ELETROS ===
+        else if (textToAnalyze.match(/(iphone|samsung|xiaomi|motorola|celular|smartphone)/)) {
+            category = "tech_mobile";
+        }
+        else if (textToAnalyze.match(/(fogao|cooktop|geladeira|air fryer|batedeira)/)) {
+            category = "eletro";
+        }
+        else if (textToAnalyze.match(/(sofa|cadeira|mesa|cama)/)) {
+            category = "moveis";
+        }
 
-            let pool = [...(reviewsDB[category] || reviewsDB["generico"])];
-            if (Math.random() > 0.6) pool = pool.concat(reviewsDB["generico"]);
-            pool.sort(() => 0.5 - Math.random());
+        // Seleciona e preenche as reviews
+        // Se a categoria não existir, usa "generico" para não dar erro
+        let pool = reviewsDB[category] ? [...reviewsDB[category]] : [...reviewsDB["generico"]];
+        
+        // Embaralha para variar
+        if (Math.random() > 0.7) pool = pool.concat(reviewsDB["generico"]);
+        pool.sort(() => 0.5 - Math.random());
 
-            for(let i=1; i<=5; i++) {
-                const review = pool[i-1] || pool[0];
-                if(review) {
-                    document.getElementById(`rText${i}`).value = review.text;
-                    document.getElementById(`rReply${i}`).value = review.reply;
-                    document.getElementById(`rName${i}`).value = gerarNomeAleatorio();
-                    document.getElementById(`rTime${i}`).value = gerarTempoAleatorio();
-                    document.getElementById(`rStars${i}`).value = Math.random() > 0.2 ? "5" : "4";
-                    
-                    if(typeof getRandomAvatarUrl === "function") { 
-                        document.getElementById(`rImg${i}`).value = getRandomAvatarUrl(); 
-                    }
+        for(let i=1; i<=5; i++) {
+            const review = pool[i-1] || pool[0];
+            const textField = document.getElementById(`rText${i}`);
+            
+            // Só preenche se o campo existir na tela
+            if(review && textField) {
+                textField.value = review.text;
+                document.getElementById(`rReply${i}`).value = review.reply;
+                document.getElementById(`rName${i}`).value = gerarNomeAleatorio();
+                document.getElementById(`rTime${i}`).value = gerarTempoAleatorio();
+                document.getElementById(`rStars${i}`).value = Math.random() > 0.2 ? "5" : "4"; 
+                
+                if(typeof getRandomAvatarUrl === "function") { 
+                    document.getElementById(`rImg${i}`).value = getRandomAvatarUrl(); 
                 }
             }
         }
+    }
 
         const AVATAR_CONFIG = { folder: 'avatar/', total: 100, ext: '.jpg' };
         function getRandomAvatarUrl() { const num = Math.floor(Math.random() * AVATAR_CONFIG.total) + 1; return `${AVATAR_CONFIG.folder}(${num})${AVATAR_CONFIG.ext}`; }
@@ -543,7 +1870,7 @@
             #modalContent { max-width: 95%; max-height: 90%; position: relative; display: flex; justify-content: center; align-items: center; }
             #modalImg, #modalVideo { max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
             .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 35px; cursor: pointer; z-index: 10000; background: rgba(0,0,0,0.5); width: 40px; height: 40px; text-align: center; line-height: 40px; border-radius: 50%; }
-        </style></head><body><div class="gallery-wrapper"><div class="gallery-container" id="gallery">{{GALLERY_CONTENT}}</div><div class="counter" id="counter">1/{{IMG_COUNT}}</div></div><div class="oferta-container-ativa"><div class="oferta-preco-info-ativa"><div class="preco-atual-wrapper-ativa"><span class="preco-atual-ativa">{{PRICE_NEW}}</span></div><div class="preco-antigo-e-desconto-ativa"><span class="preco-antigo-ativa">{{PRICE_OLD}}</span><span class="desconto-tag-ativa">Economize {{DISCOUNT}}</span></div></div><div class="oferta-status-info-ativa"><span class="oferta-relampago-texto-ativa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>OFERTA RELÂMPAGO</span><div class="contador-tempo-ativo" id="timer">TERMINA EM 00:04:19</div></div></div><div class="product-info-container"><div class="tag-row"><span class="discount-tag">Preço Promocional</span><span class="discount-tag">Economize {{DISCOUNT}}</span></div><h1 class="product-title">{{PRODUCT_TITLE}}</h1><div class="rating-row">★★★★★ <span>4.9 (100+ vendidos)</span></div></div><div class="section-container"><div class="service-item"><svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg><div class="service-text"><span class="delivery-tag">Frete grátis</span><span>Receba em até 7 dias</span><span class="shipping-cost-old">Taxa: R$ 15,00</span></div></div><div class="service-item"><svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path><polyline points="12 6 16 10 8 14 12 18"></polyline></svg><div class="service-text"><span style="color:#fff; font-weight:600;">Devoluções em 30 dias</span><span>Cancelamento fácil</span></div></div></div><div class="section-container" style="padding-top:0;"><div class="servicos-tiktok-dark"><div class="servicos-tiktok-titulo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#25f4ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Proteção do Cliente</div><div class="servicos-tiktok-lista"><div class="servicos-tiktok-item">Proteção ao comprador</div><div class="servicos-tiktok-item">Pagamento seguro</div><div class="servicos-tiktok-item">Reembolso rápido</div><div class="servicos-tiktok-item">Suporte 24h</div></div></div></div><div class="review-section"><h3 class="review-heading">Avaliações dos clientes</h3>{{REVIEWS_CONTENT}}</div><div class="seller-info-container"><div class="seller-details"><img src="images/kk.png" class="seller-avatar" onerror="this.src='https://placehold.co/40?text=S'"><div><div class="store-name">TikTok Shop <svg width="12" height="12" viewBox="0 0 24 24" fill="#25f4ee"><circle cx="12" cy="12" r="10"></circle><path d="M9 12l2 2 4-4" stroke="#000" stroke-width="2"/></svg></div><div style="font-size:11px; color:#888;">+10k vendas</div></div></div><button class="follow-button">Seguir</button></div><div class="specs-section"><h3>Especificações do Produto</h3><ul class="specs-list">{{SPECS_CONTENT}}</ul></div><div class="suggestions-section"><h3 style="color:white; margin-bottom:15px;">Você também pode gostar</h3><div class="masonry-grid">{{SUGGESTED_PRODUCTS}}</div></div><div class="footer-menu"><div class="footer-links"><span>Política de Privacidade</span> • <span>Termos de Uso</span> • <span>Ajuda</span></div><p style="margin-top:10px;">© 2025 TikTok Shop. Todos os direitos reservados.</p></div><div class="fixed-bottom-bar"><div class="left-group"><a href="index.html" class="bar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Loja</span></a><a href="#" class="bar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span>Chat</span></a></div><div class="cart-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div><a href="{{CHECKOUT_LINK}}" class="buy-button"><div class="buy-price">{{PRICE_NEW}}</div><div class="buy-text"><strong>Compre agora</strong></div></a></div><div id="imageModal"><span class="close-modal">&times;</span><div id="modalContent"><img id="modalImg" style="display:none;"><video id="modalVideo" style="display:none;" controls></video></div></div><script>const gallery=document.getElementById("gallery");const counter=document.getElementById("counter");const total={{IMG_COUNT}};if(total>1){gallery.addEventListener("scroll",()=>{const width=gallery.clientWidth;const index=Math.round(gallery.scrollLeft/width)+1;counter.textContent=index+"/"+total;});}let time=259;setInterval(()=>{if(time>0)time--;let m=Math.floor(time/60).toString().padStart(2,'0');let s=(time%60).toString().padStart(2,'0');document.getElementById('timer').innerText="TERMINA EM 00:"+m+":"+s;},1000);const modal=document.getElementById('imageModal');const modalImg=document.getElementById('modalImg');const modalVideo=document.getElementById('modalVideo');const closeBtn=document.querySelector('.close-modal');function openMedia(src,type){if(type==='video'){modalImg.style.display='none';modalVideo.style.display='block';modalVideo.src=src;modalVideo.play();}else{modalVideo.style.display='none';modalVideo.pause();modalImg.style.display='block';modalImg.src=src;}modal.style.display='flex';}document.querySelectorAll('.review-media-item').forEach(media=>{media.addEventListener('click',function(e){e.stopPropagation();const isVideo=this.tagName==='VIDEO'||this.src.endsWith('.mp4');openMedia(this.src,isVideo?'video':'image');});});closeBtn.addEventListener('click',()=>{modal.style.display='none';modalVideo.pause();});modal.addEventListener('click',(e)=>{if(e.target===modal){modal.style.display='none';modalVideo.pause();}});
+        </style></head><body><div class="gallery-wrapper"><div class="gallery-container" id="gallery">{{GALLERY_CONTENT}}</div><div class="counter" id="counter">1/{{IMG_COUNT}}</div></div><div class="oferta-container-ativa"><div class="oferta-preco-info-ativa"><div class="preco-atual-wrapper-ativa"><span class="preco-atual-ativa">{{PRICE_NEW}}</span></div><div class="preco-antigo-e-desconto-ativa"><span class="preco-antigo-ativa">{{PRICE_OLD}}</span><span class="desconto-tag-ativa">Economize {{DISCOUNT}}</span></div></div><div class="oferta-status-info-ativa"><span class="oferta-relampago-texto-ativa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>OFERTA RELÂMPAGO</span><div class="contador-tempo-ativo" id="timer">TERMINA EM 01:04:19</div></div></div><div class="product-info-container"><div class="tag-row"><span class="discount-tag">Preço Promocional</span><span class="discount-tag">Economize {{DISCOUNT}}</span></div><h1 class="product-title">{{PRODUCT_TITLE}}</h1><div class="rating-row">★★★★★ <span>4.9 (100+ vendidos)</span></div></div><div class="section-container"><div class="service-item"><svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg><div class="service-text"><span class="delivery-tag">Frete grátis</span><span>Receba em até 7 dias</span><span class="shipping-cost-old">Taxa: R$ 15,00</span></div></div><div class="service-item"><svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path><polyline points="12 6 16 10 8 14 12 18"></polyline></svg><div class="service-text"><span style="color:#fff; font-weight:600;">Devoluções em 30 dias</span><span>Cancelamento fácil</span></div></div></div><div class="section-container" style="padding-top:0;"><div class="servicos-tiktok-dark"><div class="servicos-tiktok-titulo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#25f4ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Proteção do Cliente</div><div class="servicos-tiktok-lista"><div class="servicos-tiktok-item">Proteção ao comprador</div><div class="servicos-tiktok-item">Pagamento seguro</div><div class="servicos-tiktok-item">Reembolso rápido</div><div class="servicos-tiktok-item">Suporte 24h</div></div></div></div><div class="review-section"><h3 class="review-heading">Avaliações dos clientes</h3>{{REVIEWS_CONTENT}}</div><div class="seller-info-container"><div class="seller-details"><img src="images/kk.png" class="seller-avatar" onerror="this.src='https://placehold.co/40?text=S'"><div><div class="store-name">TikTok Shop <svg width="12" height="12" viewBox="0 0 24 24" fill="#25f4ee"><circle cx="12" cy="12" r="10"></circle><path d="M9 12l2 2 4-4" stroke="#000" stroke-width="2"/></svg></div><div style="font-size:11px; color:#888;">+10k vendas</div></div></div><button class="follow-button">Seguir</button></div><div class="specs-section"><h3>Especificações do Produto</h3><ul class="specs-list">{{SPECS_CONTENT}}</ul></div><div class="suggestions-section"><h3 style="color:white; margin-bottom:15px;">Você também pode gostar</h3><div class="masonry-grid">{{SUGGESTED_PRODUCTS}}</div></div><div class="footer-menu"><div class="footer-links"><span>Política de Privacidade</span> • <span>Termos de Uso</span> • <span>Ajuda</span></div><p style="margin-top:10px;">© 2025 TikTok Shop. Todos os direitos reservados.</p></div><div class="fixed-bottom-bar"><div class="left-group"><a href="index.html" class="bar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Loja</span></a><a href="#" class="bar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span>Chat</span></a></div><div class="cart-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div><a href="{{CHECKOUT_LINK}}" class="buy-button"><div class="buy-price">{{PRICE_NEW}}</div><div class="buy-text"><strong>Compre agora</strong></div></a></div><div id="imageModal"><span class="close-modal">&times;</span><div id="modalContent"><img id="modalImg" style="display:none;"><video id="modalVideo" style="display:none;" controls></video></div></div><script>const gallery=document.getElementById("gallery");const counter=document.getElementById("counter");const total={{IMG_COUNT}};if(total>1){gallery.addEventListener("scroll",()=>{const width=gallery.clientWidth;const index=Math.round(gallery.scrollLeft/width)+1;counter.textContent=index+"/"+total;});}let time=259;setInterval(()=>{if(time>0)time--;let m=Math.floor(time/60).toString().padStart(2,'0');let s=(time%60).toString().padStart(2,'0');document.getElementById('timer').innerText="TERMINA EM 00:"+m+":"+s;},1000);const modal=document.getElementById('imageModal');const modalImg=document.getElementById('modalImg');const modalVideo=document.getElementById('modalVideo');const closeBtn=document.querySelector('.close-modal');function openMedia(src,type){if(type==='video'){modalImg.style.display='none';modalVideo.style.display='block';modalVideo.src=src;modalVideo.play();}else{modalVideo.style.display='none';modalVideo.pause();modalImg.style.display='block';modalImg.src=src;}modal.style.display='flex';}document.querySelectorAll('.review-media-item').forEach(media=>{media.addEventListener('click',function(e){e.stopPropagation();const isVideo=this.tagName==='VIDEO'||this.src.endsWith('.mp4');openMedia(this.src,isVideo?'video':'image');});});closeBtn.addEventListener('click',()=>{modal.style.display='none';modalVideo.pause();});modal.addEventListener('click',(e)=>{if(e.target===modal){modal.style.display='none';modalVideo.pause();}});
             const followBtn = document.querySelector('.follow-button'); if(followBtn){ followBtn.addEventListener('click', function() { this.classList.toggle('following'); if(this.classList.contains('following')) { this.innerText = "Seguindo"; this.classList.add('animate-shine'); setTimeout(() => this.classList.remove('animate-shine'), 500); } else { this.innerText = "Seguir"; } }); }
             <\/script></body></html>`;
 
@@ -646,7 +1973,109 @@
             a.href = url; a.download = filename;
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
         }
+		
+		
+		// ============================================================
+    // 1. FUNÇÃO: COLAGEM MÁGICA (Lê apenas o último copiado)
+    // ============================================================
+    async function pasteMagic() {
+        try {
+            const text = await navigator.clipboard.readText();
+            processarDitto(text); // Reutiliza a lógica do funil
+        } catch (err) {
+            alert("Permita o acesso à área de transferência.");
+        }
+    }
 
+    // ============================================================
+    // 2. FUNÇÃO: PROCESSADOR BLINDADO (Aceita Ditto e Links grudados)
+    // ============================================================
+    function processarDitto(texto) {
+        if (!texto) return;
+
+        // O TRUQUE: Insere uma quebra de linha ANTES de qualquer "http"
+        // Isso desgruda links colados como: ...foto.jpghttps://...
+        let textoSeparado = texto.replace(/(https?:\/\/)/gi, '\n$1');
+
+        // Quebra o texto em pedaços
+        const pedacos = textoSeparado.split(/\s+/);
+        
+        // Filtra apenas o que é link válido
+        const urls = pedacos.filter(item => {
+            return item.match(/^https?:\/\//i) && item.length > 10;
+        });
+
+        // Limpa os campos
+        document.getElementById('pImg1').value = "";
+        document.getElementById('pImg2').value = "";
+        document.getElementById('pImg3').value = "";
+        document.getElementById('pImg4').value = "";
+
+        if (urls && urls.length > 0) {
+            const uniqueUrls = [...new Set(urls)].map(u => u.replace(/['",;]/g, '').trim());
+
+            // TRUQUE DO MERCADO LIVRE (HD AUTOMÁTICO)
+            const hdUrls = uniqueUrls.map(u => {
+                if (u.includes('mlstatic.com')) {
+                    return u.replace('-I.webp', '-O.webp')
+                            .replace('-I.jpg', '-O.jpg')
+                            .replace('-V.webp', '-O.webp')
+                            .replace('-V.jpg', '-O.jpg');
+                }
+                return u;
+            });
+
+            if(hdUrls[0]) document.getElementById('pImg1').value = hdUrls[0];
+            if(hdUrls[1]) document.getElementById('pImg2').value = hdUrls[1];
+            if(hdUrls[2]) document.getElementById('pImg3').value = hdUrls[2];
+            if(hdUrls[3]) document.getElementById('pImg4').value = hdUrls[3];
+            
+            updatePreview();
+        }
+    }
+
+    // ============================================================
+    // 3. CALCULADORA DE DESCONTO
+    // ============================================================
+    function calcDiscount() {
+        let oldP = document.getElementById('pOldPrice').value.replace(/[^\d,]/g, '').replace(',', '.');
+        let newP = document.getElementById('pPrice').value.replace(/[^\d,]/g, '').replace(',', '.');
+        
+        oldP = parseFloat(oldP);
+        newP = parseFloat(newP);
+
+        if (oldP > 0 && newP > 0 && oldP > newP) {
+            const percent = Math.round(((oldP - newP) / oldP) * 100);
+            document.getElementById('pDiscount').value = `Economize ${percent}%`;
+        } else {
+            document.getElementById('pDiscount').value = "";
+        }
+        updatePreview();
+    }
+	
+	// ============================================================
+    // FORMATADOR DE DINHEIRO (MÁSCARA R$)
+    // ============================================================
+    function formatarMoeda(elemento) {
+        let valor = elemento.value.replace(/\D/g, ''); // Remove tudo que não é número
+        
+        if (valor === "") {
+            elemento.value = "";
+            return;
+        }
+        
+        // Converte para decimal e formata
+        valor = (parseInt(valor) / 100).toFixed(2) + '';
+        valor = valor.replace(".", ",");
+        valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        
+        elemento.value = "R$ " + valor;
+        
+        // Chama o cálculo de desconto automaticamente
+        calcDiscount(); 
+        updatePreview();
+    }
+	
         window.onload = updatePreview;
     </script>
 </body>
