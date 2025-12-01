@@ -1,206 +1,15 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+
+
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Checkout - Gold Edition</title>
-    <style>
-        /* --- ESTILO DO CRIADOR (TEMA DARK/GOLD) --- */
-        :root { 
-            --gold-primary: #d4af37; 
-            --gold-hover: #b48e18;
-            --bg-dark: #111827; 
-            --card-dark: #1f2937; 
-            --text-light: #f9fafb; 
-            --border-dark: #374151; 
-        }
-        
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: var(--bg-dark); 
-            color: var(--text-light); 
-            display: flex; 
-            justify-content: center; 
-            padding: 40px 20px; 
-            min-height: 100vh;
-        }
-        
-        .container { max-width: 800px; width: 100%; display: grid; gap: 30px; }
-        
-        /* Card Estilo Luxury */
-        .editor-card { 
-            background: var(--card-dark); 
-            padding: 35px; 
-            border-radius: 16px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
-            border: 1px solid var(--border-dark); 
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Efeito de brilho dourado no topo */
-        .editor-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--gold-primary), #fcd34d, var(--gold-primary));
-        }
-        
-        h1 { 
-            margin-top: 0; 
-            color: var(--gold-primary); 
-            font-size: 1.6rem; 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            font-weight: 700;
-        }
-        
-        .intro { 
-            color: #9ca3af; 
-            font-size: 0.95rem; 
-            margin-bottom: 30px; 
-            border-bottom: 1px solid var(--border-dark); 
-            padding-bottom: 20px; 
-            line-height: 1.5;
-        }
-
-        /* Form Grid */
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-        .full-width { grid-column: span 2; }
-        
-        .input-group label { 
-            display: block; 
-            font-size: 0.85rem; 
-            font-weight: 600; 
-            margin-bottom: 10px; 
-            color: #d1d5db; 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .input-group input { 
-            width: 100%; 
-            padding: 14px; 
-            background: #374151; 
-            border: 1px solid #4b5563; 
-            color: white; 
-            border-radius: 8px; 
-            font-size: 1rem; 
-            box-sizing: border-box; 
-            transition: all 0.3s ease; 
-        }
-        
-        .input-group input:focus { 
-            border-color: var(--gold-primary); 
-            outline: none; 
-            background: #4b5563;
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2); 
-        }
-        
-        .input-group input[type="color"] { 
-            height: 48px; 
-            padding: 4px; 
-            cursor: pointer; 
-            background: #374151;
-        }
-
-        /* Botões */
-        .actions { margin-top: 35px; display: flex; gap: 15px; }
-        
-        button { 
-            flex: 1; 
-            padding: 18px; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: 800; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-            font-size: 1.1rem; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-        }
-        
-        .btn-generate { 
-            background: linear-gradient(135deg, var(--gold-primary) 0%, #b48e18 100%); 
-            color: #111827; 
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
-        }
-        
-        .btn-generate:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4); 
-            filter: brightness(1.1);
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="editor-card">
-        <h1>⚜️ Criador Checkout Pro</h1>
-        <p class="intro">Configure os dados abaixo. O painel é escuro para seu conforto visual, mas o <strong>arquivo gerado será o layout original (claro)</strong> pronto para conversão.</p>
-        
-        <form id="configForm">
-            <div class="form-grid">
-                <div class="input-group full-width">
-                    <label>Nome do Produto</label>
-                    <input type="text" id="prodName" value="iPhone 13 PRO Dual SIM 128 GB estelar - Bom (Recondicionado)">
-                </div>
-
-                <div class="input-group">
-                    <label>Preço "De" (Antigo)</label>
-                    <input type="text" id="priceOld" value="R$ 2.564,04">
-                </div>
-
-                <div class="input-group">
-                    <label>Preço "Por" (Atual)</label>
-                    <input type="text" id="priceNew" value="R$ 999,90">
-                </div>
-
-                <div class="input-group full-width">
-                    <label>Link da Imagem do Produto</label>
-                    <input type="text" id="imgUrl" placeholder="https://..." value="images/12 (1).webp">
-                </div>
-
-                <div class="input-group full-width">
-                    <label>Link de Pagamento (Checkout/Gateway)</label>
-                    <input type="text" id="payLink" placeholder="https://mpago.li/..." value="https://mpago.li/1ViWZMJ">
-                </div>
-
-                <div class="input-group">
-                    <label>Cor Principal (Botões do Checkout)</label>
-                    <input type="color" id="primaryColor" value="#0071e3">
-                </div>
-
-                <div class="input-group">
-                    <label>Tempo Cronômetro (Segundos)</label>
-                    <input type="number" id="timerSeconds" value="600">
-                </div>
-            </div>
-
-            <div class="actions">
-                <button type="button" class="btn-generate" onclick="generateCheckout()">💾 Baixar Checkout (.html)</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<template id="checkoutTemplate">
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finalizar Pedido - {{PROD_NAME}}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Finalizar Pedido - Arvore De Natal 150 Cm Pinheiro Canadense Galhos Tradicional Verde</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="https://www.tiktok.com/favicon.ico">
     <style>
         :root {
-            --primary-color: {{COLOR_PRIMARY}};
+            --primary-color: #0071e3;
             --success-color: #27ae60; 
             --success-gradient: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
             --urgent-color: #e74c3c;
@@ -286,27 +95,27 @@
         .tiktok-disclaimer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #f3f4f6; text-align: center; }
         .tiktok-disclaimer p { font-size: 0.65rem; color: #9ca3af; line-height: 1.5; padding: 0 5px; }
     </style>
-</head>
-<body>
+
+
     <div class="checkout-card">
         <div class="tiktok-logo-bar">
             <img src="../images/tiktok-shop-logo.png" alt="TikTok Shop" class="logo-img">
         </div>
         <div class="timer-bar">
-            <svg style="width:18px;height:18px;fill:#e74c3c" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            <svg style="width:18px;height:18px;fill:#e74c3c" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg>
             Sua oferta expira em: <span class="timer-count" id="countdown">10:00</span>
         </div>
         <div class="header-secure">
-            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"></path></svg>
             Ambiente 100% Seguro e Criptografado
         </div>
         <div class="content-body">
             <div class="product-summary">
-                <img src="{{IMG_URL}}" alt="Produto" class="product-img">
+                <img src="https://i.imgur.com/axREKBh.png" alt="Produto" class="product-img">
                 <div class="product-info">
-                    <h4>{{PROD_NAME}}</h4>
-                    <span class="price-old">De {{PRICE_OLD}}</span><br>
-                    <span class="price-new">Por {{PRICE_NEW}}</span>
+                    <h4>Arvore De Natal 150 Cm Pinheiro Canadense Galhos Tradicional Verde</h4>
+                    <span class="price-old">De R$ 299,00</span><br>
+                    <span class="price-new">Por R$ 99,00</span>
                 </div>
             </div>
             <div class="progress-bar-container">
@@ -332,15 +141,15 @@
                             <label for="nome">Nome Completo</label>
                             <div class="input-icon-wrap">
                                 <input type="text" id="nome" placeholder="Ex: João da Silva" autocomplete="name">
-                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
                             </div>
                             <div class="msg-error" id="nomeError">Nome inválido.</div>
                         </div>
                         <div class="input-group">
                             <label for="email">E-mail</label>
                             <div class="input-icon-wrap">
-                                <input type="email" id="email" placeholder="nome@exemplo.com" autocomplete="email" required>
-                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                                <input type="email" id="email" placeholder="nome@exemplo.com" autocomplete="email" required="">
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
                                 <div class="loader" id="apiLoader"></div>
                             </div>
                             <div class="msg-error" id="emailError">E-mail inválido.</div>
@@ -349,7 +158,7 @@
                             <label for="cpf">CPF</label>
                             <div class="input-icon-wrap">
                                 <input type="tel" id="cpf" placeholder="000.000.000-00" maxlength="14" autocomplete="off" inputmode="numeric">
-                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"/></svg>
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"></path></svg>
                             </div>
                             <div class="msg-error" id="cpfError">CPF inválido.</div>
                         </div>
@@ -357,7 +166,7 @@
                             <label for="telefone">Celular / WhatsApp</label>
                             <div class="input-icon-wrap">
                                 <input type="tel" id="telefone" placeholder="(11) 99999-9999" maxlength="15" autocomplete="tel" inputmode="numeric">
-                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path></svg>
                             </div>
                             <div class="msg-error" id="telefoneError">Telefone inválido.</div>
                         </div>
@@ -371,7 +180,7 @@
                             <div class="input-icon-wrap">
                                 <div class="input-wrapper">
                                     <input type="tel" id="cep" placeholder="00000-000" maxlength="9" autocomplete="postal-code" inputmode="numeric">
-                                    <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                    <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg>
                                     <div class="loader" id="cepLoader"></div>
                                 </div>
                             </div>
@@ -380,8 +189,8 @@
                         <div class="input-group">
                             <label for="rua">Endereço</label>
                             <div class="input-icon-wrap">
-                                <input type="text" id="rua" disabled placeholder="Rua, Avenida...">
-                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/></svg>
+                                <input type="text" id="rua" disabled="" placeholder="Rua, Avenida...">
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"></path></svg>
                             </div>
                         </div>
                         <div class="row-inputs">
@@ -389,14 +198,14 @@
                                 <label for="numero">Número</label>
                                 <div class="input-icon-wrap">
                                     <input type="tel" id="numero" placeholder="Ex: 123" inputmode="numeric">
-                                    <svg class="input-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h-2v2h-2v2h2v2h2v2h2v-2h2v-2h-2v-2z"/></svg>
+                                    <svg class="input-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h-2v2h-2v2h2v2h2v2h2v-2h2v-2h-2v-2z"></path></svg>
                                 </div>
                             </div>
                             <div class="input-group">
                                 <label for="complemento">Comp.</label>
                                 <div class="input-icon-wrap">
                                     <input type="text" id="complemento" placeholder="Apto/Bloco">
-                                    <svg class="input-icon" viewBox="0 0 24 24"><path d="M15 15H9v-2h6v2zm0-4H9V9h6v2zm-1-8h-4v2h4V3zM7 3H3v2h4V3zm14 0h-4v2h4V3zm0 4h-4v14H7V7H3v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7z"/></svg>
+                                    <svg class="input-icon" viewBox="0 0 24 24"><path d="M15 15H9v-2h6v2zm0-4H9V9h6v2zm-1-8h-4v2h4V3zM7 3H3v2h4V3zm14 0h-4v2h4V3zm0 4h-4v14H7V7H3v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7z"></path></svg>
                                 </div>
                             </div>
                         </div>
@@ -404,40 +213,40 @@
                             <label for="referencia">Ponto de Referência (Opcional)</label>
                             <div class="input-icon-wrap">
                                 <input type="text" id="referencia" placeholder="Ex: Portão preto, perto da padaria.">
-                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm0-4h-2V7h2v8z"/></svg>
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm0-4h-2V7h2v8z"></path></svg>
                             </div>
                         </div>
                         <div class="input-group">
                             <label for="bairro">Bairro</label>
                             <div class="input-icon-wrap">
-                                <input type="text" id="bairro" disabled>
-                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M10.5 18.5l-6-6 1.41-1.41L10.5 15.67l6.59-6.59L18.5 10.5z"/></svg>
+                                <input type="text" id="bairro" disabled="">
+                                <svg class="input-icon" viewBox="0 0 24 24"><path d="M10.5 18.5l-6-6 1.41-1.41L10.5 15.67l6.59-6.59L18.5 10.5z"></path></svg>
                             </div>
                         </div>
                         <div class="row-inputs">
                             <div class="input-group">
                                 <label for="cidade">Cidade</label>
                                 <div class="input-icon-wrap">
-                                    <input type="text" id="cidade" disabled>
-                                    <svg class="input-icon" viewBox="0 0 24 24"><path d="M15 11V5l-3-3-3 3v2H2v11h20V11h-7z"/></svg>
+                                    <input type="text" id="cidade" disabled="">
+                                    <svg class="input-icon" viewBox="0 0 24 24"><path d="M15 11V5l-3-3-3 3v2H2v11h20V11h-7z"></path></svg>
                                 </div>
                             </div>
                             <div class="input-group">
                                 <label for="uf">Estado</label>
                                 <div class="input-icon-wrap">
-                                    <input type="text" id="uf" disabled>
-                                    <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg>
+                                    <input type="text" id="uf" disabled="">
+                                    <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"></path></svg>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="guarantee-box" style="margin-top: 25px; padding: 12px; background: #ecfdf5; border-radius: 8px; border: 1px solid #a7f3d0; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.85rem; color: #065f46; font-weight: 600;">
-                        <svg style="width:20px;height:20px;fill:#059669" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                        <svg style="width:20px;height:20px;fill:#059669" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"></path></svg>
                         Compra Segura | Entrega Garantida ou Seu Dinheiro de Volta
                     </div>
-                    <button type="button" id="checkoutBtn" class="btn-checkout" onclick="initiatePayment()" disabled>  
+                    <button type="button" id="checkoutBtn" class="btn-checkout" onclick="initiatePayment()" disabled="">  
                         <div class="spinner" id="btnSpinner"></div> 
-                        <svg style="width:22px;height:22px;fill:white" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                        <svg style="width:22px;height:22px;fill:white" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path></svg>
                         <span id="btnText">FINALIZAR COMPRA</span>
                     </button>
                 </div>
@@ -456,7 +265,7 @@
                     </div>
                     <img src="../images/RA1000.png" alt="Selo de Qualidade RA1000 Reclame Aqui" style="width: 120px; height: auto; display: block; margin: 20px auto 15px auto;">
                     <div class="tiktok-disclaimer">
-                        <p>Esta página é uma oferta especial da i2GO, desenvolvida para clientes do TikTok Shop. O TikTok é uma marca registrada. Esta oferta é de responsabilidade exclusiva da i2GO e não é afiliada ou endossada pelo TikTok.<br>Todos os direitos reservados. &copy; 2024 i2GO.</p>
+                        <p>Esta página é uma oferta especial da i2GO, desenvolvida para clientes do TikTok Shop. O TikTok é uma marca registrada. Esta oferta é de responsabilidade exclusiva da i2GO e não é afiliada ou endossada pelo TikTok.<br>Todos os direitos reservados. © 2024 i2GO.</p>
                     </div>
                 </div>
             </form>
@@ -464,7 +273,7 @@
     </div>
 <script>
     const timerElement = document.getElementById('countdown');
-    let timeInSeconds = {{TIMER_SECONDS}}; 
+    let timeInSeconds = 900; 
     const checkoutBtn = document.getElementById('checkoutBtn'); 
     const btnSpinner = document.getElementById('btnSpinner');
     const btnText = document.getElementById('btnText');
@@ -707,58 +516,11 @@
         btnText.textContent = 'Redirecionando...'; 
         checkoutBtn.disabled = true;
         setTimeout(() => {
-            window.location.href = '{{PAYMENT_LINK}}';
+            window.location.href = 'https://mpago.la/2JzLHrZ';
         }, 2000); 
     };
     startTimer();
     checkFormValidity(); 
 </script>
-</body>
-</html>
-</template>
 
-<script>
-    function generateCheckout() {
-        // 1. Pegar o conteúdo do template
-        let templateContent = document.getElementById('checkoutTemplate').innerHTML;
 
-        // 2. Pegar os valores dos inputs do editor
-        const prodName = document.getElementById('prodName').value;
-        const priceOld = document.getElementById('priceOld').value;
-        const priceNew = document.getElementById('priceNew').value;
-        const imgUrl = document.getElementById('imgUrl').value;
-        const payLink = document.getElementById('payLink').value;
-        const primaryColor = document.getElementById('primaryColor').value;
-        const timerSeconds = document.getElementById('timerSeconds').value;
-
-        // 3. Fazer as substituições
-        // Nota: O replaceAll garante que se houver mais de uma ocorrência, todas sejam trocadas
-        let finalCode = templateContent
-            .replaceAll('{{PROD_NAME}}', prodName)
-            .replaceAll('{{PRICE_OLD}}', priceOld)
-            .replaceAll('{{PRICE_NEW}}', priceNew)
-            .replaceAll('{{IMG_URL}}', imgUrl)
-            .replaceAll('{{PAYMENT_LINK}}', payLink)
-            .replaceAll('{{COLOR_PRIMARY}}', primaryColor)
-            .replaceAll('{{TIMER_SECONDS}}', timerSeconds);
-
-        // 4. Criar o arquivo para download
-        const blob = new Blob([finalCode], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        
-        // Nome do arquivo limpo
-        const fileName = 'Checkout_' + prodName.replace(/[^a-z0-9]/gi, '_').toLowerCase().substring(0, 15) + '.html';
-        
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        
-        // Alerta opcional
-        alert('Seu checkout foi gerado com sucesso!');
-    }
-</script>
-</body>
-</html>
