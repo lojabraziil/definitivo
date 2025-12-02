@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Shop - Ofertas</title>
+    <title>TikTok Shop - Achadinhos</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root { --primary-pink: #fe2c55; --primary-cyan: #25f4ee; --bg-main: #121212; --bg-card: #1e1e1e; --text-primary: #ffffff; --text-secondary: #b0b0b0; --border-dark: #333333; --header-height: 110px; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary); padding-top: var(--header-height); padding-bottom: 40px; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary); padding-top: var(--header-height); padding-bottom: 60px; }
         
         /* HEADER & SEARCH */
         .top-header { position: fixed; top: 0; left: 0; width: 100%; background: #121212; z-index: 1000; border-bottom: 1px solid var(--border-dark); display: flex; flex-direction: column; align-items: center;}
@@ -46,19 +46,54 @@
         .btn-resgatar-modern { background: white; color: var(--primary-pink); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; z-index: 3; }
         .btn-resgatar-modern.resgatado { background-color: #333; color: #777; pointer-events: none; }
 
-        /* GRID PRODUTOS */
-        .masonry-grid { column-count: 2; column-gap: 10px; padding: 0 12px; max-width: 1100px; margin: 0 auto; }
+        /* GRID PRODUTOS (AJUSTADO PARA AUMENTAR A QUEDA) */
+        .masonry-grid { column-count: 2; column-gap: 14px; padding: 0 12px; max-width: 1100px; margin: 0 auto; }
         @media (min-width: 768px) { .masonry-grid { column-count: 4; column-gap: 16px; } }
-        .product-card { break-inside: avoid; margin-bottom: 10px; background: var(--bg-card); border-radius: 8px; overflow: hidden; border: 1px solid #2a2a2a; cursor: pointer; transition: transform 0.1s; }
+        
+        .product-card { 
+            break-inside: avoid; 
+            margin-bottom: 16px; /* AUMENTADO DE 10px PARA 16px */
+            background: var(--bg-card); 
+            border-radius: 8px; 
+            overflow: hidden; 
+            border: 1px solid #2a2a2a; 
+            cursor: pointer; 
+            transition: transform 0.1s; 
+        }
         .product-card:active { transform: scale(0.98); }
         .card-img { width: 100%; display: block; object-fit: cover; background-color: #ffffff; aspect-ratio: 1/1; }
-        .card-info { padding: 10px; }
+        .card-info { padding: 10px; display: flex; flex-direction: column; }
         .card-title { font-size: 13px; line-height: 1.3; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: var(--text-primary); }
         .price-final { font-size: 15px; font-weight: 800; color: var(--primary-pink); }
-        .badges-row { display: flex; gap: 4px; margin-top: 6px; }
+        .badges-row { display: flex; gap: 4px; margin-top: 4px; margin-bottom: 4px; }
         .badge { padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; }
         .badge-frete { background: rgba(37, 244, 238, 0.15); color: var(--primary-cyan); }
         
+        .rating-row { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #ffce00; margin-top: 6px; }
+        .sold-count { color: #777; font-size: 10px; margin-left: 6px; }
+
+        /* RODAPÉ MINIMALISTA */
+        .simple-footer {
+            margin-top: 60px;
+            background-color: #0e0e0e;
+            border-top: 1px solid #222;
+            padding: 30px 20px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* WHATSAPP FLUTUANTE */
+        .whatsapp-btn {
+            position: fixed; bottom: 20px; right: 20px;
+            background-color: #25D366; width: 55px; height: 55px;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000;
+            cursor: pointer; transition: transform 0.2s; text-decoration: none;
+        }
+        .whatsapp-btn:hover { transform: scale(1.1); }
+
         .no-results { text-align: center; padding: 40px; color: var(--text-secondary); display: none; }
         #loadingBar { position:fixed; top:0; left:0; height:3px; background:var(--primary-cyan); width:0%; transition: width 0.3s; z-index:2000; }
     </style>
@@ -110,7 +145,20 @@
             <p style="font-size: 40px; margin-bottom: 10px;">😕</p>
             <p>Nenhum produto encontrado.</p>
         </div>
+
+        <footer class="simple-footer">
+            <p>© 2025 Achadinhos TikTok Shop. Todos os direitos reservados.</p>
+            <div style="margin-top:5px;">
+                <span style="margin:0 5px; cursor:pointer;">Política de Privacidade</span> • 
+                <span style="margin:0 5px; cursor:pointer;">Termos de Uso</span> •
+                <span style="margin:0 5px; cursor:pointer;">Loja Autorizada</span>
+            </div>
+        </footer>
     </main>
+
+    <a href="https://wa.me/5521966694409?text=Olá,+preciso+de+ajuda!" class="whatsapp-btn" target="_blank">
+        <svg viewBox="0 0 24 24" width="30" height="30" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    </a>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -130,7 +178,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         
-        // --- 1. FUNÇÃO DE MONITORAMENTO DE VISITAS (MANTIDA) ---
+        // --- 1. FUNÇÃO DE MONITORAMENTO DE VISITAS ---
         function registrarAcesso() {
             try {
                 const logsRef = ref(db, 'stats_visitas');
@@ -146,7 +194,6 @@
             }
         }
         registrarAcesso();
-
 
         // --- 2. LÓGICA DE PRODUTOS ---
         let allProducts = [];
@@ -187,16 +234,24 @@
             list.forEach(product => {
                 const oldPriceHtml = product.oldPrice ? 
                     `<div style="color:#777; font-size:11px; text-decoration:line-through;">${product.oldPrice}</div>` : '';
+
+                const vendidos = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
                 
                 const html = `
                 <div class="product-card" onclick="window.location.href='${product.link}'">
                     <img src="${product.img}" class="card-img" onerror="this.src='https://placehold.co/400?text=Sem+Img'">
                     <div class="card-info">
                         <h3 class="card-title">${product.title}</h3>
+                        
                         ${oldPriceHtml}
                         <div class="price-final">${product.price}</div>
                         <div class="badges-row">
                             <span class="badge badge-frete">Frete grátis</span>
+                        </div>
+                        
+                        <div class="rating-row">
+                            <span>★★★★★</span>
+                            <span class="sold-count">${vendidos} vendidos</span>
                         </div>
                     </div>
                 </div>`;
@@ -204,7 +259,7 @@
             });
         }
 
-        // --- 3. UI EVENTS (Busca, Botão Resgatar) ---
+        // --- 3. UI EVENTS ---
         document.getElementById('btnResgatar').addEventListener('click', function() {
             this.innerText = "Resgatado";
             this.classList.add('resgatado');
@@ -216,14 +271,12 @@
         searchInput.addEventListener('input', function(e) {
             const query = e.target.value.toLowerCase().trim();
             
-            // Filtro Principal
             let matches = allProducts;
             if (query.length > 0) {
                 matches = allProducts.filter(p => p.title.toLowerCase().includes(query));
             }
             renderProducts(matches);
 
-            // Dropdown de Sugestões
             dropdownResults.innerHTML = '';
             if (query.length === 0) {
                 dropdownResults.style.display = 'none';
