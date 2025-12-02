@@ -6,66 +6,60 @@
     <title>TikTok Shop - Ofertas</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* CSS ORIGINAL MANTIDO */
-        :root { --primary-pink: #fe2c55; --primary-cyan: #25f4ee; --tiktok-black: #161823; --bg-gray: #f1f1f2; --text-gray: #8a8b91; --border-color: #e3e3e4; --header-height: 110px; --bg-main: #121212; --bg-card: #1e1e1e; --bg-header: #121212; --text-primary: #ffffff; --text-secondary: #b0b0b0; --border-dark: #333333; --badge-frete-bg: rgba(37, 244, 238, 0.15); --badge-frete-text: #25f4ee; --badge-cupom-bg: rgba(254, 44, 85, 0.15); --badge-cupom-text: #fe2c55; }
+        :root { --primary-pink: #fe2c55; --primary-cyan: #25f4ee; --bg-main: #121212; --bg-card: #1e1e1e; --text-primary: #ffffff; --text-secondary: #b0b0b0; --border-dark: #333333; --header-height: 110px; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary); padding-top: var(--header-height); padding-bottom: 40px; }
-        .top-header { position: fixed; top: 0; left: 0; width: 100%; background: var(--bg-header); z-index: 1000; border-bottom: 1px solid var(--border-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; flex-direction: column; align-items: center;}
-        .logo-row { display: flex; justify-content: center; align-items: center; padding: 12px 16px 8px 16px; position: relative; width: 100%; max-width: 1100px; }
-        .brand-logo { display: flex; align-items: center; gap: 6px; font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: var(--text-primary); cursor: pointer; text-decoration: none;}
+        
+        /* HEADER & SEARCH */
+        .top-header { position: fixed; top: 0; left: 0; width: 100%; background: #121212; z-index: 1000; border-bottom: 1px solid var(--border-dark); display: flex; flex-direction: column; align-items: center;}
+        .logo-row { display: flex; justify-content: center; align-items: center; padding: 12px 16px 8px 16px; width: 100%; max-width: 1100px; }
+        .brand-logo { display: flex; align-items: center; gap: 6px; font-size: 20px; font-weight: 900; color: var(--text-primary); text-decoration: none;}
         .tiktok-icon-svg { width: 24px; height: 24px; fill: var(--text-primary); filter: drop-shadow(0 0 5px var(--primary-pink)); }
-        .search-row-custom { padding: 0 16px 12px 16px; display: flex; justify-content: center; position: relative; width: 100%; max-width: 800px; margin: 0 auto; }
-        .modern-search-bar { display: flex; align-items: center; width: 100%; background-color: var(--bg-card); border: 2px solid #333; border-radius: 50px; padding: 3px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .search-icon-left { padding-left: 14px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; }
+        
+        .search-row-custom { padding: 0 16px 12px 16px; width: 100%; max-width: 800px; margin: 0 auto; position: relative; }
+        .modern-search-bar { display: flex; align-items: center; width: 100%; background-color: var(--bg-card); border: 2px solid #333; border-radius: 50px; padding: 3px; }
+        .search-icon-left { padding-left: 14px; color: var(--text-secondary); display: flex; align-items: center; }
         .search-icon-svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; }
-        .modern-input { flex: 1; border: none; background: transparent; outline: none; padding: 8px 10px; font-size: 14px; color: var(--text-primary); transition: opacity 0.3s ease; }
-        .modern-search-btn { background-color: var(--primary-pink); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s; box-shadow: 0 0 10px rgba(254, 44, 85, 0.3); }
-        .search-results-dropdown { position: absolute; top: 100%; left: 16px; right: 16px; background: var(--bg-card); border-radius: 0 0 12px 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); margin-top: -10px; z-index: 999; display: none; max-height: 350px; overflow-y: auto; border: 1px solid var(--border-dark); }
-        .result-item { display: flex; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border-dark); cursor: pointer; transition: background 0.2s; }
+        .modern-input { flex: 1; border: none; background: transparent; outline: none; padding: 8px 10px; color: var(--text-primary); }
+        .modern-search-btn { background-color: var(--primary-pink); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: 700; cursor: pointer; }
+        
+        /* DROPDOWN RESULTADOS */
+        .search-results-dropdown { position: absolute; top: 100%; left: 16px; right: 16px; background: var(--bg-card); border-radius: 0 0 12px 12px; z-index: 999; display: none; max-height: 350px; overflow-y: auto; border: 1px solid var(--border-dark); }
+        .result-item { display: flex; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border-dark); cursor: pointer; }
         .result-item:hover { background-color: #2a2a2a; }
-        .result-thumb { width: 36px; height: 36px; border-radius: 4px; margin-right: 12px; flex-shrink: 0; border: 1px solid #333; object-fit: cover; }
-        .result-text { font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.2; }
-        .result-price { font-size: 11px; color: var(--primary-pink); font-weight: 700; margin-top: 2px; }
+        .result-thumb { width: 36px; height: 36px; border-radius: 4px; margin-right: 12px; object-fit: cover; }
+        
+        /* HERO & PROMOS */
         .container { padding: 0 12px; max-width: 1100px; margin: 0 auto; }
-        .hero-banner-container { margin-top: 12px; background-color: #000; border-radius: 16px; padding: 0; position: relative; overflow: hidden; width: 100%; aspect-ratio: 822 / 234; box-shadow: 0 5px 20px rgba(254, 44, 85, 0.2); border: 1px solid #222; }
+        .hero-banner-container { margin-top: 12px; border-radius: 16px; overflow: hidden; width: 100%; aspect-ratio: 822 / 234; border: 1px solid #222; }
         @media (min-width: 768px) { .hero-banner-container { max-height: 400px; } }
-        .banner-video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 1; pointer-events: none; }
-        .promo-container-modern { display: flex; width: 100%; border-radius: 24px; overflow: hidden; margin-top: 12px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid #222; }
+        .banner-img-bg { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        .promo-container-modern { display: flex; width: 100%; border-radius: 24px; overflow: hidden; margin-top: 12px; margin-bottom: 20px; border: 1px solid #222; }
         .promo-block-modern { padding: 16px 20px; display: flex; flex-direction: column; justify-content: center; min-height: 90px; }
-        .block-frete-modern { flex: 1; background-color: #132c33; position: relative; z-index: 1; }
+        .block-frete-modern { flex: 1; background-color: #132c33; }
         .frete-title { color: var(--primary-cyan); font-size: 17px; font-weight: 900; }
         .frete-desc { color: #8aaeb3; font-size: 12px; margin-top: 4px; }
         .block-desconto-modern { flex: 1.2; background: linear-gradient(135deg, #ff7eb3, #ff3e3e); color: white; position: relative; display: flex; justify-content: space-between; align-items: center; padding-left: 40px; }
-        .block-desconto-modern::before { content: ''; position: absolute; left: -25px; top: 0; width: 50px; height: 100%; background: #132c33; border-radius: 0 50% 50% 0; z-index: 2; }
-        .desconto-info { z-index: 3; }
-        .desconto-title { font-size: 17px; font-weight: 900; }
-        .desconto-desc { font-size: 12px; opacity: 0.9; margin-top: 4px; }
-        .tag-cliente-novo { position: absolute; top: 8px; right: 12px; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; z-index: 3; }
-        .btn-resgatar-modern { background: white; color: var(--primary-pink); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; z-index: 3; box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: all 0.2s; }
-        .btn-resgatar-modern.resgatado { background-color: #333; color: #777; box-shadow: none; cursor: default; pointer-events: none; }
-        .masonry-grid { column-count: 2; column-gap: 10px; padding: 12px; max-width: 1100px; margin: 0 auto; }
+        .block-desconto-modern::before { content: ''; position: absolute; left: -25px; top: 0; width: 50px; height: 100%; background: #132c33; border-radius: 0 50% 50% 0; }
+        .desconto-title { font-size: 17px; font-weight: 900; z-index: 2; position: relative;}
+        .btn-resgatar-modern { background: white; color: var(--primary-pink); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; z-index: 3; }
+        .btn-resgatar-modern.resgatado { background-color: #333; color: #777; pointer-events: none; }
+
+        /* GRID PRODUTOS */
+        .masonry-grid { column-count: 2; column-gap: 10px; padding: 0 12px; max-width: 1100px; margin: 0 auto; }
         @media (min-width: 768px) { .masonry-grid { column-count: 4; column-gap: 16px; } }
-        @media (min-width: 1200px) { .masonry-grid { column-count: 5; } }
-        .product-card { break-inside: avoid; margin-bottom: 10px; background: var(--bg-card); border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.3); border: 1px solid #2a2a2a; cursor: pointer; transition: transform 0.1s; color: var(--text-primary); }
+        .product-card { break-inside: avoid; margin-bottom: 10px; background: var(--bg-card); border-radius: 8px; overflow: hidden; border: 1px solid #2a2a2a; cursor: pointer; transition: transform 0.1s; }
         .product-card:active { transform: scale(0.98); }
-        .badges-row { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
-        .badge { padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; white-space: nowrap; }
-        .badge-frete { background-color: var(--badge-frete-bg); color: var(--badge-frete-text); }
-        .badge-off { background-color: var(--badge-cupom-bg); color: var(--badge-cupom-text); }
-        .card-img { width: 100%; display: block; object-fit: cover; background-color: #ffffff; }
+        .card-img { width: 100%; display: block; object-fit: cover; background-color: #ffffff; aspect-ratio: 1/1; }
         .card-info { padding: 10px; }
         .card-title { font-size: 13px; line-height: 1.3; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: var(--text-primary); }
-        .price-final { font-size: 15px; font-weight: 800; color: var(--primary-pink); text-shadow: 0 0 2px rgba(254, 44, 85, 0.3); }
-        .text-muted { color: var(--text-secondary); font-size: 11px; }
-        .no-results { text-align: center; padding: 40px; width: 100%; grid-column: span 2; display: none; color: var(--text-secondary); }
-        .no-results button { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-dark); }
-		.banner-img-bg {
-    width: 100%;
-    height: 100%;       /* Ou defina uma altura fixa, ex: 300px, se preferir */
-    object-fit: cover;  /* Isso impede que a imagem fique esticada/achatada */
-    display: block;
-}
+        .price-final { font-size: 15px; font-weight: 800; color: var(--primary-pink); }
+        .badges-row { display: flex; gap: 4px; margin-top: 6px; }
+        .badge { padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+        .badge-frete { background: rgba(37, 244, 238, 0.15); color: var(--primary-cyan); }
         
+        .no-results { text-align: center; padding: 40px; color: var(--text-secondary); display: none; }
         #loadingBar { position:fixed; top:0; left:0; height:3px; background:var(--primary-cyan); width:0%; transition: width 0.3s; z-index:2000; }
     </style>
 </head>
@@ -92,14 +86,20 @@
     <main>
         <section class="container">
             <div class="hero-banner-container">
-    <img src="images/an.jpg" class="banner-img-bg" alt="Banner Principal">
-</div>
+                <img src="images/an.jpg" class="banner-img-bg" alt="Banner Principal" onerror="this.src='https://placehold.co/800x300/111/FFF?text=Banner+TikTok'">
+            </div>
+            
             <div class="promo-container-modern">
-                <div class="promo-block-modern block-frete-modern"><div class="frete-title">Frete grátis</div><div class="frete-desc">em pedidos acima de R$ 9</div></div>
+                <div class="promo-block-modern block-frete-modern">
+                    <div class="frete-title">Frete grátis</div>
+                    <div class="frete-desc">em pedidos acima de R$ 9</div>
+                </div>
                 <div class="promo-block-modern block-desconto-modern">
-                    <div class="desconto-info"><div class="desconto-title">Desconto</div><div class="desconto-desc">nos pedidos...</div></div>
-                    <button class="btn-resgatar-modern" id="btnResgatar">Resgatar tudo</button>
-                    <div class="tag-cliente-novo">Cliente novo</div>
+                    <div style="z-index: 2;">
+                        <div class="desconto-title">Desconto</div>
+                        <div style="font-size: 12px; opacity: 0.9;">Primeira compra</div>
+                    </div>
+                    <button class="btn-resgatar-modern" id="btnResgatar">Resgatar</button>
                 </div>
             </div>
         </section>
@@ -108,15 +108,14 @@
         
         <div class="no-results" id="noResultsMsg">
             <p style="font-size: 40px; margin-bottom: 10px;">😕</p>
-            <p>Nenhum produto encontrado na nuvem.</p>
+            <p>Nenhum produto encontrado.</p>
         </div>
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // SUAS CREDENCIAIS AQUI
         const firebaseConfig = {
             apiKey: "AIzaSyCvXcgBkLNFBX8G0c6bUYxGd_6St_l7H4s",
             authDomain: "lojatiktok-9db54.firebaseapp.com",
@@ -131,62 +130,81 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         
-        let productsData = [];
+        // --- 1. FUNÇÃO DE MONITORAMENTO DE VISITAS (MANTIDA) ---
+        function registrarAcesso() {
+            try {
+                const logsRef = ref(db, 'stats_visitas');
+                push(logsRef, {
+                    data: new Date().toLocaleString('pt-BR'),
+                    userAgent: navigator.userAgent,
+                    tela: `${window.screen.width}x${window.screen.height}`,
+                    pagina: window.location.pathname
+                });
+                console.log("Acesso registrado.");
+            } catch (error) {
+                console.error("Erro no monitoramento:", error);
+            }
+        }
+        registrarAcesso();
+
+
+        // --- 2. LÓGICA DE PRODUTOS ---
+        let allProducts = [];
         const productGrid = document.getElementById('productGrid');
-        const noResultsMsg = document.getElementById('noResultsMsg');
         const loadingBar = document.getElementById('loadingBar');
 
-        // LER DADOS (REALTIME)
         loadingBar.style.width = "50%";
         const productsRef = ref(db, 'products');
-        
+
         onValue(productsRef, (snapshot) => {
             const data = snapshot.val();
-            productsData = [];
+            allProducts = [];
             
             if(data) {
                 Object.keys(data).forEach(key => {
-                    productsData.push({ id: key, ...data[key] });
+                    allProducts.push({ id: key, ...data[key] });
                 });
-                productsData.reverse();
+                allProducts.reverse(); 
             }
             
             loadingBar.style.width = "100%";
             setTimeout(() => loadingBar.style.display = 'none', 500);
             
             document.getElementById('searchInput').placeholder = "Buscar ofertas...";
-            renderProducts(productsData);
+            renderProducts(allProducts);
         });
 
         function renderProducts(list) {
             productGrid.innerHTML = '';
+            const noResults = document.getElementById('noResultsMsg');
+
             if (list.length === 0) {
-                noResultsMsg.style.display = 'block';
+                noResults.style.display = 'block';
                 return;
             }
-            noResultsMsg.style.display = 'none';
+            noResults.style.display = 'none';
 
             list.forEach(product => {
-                const oldPriceHtml = product.oldPrice ? `<div class="text-muted"><s>${product.oldPrice}</s> -61%</div>` : '';
+                const oldPriceHtml = product.oldPrice ? 
+                    `<div style="color:#777; font-size:11px; text-decoration:line-through;">${product.oldPrice}</div>` : '';
+                
                 const html = `
-                <div class="product-card item-searchable" onclick="window.location.href='${product.link}'">
-                    <img src="${product.img}" class="card-img" style="aspect-ratio: 1/1;" onerror="this.src='https://placehold.co/400?text=Sem+Img'">
+                <div class="product-card" onclick="window.location.href='${product.link}'">
+                    <img src="${product.img}" class="card-img" onerror="this.src='https://placehold.co/400?text=Sem+Img'">
                     <div class="card-info">
                         <h3 class="card-title">${product.title}</h3>
-                        <div><div class="price-final">${product.price}</div>${oldPriceHtml}</div>
-                        <div class="badges-row"><span class="badge badge-frete">Frete grátis</span><span class="badge badge-off">Oferta</span></div>
+                        ${oldPriceHtml}
+                        <div class="price-final">${product.price}</div>
+                        <div class="badges-row">
+                            <span class="badge badge-frete">Frete grátis</span>
+                        </div>
                     </div>
                 </div>`;
                 productGrid.innerHTML += html;
             });
         }
 
-        // Lógica de UI (Vídeo, Botão, Pesquisa)
-        document.addEventListener('DOMContentLoaded', () => {
-            var video = document.getElementById('heroVideo');
-            if(video) { video.muted = true; video.play().catch(()=>{}); }
-        });
-        
+        // --- 3. UI EVENTS (Busca, Botão Resgatar) ---
         document.getElementById('btnResgatar').addEventListener('click', function() {
             this.innerText = "Resgatado";
             this.classList.add('resgatado');
@@ -197,43 +215,42 @@
 
         searchInput.addEventListener('input', function(e) {
             const query = e.target.value.toLowerCase().trim();
-            dropdownResults.innerHTML = '';
             
+            // Filtro Principal
+            let matches = allProducts;
+            if (query.length > 0) {
+                matches = allProducts.filter(p => p.title.toLowerCase().includes(query));
+            }
+            renderProducts(matches);
+
+            // Dropdown de Sugestões
+            dropdownResults.innerHTML = '';
             if (query.length === 0) {
                 dropdownResults.style.display = 'none';
-                renderProducts(productsData);
                 return;
             }
 
-            const matches = productsData.filter(product => product.title.toLowerCase().includes(query));
-
-            if (matches.length > 0) {
+            const dropdownMatches = matches.slice(0, 5); 
+            if (dropdownMatches.length > 0) {
                 dropdownResults.style.display = 'block';
-                matches.forEach(match => {
+                dropdownMatches.forEach(match => {
                     const div = document.createElement('div');
                     div.className = 'result-item';
                     div.onclick = () => { window.location.href = match.link; };
-                    div.innerHTML = `<img src="${match.img}" class="result-thumb"><div><div class="result-text">${match.title}</div><div class="result-price">${match.price}</div></div>`;
+                    div.innerHTML = `<img src="${match.img}" class="result-thumb"><div><div style="font-size:13px; color:white;">${match.title}</div><div style="font-size:11px; color:#fe2c55;">${match.price}</div></div>`;
                     dropdownResults.appendChild(div);
                 });
             } else {
-                dropdownResults.style.display = 'block';
-                dropdownResults.innerHTML = `<div class="result-item" style="color:#999;">Nada encontrado</div>`;
+                dropdownResults.style.display = 'none';
             }
-            renderProducts(matches);
         });
 
-        window.showAllProducts = () => {
-            renderProducts(productsData);
-            searchInput.value = '';
-            dropdownResults.style.display = 'none';
-        }
-
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', (e) => {
             if (!document.querySelector('.search-row-custom').contains(e.target)) {
                 dropdownResults.style.display = 'none';
             }
         });
+
     </script>
 </body>
 </html>
