@@ -59,6 +59,12 @@
         .text-muted { color: var(--text-secondary); font-size: 11px; }
         .no-results { text-align: center; padding: 40px; width: 100%; grid-column: span 2; display: none; color: var(--text-secondary); }
         .no-results button { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-dark); }
+		.banner-img-bg {
+    width: 100%;
+    height: 100%;       /* Ou defina uma altura fixa, ex: 300px, se preferir */
+    object-fit: cover;  /* Isso impede que a imagem fique esticada/achatada */
+    display: block;
+}
         
         #loadingBar { position:fixed; top:0; left:0; height:3px; background:var(--primary-cyan); width:0%; transition: width 0.3s; z-index:2000; }
     </style>
@@ -86,10 +92,8 @@
     <main>
         <section class="container">
             <div class="hero-banner-container">
-                <video id="heroVideo" class="banner-video-bg" autoplay loop muted playsinline preload="auto">
-                    <source src="images/an.mp4" type="video/mp4">
-                </video>
-            </div>
+    <img src="images/an.jpg" class="banner-img-bg" alt="Banner Principal">
+</div>
             <div class="promo-container-modern">
                 <div class="promo-block-modern block-frete-modern"><div class="frete-title">Frete grátis</div><div class="frete-desc">em pedidos acima de R$ 9</div></div>
                 <div class="promo-block-modern block-desconto-modern">
