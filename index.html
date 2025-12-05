@@ -20,11 +20,10 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary); padding-top: var(--header-height); padding-bottom: 60px; }
         
-        /* HEADER & SEARCH - Estilo Premium */
+        /* HEADER & SEARCH */
         .top-header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--border-dark); display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
         .logo-row { display: flex; justify-content: center; align-items: center; padding: 15px 16px 10px 16px; width: 100%; max-width: 1100px; }
         
-        /* Logo Texto com Gradiente Dourado */
         .brand-logo { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
         .brand-text {
             background: linear-gradient(90deg, var(--primary-gold-light), var(--primary-gold), var(--primary-gold-dark));
@@ -39,7 +38,6 @@
         .search-icon-svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; }
         .modern-input { flex: 1; border: none; background: transparent; outline: none; padding: 10px 12px; color: var(--text-primary); font-size: 14px; }
         
-        /* Botão de Busca Dourado */
         .modern-search-btn { 
             background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark)); 
             color: #000; 
@@ -53,7 +51,6 @@
             letter-spacing: 0.5px;
         }
         
-        /* DROPDOWN RESULTADOS */
         .search-results-dropdown { position: absolute; top: 100%; left: 16px; right: 16px; background: var(--bg-card); border-radius: 0 0 8px 8px; z-index: 999; display: none; max-height: 350px; overflow-y: auto; border: 1px solid var(--border-dark); border-top: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .result-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid var(--border-dark); cursor: pointer; }
         .result-item:hover { background-color: #1f1f1f; }
@@ -66,58 +63,74 @@
         @media (min-width: 768px) { .hero-banner-container { max-height: 400px; } }
         .banner-img-bg { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        /* Blocos de Promoção - Estilo Luxo */
-        .promo-container-modern { display: flex; width: 100%; border-radius: 12px; overflow: hidden; margin-top: 15px; margin-bottom: 25px; border: 1px solid var(--border-dark); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .promo-block-modern { padding: 16px 20px; display: flex; flex-direction: column; justify-content: center; min-height: 90px; }
-        
-        .block-frete-modern { flex: 1; background: linear-gradient(180deg, #1a1a1a, #141414); border-right: 1px solid #333; }
-        .frete-title { color: var(--primary-gold); font-size: 16px; font-weight: 800; text-transform: uppercase; }
-        .frete-desc { color: #888; font-size: 12px; margin-top: 4px; }
-        
-        .block-desconto-modern { flex: 1.2; background: linear-gradient(135deg, #222, #000); color: white; position: relative; display: flex; justify-content: space-between; align-items: center; padding-left: 30px; }
-        .desconto-title { font-size: 18px; font-weight: 900; color: white; z-index: 2; position: relative; }
-        .desconto-sub { font-size: 11px; color: var(--primary-gold); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px;}
-        
-        /* Botão Resgatar com Animação de Pressão */
-.btn-resgatar-modern { 
-    background: linear-gradient(90deg, var(--primary-gold), var(--primary-gold-dark)); 
-    color: #000; 
-    border: none; 
-    padding: 8px 18px; 
-    border-radius: 4px; 
-    font-weight: 800; 
-    font-size: 11px; 
-    cursor: pointer; 
-    z-index: 3; 
-    text-transform: uppercase;
-    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.2);
-    /* Adicionamos uma transição suave para todas as propriedades */
-    transition: all 0.15s ease-in-out;
-    position: relative;
-    overflow: hidden;
-}
+        /* NOVA BARRA DE PROMOÇÃO UNIFICADA E ALINHADA */
+        .promo-container-modern { 
+            display: flex; 
+            align-items: center; /* Alinha verticalmente no centro */
+            justify-content: space-between; /* Texto na esquerda, botão na direita */
+            width: 100%; 
+            border-radius: 12px; 
+            margin-top: 15px; 
+            margin-bottom: 25px; 
+            border: 1px solid var(--border-dark); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: linear-gradient(90deg, #141414, #0a0a0a);
+            padding: 20px 25px;
+            position: relative;
+            overflow: hidden;
+        }
 
-/* O EFEITO DE BRILHO AO PRESSIONAR */
-.btn-resgatar-modern:active {
-    /* Diminui levemente para dar sensação de clique */
-    transform: scale(0.96);
-    /* Aumenta o brilho geral */
-    filter: brightness(1.2);
-    /* Cria um brilho dourado intenso externo e um flash branco interno */
-    box-shadow: 
-        0 0 25px rgba(212, 175, 55, 0.7), /* Glow externo forte */
-        inset 0 0 15px rgba(255, 255, 255, 0.8); /* Brilho interno branco */
-}
+        /* Detalhe dourado na lateral */
+        .promo-container-modern::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; 
+            background: linear-gradient(to bottom, var(--primary-gold), var(--primary-gold-dark));
+        }
 
-/* Estado quando já foi resgatado (mantém sem brilho) */
-.btn-resgatar-modern.resgatado { 
-    background: #333; 
-    color: #777; 
-    pointer-events: none; 
-    box-shadow: none; 
-    transform: none;
-    filter: none;
-}
+        .promo-text-area { display: flex; flex-direction: column; justify-content: center; }
+        
+        .frete-title { 
+            color: var(--primary-gold); 
+            font-size: 18px; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        
+        .frete-desc { 
+            color: #ccc; 
+            font-size: 12px; 
+        }
+
+        /* Botão Resgatar */
+        .btn-resgatar-modern { 
+            background: linear-gradient(90deg, var(--primary-gold), var(--primary-gold-dark)); 
+            color: #000; 
+            border: none; 
+            padding: 10px 24px; 
+            border-radius: 6px; 
+            font-weight: 800; 
+            font-size: 12px; 
+            cursor: pointer; 
+            z-index: 3; 
+            text-transform: uppercase;
+            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.2);
+            transition: all 0.15s ease-in-out;
+            white-space: nowrap; /* Impede quebra de linha */
+            margin-left: 15px;
+        }
+
+        .btn-resgatar-modern:active {
+            transform: scale(0.96);
+            filter: brightness(1.2);
+        }
+
+        .btn-resgatar-modern.resgatado { 
+            background: #333; 
+            color: #777; 
+            pointer-events: none; 
+            box-shadow: none; 
+        }
 
         /* GRID PRODUTOS */
         .masonry-grid { column-count: 2; column-gap: 12px; padding: 0 12px; max-width: 1100px; margin: 0 auto; }
@@ -132,7 +145,6 @@
             border: 1px solid var(--border-dark); 
             cursor: pointer; 
             transition: transform 0.2s, border-color 0.2s; 
-            position: relative;
         }
         .product-card:hover { border-color: var(--primary-gold-dark); transform: translateY(-2px); }
         .product-card:active { transform: scale(0.98); }
@@ -149,10 +161,29 @@
             color: var(--primary-gold); 
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
         }
+
+        /* Badge abaixo do preço */
+        .badges-row { margin-top: 6px; margin-bottom: 4px; display: flex; min-height: 20px; align-items: center; }
         
-        .badges-row { display: flex; gap: 4px; margin-top: 6px; margin-bottom: 4px; }
-        .badge { padding: 3px 6px; border-radius: 3px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-        .badge-frete { background: rgba(212, 175, 55, 0.15); color: var(--primary-gold); border: 1px solid rgba(212, 175, 55, 0.3); }
+        .badge-surpresa { 
+            display: none; /* PADRÃO: ESCONDIDO */
+            background: rgba(212, 175, 55, 0.15); 
+            color: var(--primary-gold); 
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 3px 6px; 
+            border-radius: 3px; 
+            font-size: 9px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            width: fit-content;
+            animation: fadeInBadge 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeInBadge {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         
         .rating-row { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--primary-gold); margin-top: 6px; }
         .sold-count { color: #666; font-size: 10px; margin-left: 6px; font-weight: 600;}
@@ -219,17 +250,11 @@
             </div>
             
             <div class="promo-container-modern">
-                <div class="promo-block-modern block-frete-modern">
-                    <div class="frete-title">Frete Grátis</div>
-                    <div class="frete-desc">Confira as condições para sua região</div>
+                <div class="promo-text-area">
+                    <div class="frete-title" id="promoTitle">FRETE GRÁTIS</div>
+                    <div class="frete-desc" id="promoDesc">Para todo o Brasil na primeira compra</div>
                 </div>
-                <div class="promo-block-modern block-desconto-modern">
-                    <div style="z-index: 2;">
-                        <div class="frete-title">Primeira Compra</div>
-                        <div class="desconto-sub"></div>
-                    </div>
-                    <button class="btn-resgatar-modern" id="btnResgatar">RESGATAR</button>
-                </div>
+                <button class="btn-resgatar-modern" id="btnResgatar">RESGATAR</button>
             </div>
         </section>
 
@@ -272,7 +297,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         
-        // --- 1. FUNÇÃO DE MONITORAMENTO DE VISITAS ---
         function registrarAcesso() {
             try {
                 const logsRef = ref(db, 'stats_visitas');
@@ -282,15 +306,13 @@
                     tela: `${window.screen.width}x${window.screen.height}`,
                     pagina: window.location.pathname
                 });
-                console.log("Acesso registrado.");
-            } catch (error) {
-                console.error("Erro no monitoramento:", error);
-            }
+            } catch (error) { console.error(error); }
         }
         registrarAcesso();
 
-        // --- 2. LÓGICA DE PRODUTOS ---
         let allProducts = [];
+        let cupomAtivo = false;
+
         const productGrid = document.getElementById('productGrid');
         const loadingBar = document.getElementById('loadingBar');
 
@@ -330,6 +352,8 @@
 
                 const vendidos = Math.floor(Math.random() * (500 - 50 + 1)) + 50;
                 
+                const badgeStyle = cupomAtivo ? 'display: block;' : ''; 
+                
                 const html = `
                 <div class="product-card" onclick="window.location.href='${product.link}'">
                     <img src="${product.img}" class="card-img" onerror="this.src='https://placehold.co/400?text=Sem+Img'">
@@ -338,8 +362,9 @@
                         
                         ${oldPriceHtml}
                         <div class="price-final">${product.price}</div>
+                        
                         <div class="badges-row">
-                            <span class="badge badge-frete">FRETE GRÁTIS</span>
+                            <span class="badge-surpresa" style="${badgeStyle}">FRETE GRÁTIS</span>
                         </div>
                         
                         <div class="rating-row">
@@ -352,10 +377,30 @@
             });
         }
 
-        // --- 3. UI EVENTS ---
+        // --- LÓGICA DO BOTÃO E ATUALIZAÇÃO DO TEXTO ---
         document.getElementById('btnResgatar').addEventListener('click', function() {
-            this.innerText = "RESGATADO";
+            cupomAtivo = true;
+
+            this.innerText = "ATIVO";
             this.classList.add('resgatado');
+            
+            // Atualiza o texto na mesma linha, mantendo o alinhamento
+            const title = document.getElementById('promoTitle');
+            const desc = document.getElementById('promoDesc');
+            
+            title.innerText = "CUPOM ATIVADO!";
+            title.style.color = "#4caf50";
+            
+            desc.innerText = "Frete Grátis aplicado com sucesso.";
+            desc.style.color = "#fff";
+            
+            // Revela as tags
+            const badges = document.querySelectorAll('.badge-surpresa');
+            badges.forEach(badge => {
+                badge.style.display = 'block';
+            });
+
+            if (navigator.vibrate) navigator.vibrate(50);
         });
 
         const searchInput = document.getElementById('searchInput');
