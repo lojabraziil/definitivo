@@ -3,99 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Shop - Achadinhos</title>
+    <title>Casa dos Eletros - Ofertas Imperdíveis</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary-pink: #fe2c55; --primary-cyan: #25f4ee; --bg-main: #121212; --bg-card: #1e1e1e; --text-primary: #ffffff; --text-secondary: #b0b0b0; --border-dark: #333333; --header-height: 110px; }
+        :root { 
+            --primary-gold: #D4AF37; 
+            --primary-gold-light: #FEDC56;
+            --primary-gold-dark: #AA8C2C;
+            --bg-main: #0a0a0a; 
+            --bg-card: #141414; 
+            --text-primary: #ffffff; 
+            --text-secondary: #b0b0b0; 
+            --border-dark: #2a2a2a; 
+            --header-height: 110px; 
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-primary); padding-top: var(--header-height); padding-bottom: 60px; }
         
-        /* HEADER & SEARCH */
-        .top-header { position: fixed; top: 0; left: 0; width: 100%; background: #121212; z-index: 1000; border-bottom: 1px solid var(--border-dark); display: flex; flex-direction: column; align-items: center;}
-        .logo-row { display: flex; justify-content: center; align-items: center; padding: 12px 16px 8px 16px; width: 100%; max-width: 1100px; }
-        .brand-logo { display: flex; align-items: center; gap: 6px; font-size: 20px; font-weight: 900; color: var(--text-primary); text-decoration: none;}
-        .tiktok-icon-svg { width: 24px; height: 24px; fill: var(--text-primary); filter: drop-shadow(0 0 5px var(--primary-pink)); }
+        /* HEADER & SEARCH - Estilo Premium */
+        .top-header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--border-dark); display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .logo-row { display: flex; justify-content: center; align-items: center; padding: 15px 16px 10px 16px; width: 100%; max-width: 1100px; }
         
-        .search-row-custom { padding: 0 16px 12px 16px; width: 100%; max-width: 800px; margin: 0 auto; position: relative; }
-        .modern-search-bar { display: flex; align-items: center; width: 100%; background-color: var(--bg-card); border: 2px solid #333; border-radius: 50px; padding: 3px; }
-        .search-icon-left { padding-left: 14px; color: var(--text-secondary); display: flex; align-items: center; }
+        /* Logo Texto com Gradiente Dourado */
+        .brand-logo { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .brand-text {
+            background: linear-gradient(90deg, var(--primary-gold-light), var(--primary-gold), var(--primary-gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .search-row-custom { padding: 0 16px 15px 16px; width: 100%; max-width: 800px; margin: 0 auto; position: relative; }
+        .modern-search-bar { display: flex; align-items: center; width: 100%; background-color: var(--bg-card); border: 1px solid var(--border-dark); border-radius: 8px; padding: 4px; transition: border-color 0.3s; }
+        .modern-search-bar:focus-within { border-color: var(--primary-gold); }
+        .search-icon-left { padding-left: 14px; color: var(--primary-gold); display: flex; align-items: center; }
         .search-icon-svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; }
-        .modern-input { flex: 1; border: none; background: transparent; outline: none; padding: 8px 10px; color: var(--text-primary); }
-        .modern-search-btn { background-color: var(--primary-pink); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: 700; cursor: pointer; }
+        .modern-input { flex: 1; border: none; background: transparent; outline: none; padding: 10px 12px; color: var(--text-primary); font-size: 14px; }
+        
+        /* Botão de Busca Dourado */
+        .modern-search-btn { 
+            background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark)); 
+            color: #000; 
+            border: none; 
+            padding: 8px 24px; 
+            border-radius: 6px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
         
         /* DROPDOWN RESULTADOS */
-        .search-results-dropdown { position: absolute; top: 100%; left: 16px; right: 16px; background: var(--bg-card); border-radius: 0 0 12px 12px; z-index: 999; display: none; max-height: 350px; overflow-y: auto; border: 1px solid var(--border-dark); }
-        .result-item { display: flex; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border-dark); cursor: pointer; }
-        .result-item:hover { background-color: #2a2a2a; }
-        .result-thumb { width: 36px; height: 36px; border-radius: 4px; margin-right: 12px; object-fit: cover; }
+        .search-results-dropdown { position: absolute; top: 100%; left: 16px; right: 16px; background: var(--bg-card); border-radius: 0 0 8px 8px; z-index: 999; display: none; max-height: 350px; overflow-y: auto; border: 1px solid var(--border-dark); border-top: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .result-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid var(--border-dark); cursor: pointer; }
+        .result-item:hover { background-color: #1f1f1f; }
+        .result-thumb { width: 40px; height: 40px; border-radius: 4px; margin-right: 12px; object-fit: cover; border: 1px solid #333; }
         
         /* HERO & PROMOS */
         .container { padding: 0 12px; max-width: 1100px; margin: 0 auto; }
-        .hero-banner-container { margin-top: 12px; border-radius: 16px; overflow: hidden; width: 100%; aspect-ratio: 822 / 234; border: 1px solid #222; }
+        .hero-banner-container { margin-top: 15px; border-radius: 12px; overflow: hidden; width: 100%; aspect-ratio: 822 / 234; border: 1px solid var(--border-dark); position: relative; }
+        .hero-banner-container::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 50px rgba(0,0,0,0.5); pointer-events: none; }
         @media (min-width: 768px) { .hero-banner-container { max-height: 400px; } }
         .banner-img-bg { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        .promo-container-modern { display: flex; width: 100%; border-radius: 24px; overflow: hidden; margin-top: 12px; margin-bottom: 20px; border: 1px solid #222; }
+        /* Blocos de Promoção - Estilo Luxo */
+        .promo-container-modern { display: flex; width: 100%; border-radius: 12px; overflow: hidden; margin-top: 15px; margin-bottom: 25px; border: 1px solid var(--border-dark); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .promo-block-modern { padding: 16px 20px; display: flex; flex-direction: column; justify-content: center; min-height: 90px; }
-        .block-frete-modern { flex: 1; background-color: #132c33; }
-        .frete-title { color: var(--primary-cyan); font-size: 17px; font-weight: 900; }
-        .frete-desc { color: #8aaeb3; font-size: 12px; margin-top: 4px; }
-        .block-desconto-modern { flex: 1.2; background: linear-gradient(135deg, #ff7eb3, #ff3e3e); color: white; position: relative; display: flex; justify-content: space-between; align-items: center; padding-left: 40px; }
-        .block-desconto-modern::before { content: ''; position: absolute; left: -25px; top: 0; width: 50px; height: 100%; background: #132c33; border-radius: 0 50% 50% 0; }
-        .desconto-title { font-size: 17px; font-weight: 900; z-index: 2; position: relative;}
-        .btn-resgatar-modern { background: white; color: var(--primary-pink); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; z-index: 3; }
-        .btn-resgatar-modern.resgatado { background-color: #333; color: #777; pointer-events: none; }
+        
+        .block-frete-modern { flex: 1; background: linear-gradient(180deg, #1a1a1a, #141414); border-right: 1px solid #333; }
+        .frete-title { color: var(--primary-gold); font-size: 16px; font-weight: 800; text-transform: uppercase; }
+        .frete-desc { color: #888; font-size: 12px; margin-top: 4px; }
+        
+        .block-desconto-modern { flex: 1.2; background: linear-gradient(135deg, #222, #000); color: white; position: relative; display: flex; justify-content: space-between; align-items: center; padding-left: 30px; }
+        .desconto-title { font-size: 18px; font-weight: 900; color: white; z-index: 2; position: relative; }
+        .desconto-sub { font-size: 11px; color: var(--primary-gold); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px;}
+        
+        /* Botão Resgatar com Animação de Pressão */
+.btn-resgatar-modern { 
+    background: linear-gradient(90deg, var(--primary-gold), var(--primary-gold-dark)); 
+    color: #000; 
+    border: none; 
+    padding: 8px 18px; 
+    border-radius: 4px; 
+    font-weight: 800; 
+    font-size: 11px; 
+    cursor: pointer; 
+    z-index: 3; 
+    text-transform: uppercase;
+    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.2);
+    /* Adicionamos uma transição suave para todas as propriedades */
+    transition: all 0.15s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
 
-        /* GRID PRODUTOS (AJUSTADO PARA AUMENTAR A QUEDA) */
-        .masonry-grid { column-count: 2; column-gap: 14px; padding: 0 12px; max-width: 1100px; margin: 0 auto; }
+/* O EFEITO DE BRILHO AO PRESSIONAR */
+.btn-resgatar-modern:active {
+    /* Diminui levemente para dar sensação de clique */
+    transform: scale(0.96);
+    /* Aumenta o brilho geral */
+    filter: brightness(1.2);
+    /* Cria um brilho dourado intenso externo e um flash branco interno */
+    box-shadow: 
+        0 0 25px rgba(212, 175, 55, 0.7), /* Glow externo forte */
+        inset 0 0 15px rgba(255, 255, 255, 0.8); /* Brilho interno branco */
+}
+
+/* Estado quando já foi resgatado (mantém sem brilho) */
+.btn-resgatar-modern.resgatado { 
+    background: #333; 
+    color: #777; 
+    pointer-events: none; 
+    box-shadow: none; 
+    transform: none;
+    filter: none;
+}
+
+        /* GRID PRODUTOS */
+        .masonry-grid { column-count: 2; column-gap: 12px; padding: 0 12px; max-width: 1100px; margin: 0 auto; }
         @media (min-width: 768px) { .masonry-grid { column-count: 4; column-gap: 16px; } }
         
         .product-card { 
             break-inside: avoid; 
-            margin-bottom: 16px; /* AUMENTADO DE 10px PARA 16px */
+            margin-bottom: 12px; 
             background: var(--bg-card); 
             border-radius: 8px; 
             overflow: hidden; 
-            border: 1px solid #2a2a2a; 
+            border: 1px solid var(--border-dark); 
             cursor: pointer; 
-            transition: transform 0.1s; 
+            transition: transform 0.2s, border-color 0.2s; 
+            position: relative;
         }
+        .product-card:hover { border-color: var(--primary-gold-dark); transform: translateY(-2px); }
         .product-card:active { transform: scale(0.98); }
-        .card-img { width: 100%; display: block; object-fit: cover; background-color: #ffffff; aspect-ratio: 1/1; }
-        .card-info { padding: 10px; display: flex; flex-direction: column; }
-        .card-title { font-size: 13px; line-height: 1.3; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: var(--text-primary); }
-        .price-final { font-size: 15px; font-weight: 800; color: var(--primary-pink); }
-        .badges-row { display: flex; gap: 4px; margin-top: 4px; margin-bottom: 4px; }
-        .badge { padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; }
-        .badge-frete { background: rgba(37, 244, 238, 0.15); color: var(--primary-cyan); }
         
-        .rating-row { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #ffce00; margin-top: 6px; }
-        .sold-count { color: #777; font-size: 10px; margin-left: 6px; }
+        .card-img { width: 100%; display: block; object-fit: cover; background-color: #fff; aspect-ratio: 1/1; border-bottom: 1px solid #222; }
+        
+        .card-info { padding: 12px; display: flex; flex-direction: column; }
+        .card-title { font-size: 13px; line-height: 1.4; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: #e0e0e0; font-weight: 500; }
+        
+        /* Preço Dourado e Grande */
+        .price-final { 
+            font-size: 18px; 
+            font-weight: 900; 
+            color: var(--primary-gold); 
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+        }
+        
+        .badges-row { display: flex; gap: 4px; margin-top: 6px; margin-bottom: 4px; }
+        .badge { padding: 3px 6px; border-radius: 3px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-frete { background: rgba(212, 175, 55, 0.15); color: var(--primary-gold); border: 1px solid rgba(212, 175, 55, 0.3); }
+        
+        .rating-row { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--primary-gold); margin-top: 6px; }
+        .sold-count { color: #666; font-size: 10px; margin-left: 6px; font-weight: 600;}
 
-        /* RODAPÉ MINIMALISTA */
+        /* RODAPÉ E WHATSAPP */
         .simple-footer {
             margin-top: 60px;
-            background-color: #0e0e0e;
-            border-top: 1px solid #222;
-            padding: 30px 20px;
+            background-color: #050505;
+            border-top: 1px solid var(--border-dark);
+            padding: 40px 20px;
             text-align: center;
             color: #666;
             font-size: 12px;
             font-weight: 500;
         }
 
-        /* WHATSAPP FLUTUANTE */
         .whatsapp-btn {
             position: fixed; bottom: 20px; right: 20px;
-            background-color: #25D366; width: 55px; height: 55px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            width: 55px; height: 55px;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000;
-            cursor: pointer; transition: transform 0.2s; text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 1000;
+            cursor: pointer; transition: transform 0.2s; text-decoration: none; border: 2px solid #000;
         }
         .whatsapp-btn:hover { transform: scale(1.1); }
 
         .no-results { text-align: center; padding: 40px; color: var(--text-secondary); display: none; }
-        #loadingBar { position:fixed; top:0; left:0; height:3px; background:var(--primary-cyan); width:0%; transition: width 0.3s; z-index:2000; }
+        #loadingBar { position:fixed; top:0; left:0; height:3px; background: linear-gradient(90deg, var(--primary-gold), var(--primary-gold-light)); width:0%; transition: width 0.3s; z-index:2000; box-shadow: 0 0 10px var(--primary-gold); }
     </style>
 </head>
 <body>
@@ -103,16 +188,25 @@
 
     <header class="top-header">
         <div class="logo-row">
-            <a href="admin.html" class="brand-logo">
-                <svg class="tiktok-icon-svg" viewBox="0 0 448 512"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
-                <span>TikTok Shop</span>
+            <a href="" class="brand-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#goldGradient)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FEDC56" />
+                            <stop offset="100%" style="stop-color:#D4AF37" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span class="brand-text">CASA DOS ELETROS</span>
             </a>
         </div>
         <div class="search-row-custom">
             <div class="modern-search-bar">
                 <span class="search-icon-left"><svg class="search-icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
-                <input type="text" id="searchInput" class="modern-input" placeholder="Carregando produtos..." autocomplete="off">
-                <button class="modern-search-btn" id="searchBtn">Procurar</button>
+                <input type="text" id="searchInput" class="modern-input" placeholder="Buscar produtos premium..." autocomplete="off">
+                <button class="modern-search-btn" id="searchBtn">BUSCAR</button>
             </div>
             <div id="dropdownResults" class="search-results-dropdown"></div>
         </div>
@@ -121,20 +215,20 @@
     <main>
         <section class="container">
             <div class="hero-banner-container">
-                <img src="images/an.jpg" class="banner-img-bg" alt="Banner Principal" onerror="this.src='https://placehold.co/800x300/111/FFF?text=Banner+TikTok'">
+                <img src="images/an.png" class="banner-img-bg" alt="Ofertas Casa dos Eletros" onerror="this.src='https://placehold.co/800x300/111/D4AF37?text=CASA+DOS+ELETROS&font=lora'">
             </div>
             
             <div class="promo-container-modern">
                 <div class="promo-block-modern block-frete-modern">
-                    <div class="frete-title">Frete grátis</div>
-                    <div class="frete-desc">em pedidos acima de R$ 9</div>
+                    <div class="frete-title">Frete Grátis</div>
+                    <div class="frete-desc">Confira as condições para sua região</div>
                 </div>
                 <div class="promo-block-modern block-desconto-modern">
                     <div style="z-index: 2;">
-                        <div class="desconto-title">Desconto</div>
-                        <div style="font-size: 12px; opacity: 0.9;">Primeira compra</div>
+                        <div class="frete-title">Primeira Compra</div>
+                        <div class="desconto-sub"></div>
                     </div>
-                    <button class="btn-resgatar-modern" id="btnResgatar">Resgatar</button>
+                    <button class="btn-resgatar-modern" id="btnResgatar">RESGATAR</button>
                 </div>
             </div>
         </section>
@@ -147,16 +241,16 @@
         </div>
 
         <footer class="simple-footer">
-            <p>© 2025 Achadinhos TikTok Shop. Todos os direitos reservados.</p>
-            <div style="margin-top:5px;">
-                <span style="margin:0 5px; cursor:pointer;">Política de Privacidade</span> • 
-                <span style="margin:0 5px; cursor:pointer;">Termos de Uso</span> •
-                <span style="margin:0 5px; cursor:pointer;">Loja Autorizada</span>
+            <p>© 2025 Casa dos Eletros. Excelência e Confiança.</p>
+            <div style="margin-top:10px; opacity: 0.7;">
+                <span style="margin:0 5px; cursor:pointer;">Privacidade</span> • 
+                <span style="margin:0 5px; cursor:pointer;">Termos</span> •
+                <span style="margin:0 5px; cursor:pointer;">Loja Verificada</span>
             </div>
         </footer>
     </main>
 
-    <a href="https://wa.me/5521966694409?text=Olá,+preciso+de+ajuda!" class="whatsapp-btn" target="_blank">
+    <a href="https://wa.me/5521966694409?text=Olá,+vim+pelo+site+da+Casa+dos+Eletros!" class="whatsapp-btn" target="_blank">
         <svg viewBox="0 0 24 24" width="30" height="30" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
     </a>
 
@@ -217,7 +311,6 @@
             loadingBar.style.width = "100%";
             setTimeout(() => loadingBar.style.display = 'none', 500);
             
-            document.getElementById('searchInput').placeholder = "Buscar ofertas...";
             renderProducts(allProducts);
         });
 
@@ -246,7 +339,7 @@
                         ${oldPriceHtml}
                         <div class="price-final">${product.price}</div>
                         <div class="badges-row">
-                            <span class="badge badge-frete">Frete grátis</span>
+                            <span class="badge badge-frete">FRETE GRÁTIS</span>
                         </div>
                         
                         <div class="rating-row">
@@ -261,7 +354,7 @@
 
         // --- 3. UI EVENTS ---
         document.getElementById('btnResgatar').addEventListener('click', function() {
-            this.innerText = "Resgatado";
+            this.innerText = "RESGATADO";
             this.classList.add('resgatado');
         });
 
@@ -290,7 +383,7 @@
                     const div = document.createElement('div');
                     div.className = 'result-item';
                     div.onclick = () => { window.location.href = match.link; };
-                    div.innerHTML = `<img src="${match.img}" class="result-thumb"><div><div style="font-size:13px; color:white;">${match.title}</div><div style="font-size:11px; color:#fe2c55;">${match.price}</div></div>`;
+                    div.innerHTML = `<img src="${match.img}" class="result-thumb"><div><div style="font-size:13px; color:white;">${match.title}</div><div style="font-size:11px; color:#D4AF37;">${match.price}</div></div>`;
                     dropdownResults.appendChild(div);
                 });
             } else {
